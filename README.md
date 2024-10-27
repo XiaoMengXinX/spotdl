@@ -1,4 +1,4 @@
-# SpoDL-Go
+# SpotDL-Go
 
 A simple downloader for downloading spotify songs/products written by Golang.
 
