@@ -7,7 +7,7 @@ Credits: [DevLARLEY/spotify-oggmp4-dl](https://github.com/DevLARLEY/spotify-oggm
 # Usage
 
 ```shell
-Usage of sp-dl-go:
+Usage of SpotDL-Go:
   -help
         Show this help message.
   -id string
