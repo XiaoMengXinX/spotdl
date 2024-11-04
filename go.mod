@@ -1,9 +1,9 @@
-module github.com/XiaoMengXinX/SpotDL-Go
+module github.com/XiaoMengXinX/spotdl
 
 go 1.21
 
 require (
-	github.com/XiaoMengXinX/SimpleDownloader v0.0.0-20241019163123-cb28636b917b
+	github.com/XiaoMengXinX/SimpleDownloader v0.0.0-20241104184306-5642193c58ed
 	github.com/bogem/id3v2 v1.2.0
 	github.com/iyear/gowidevine v0.1.1
 	github.com/u2takey/ffmpeg-go v0.5.0
