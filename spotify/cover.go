@@ -2,7 +2,7 @@ package spotify
 
 import (
 	"fmt"
-	log "github.com/XiaoMengXinX/SpotDL-Go/logger"
+	log "github.com/XiaoMengXinX/spotdl/logger"
 	"sort"
 )
 

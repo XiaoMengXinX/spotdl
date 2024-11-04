@@ -3,8 +3,8 @@ package token
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/XiaoMengXinX/SpotDL-Go/config"
-	log "github.com/XiaoMengXinX/SpotDL-Go/logger"
+	"github.com/XiaoMengXinX/spotdl/config"
+	log "github.com/XiaoMengXinX/spotdl/logger"
 	"io"
 	"net/http"
 	"os"

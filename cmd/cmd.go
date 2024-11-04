@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	log "github.com/XiaoMengXinX/SpotDL-Go/logger"
-	"github.com/XiaoMengXinX/SpotDL-Go/spotify"
+	log "github.com/XiaoMengXinX/spotdl/logger"
+	"github.com/XiaoMengXinX/spotdl/spotify"
 	"os"
 )
 

@@ -2,7 +2,7 @@ package spotify
 
 import (
 	"fmt"
-	log "github.com/XiaoMengXinX/SpotDL-Go/logger"
+	log "github.com/XiaoMengXinX/spotdl/logger"
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 	"os"
 	"os/exec"

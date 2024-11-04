@@ -3,8 +3,8 @@ package spotify
 import (
 	"fmt"
 	"github.com/XiaoMengXinX/SimpleDownloader"
-	log "github.com/XiaoMengXinX/SpotDL-Go/logger"
-	"github.com/XiaoMengXinX/SpotDL-Go/playplay"
+	log "github.com/XiaoMengXinX/spotdl/logger"
+	"github.com/XiaoMengXinX/spotdl/playplay"
 	widevine "github.com/iyear/gowidevine"
 	"os"
 	"path/filepath"
