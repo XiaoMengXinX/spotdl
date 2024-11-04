@@ -1,13 +1,13 @@
-# SpotDL-Go
+# Spot-DL
 
-A simple downloader for downloading spotify songs/products written by Golang.
+A simple downloader for downloading spotify songs/products with metadata.
 
 Credits: [DevLARLEY/spotify-oggmp4-dl](https://github.com/DevLARLEY/spotify-oggmp4-dl)
 
 # Usage
 
 ```shell
-Usage of SpotDL-Go:
+Usage of spotdl:
   -help
         Show this help message.
   -id string
@@ -28,8 +28,8 @@ Usage of SpotDL-Go:
 
 # Notice
 
-- You need to put a [CDM](https://forum.videohelp.com/threads/408031-Dumping-Your-own-L3-CDM-with-Android-Studio) in the `./cdm` directory for mp4 decryption.
+- A `.vwd` file is required in the `./cdm` directory for mp4 decryption. Detailed instructions can be found in: https://github.com/hyugogirubato/KeyDive.
 
-- Get your `sp_dc` cookie value from somewhere and enter it to the terminal at your first run.
+- Get the `sp_dc` cookie value from your browser and enter to the cli at first run.
 
-- OGG decryption may not always work because the platform occasionally updates the decryption token or something, which is not easy to obtain.
+- OGG decryption may not work because the [playplay](https://git.gay/uhwot/unplayplay.git) key is always in update.
