@@ -90,7 +90,7 @@ func (d *Downloader) downloadContent(ID string, content IDType) (outFilePath str
 		}
 	}
 
-	log.Infof("Download %s [%s] successfully", content, fileName)
+	log.Infof("Download complete for %s [%s]", content, fileName)
 	return
 }
 
