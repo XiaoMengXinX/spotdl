@@ -10,7 +10,7 @@ Credits: [DevLARLEY/spotify-oggmp4-dl](https://github.com/DevLARLEY/spotify-oggm
 go install github.com/XiaoMengXinX/spotdl/cmd/spotdl@latest
 ```
 
-For MacOS, you may need to codesign your binary file before running:
+For macOS, you may need to codesign your binary file:
 
 ```shell
 sudo codesign --force --deep --sign - ~/go/bin/spotdl
