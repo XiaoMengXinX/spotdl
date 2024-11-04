@@ -4,6 +4,12 @@ A simple downloader for downloading spotify songs/products with metadata.
 
 Credits: [DevLARLEY/spotify-oggmp4-dl](https://github.com/DevLARLEY/spotify-oggmp4-dl)
 
+# Installation
+
+```shell
+go install github.com/XiaoMengXinX/spotdl/cmd/spotdl@latest
+```
+
 # Usage
 
 ```shell
