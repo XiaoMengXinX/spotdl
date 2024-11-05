@@ -98,6 +98,15 @@ type trackData struct {
 	TrackNumber int    `json:"track_number"`
 }
 
+type trackCredits struct {
+	TrackTitle  string `json:"trackTitle"`
+	RoleCredits []struct {
+		RoleTitle string       `json:"roleTitle"`
+		Artists   []artistData `json:"artists"`
+	} `json:"roleCredits"`
+	SourceNames []string `json:"sourceNames"`
+}
+
 type trackMetadata struct {
 	GID   string `json:"gid"`
 	Name  string `json:"name"`
@@ -136,8 +145,9 @@ type artistData struct {
 	ExternalUrls struct {
 		Spotify string `json:"spotify"`
 	} `json:"external_urls"`
-	Name string `json:"name"`
-	ID   string `json:"id"`
+	SubRoles []string `json:"subroles"`
+	Name     string   `json:"name"`
+	ID       string   `json:"id"`
 }
 
 type albumImageData struct {
