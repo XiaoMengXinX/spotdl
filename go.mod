@@ -1,6 +1,8 @@
 module github.com/XiaoMengXinX/spotdl
 
-go 1.21
+go 1.21.6
+
+toolchain go1.23.2
 
 require (
 	github.com/XiaoMengXinX/SimpleDownloader v0.0.0-20241104184306-5642193c58ed
@@ -12,6 +14,7 @@ require (
 
 require (
 	github.com/Eyevinn/mp4ff v0.46.0 // indirect
+	github.com/Sorrow446/go-mp4tag v0.0.0-20240130220823-68ce31d53e37 // indirect
 	github.com/aws/aws-sdk-go v1.55.5 // indirect
 	github.com/chmike/cmac-go v1.1.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect

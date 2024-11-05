@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 func (d *Downloader) addMetadata(trackMD trackMetadata, filePath string) (err error) {
@@ -25,12 +26,18 @@ func (d *Downloader) addMetadata(trackMD trackMetadata, filePath string) (err er
 		return fmt.Errorf("failed to fetch album data: %w", err)
 	}
 
+	credits, err := d.getTrackCredits(trackID)
+	if err != nil {
+		return fmt.Errorf("failed to fetch track credits: %w", err)
+	}
+
 	metadata := make(map[string]string)
 	metadata["title"] = trackMD.Name
 	metadata["artist"] = formatArtistsStr(trackMD.Artists)
 	metadata["album"] = trackMD.Album.Name
 	metadata["date"] = album.ReleaseDate
 	metadata["album_artist"] = formatArtistsStr(album.Artists)
+	metadata["composer"] = formatComposersStr(credits)
 	for _, copyright := range album.Copyrights {
 		if copyright.Type == "P" {
 			cr := strings.Replace(copyright.Text, "(P)", "℗", 1)
@@ -59,6 +66,7 @@ func (d *Downloader) addMetadata(trackMD trackMetadata, filePath string) (err er
 	if len(album.Genres) > 0 {
 		metadata["genre"] = album.Genres[0]
 	}
+	metadata["creation_time"] = time.Now().UTC().Format(time.RFC3339)
 
 	log.Debugf("Serialized metadata: %+v", metadata)
 

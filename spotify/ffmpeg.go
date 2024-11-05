@@ -2,11 +2,13 @@ package spotify
 
 import (
 	"fmt"
+	"github.com/Sorrow446/go-mp4tag"
 	log "github.com/XiaoMengXinX/spotdl/logger"
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
 )
 
 var hasFFmpeg bool
@@ -59,6 +61,32 @@ func encodeMetadata(inputFile, coverFilePath string, metadata map[string]string)
 
 	if err := os.Rename(tempFile, inputFile); err != nil {
 		return fmt.Errorf("fail to rename temp file: %v", err)
+	}
+
+	mp4, err := mp4tag.Open(inputFile)
+	if err != nil {
+		return fmt.Errorf("fail to open mp4 file: %v", err)
+	}
+	defer mp4.Close()
+
+	var year int
+	if len(metadata["date"]) >= 4 {
+		year, _ = strconv.Atoi(metadata["date"][:4])
+	}
+	tags := mp4tag.MP4Tags{
+		Custom: map[string]string{
+			"label": metadata["label"],
+			"ISRC":  metadata["ISRC"],
+			"UPC":   metadata["UPC"],
+			"EAN":   metadata["EAN"],
+		},
+		CustomGenre: metadata["genre"],
+		Year:        int32(year),
+	}
+
+	err = mp4.Write(&tags, []string{})
+	if err != nil {
+		return fmt.Errorf("fail to write extra tags: %v", err)
 	}
 	return nil
 }
