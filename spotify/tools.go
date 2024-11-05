@@ -103,6 +103,23 @@ func formatArtistsStr(artists []artistData) string {
 	return strings.Join(artistNames, ", ")
 }
 
+func formatComposersStr(credits trackCredits) string {
+	if len(credits.RoleCredits) == 0 {
+		return ""
+	}
+
+	artistNames := make([]string, 0)
+	for _, r := range credits.RoleCredits {
+		if r.RoleTitle == "Writers" {
+			for _, ar := range r.Artists {
+				artistNames = append(artistNames, ar.Name)
+			}
+		}
+	}
+
+	return strings.Join(artistNames, ", ")
+}
+
 func cleanFilename(filename string) string {
 	osType := os.Getenv("GOOS")
 
