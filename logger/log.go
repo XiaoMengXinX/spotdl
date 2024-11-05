@@ -74,10 +74,16 @@ func (h *TextHandler) Handle(_ context.Context, r slog.Record) error {
 	timestamp := time.Now().Format("2006/01/02 15:04:05")
 
 	color := levelColor(r.Level)
-	logLine := fmt.Sprintf("%s%s [%s] %s (%s:%d)%s\n",
+	logLine := fmt.Sprintf("%s%s [%s] %s%s\n",
+		color, timestamp, r.Level.String(), r.Message, Reset)
+	logLineDebug := fmt.Sprintf("%s%s [%s] %s (%s:%d)%s\n",
 		color, timestamp, r.Level.String(), r.Message, file, line, Reset)
 
-	fmt.Print(logLine)
+	if h.level <= slog.LevelDebug {
+		fmt.Print(logLineDebug)
+	} else {
+		fmt.Print(logLine)
+	}
 	return nil
 }
 
