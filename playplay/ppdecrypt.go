@@ -13,6 +13,7 @@ import (
 
 const PlayPlayToken = `0101bf34c8d0393bcda8b1d3eeaf8f3b2`
 
+// PlayPlayDecrypt currently does not work
 func PlayPlayDecrypt(keyBasis [16]byte, fileID [20]byte) [16]byte {
 	var buf [16]byte
 

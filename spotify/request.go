@@ -26,8 +26,8 @@ func (d *Downloader) makeRequest(method, url string, body []byte) ([]byte, error
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36")
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("app-platform", "WebPlayer")
-	req.Header.Set("spotify-app-version", "1.2.46.25.g7f189073")
-	req.Header.Set("sec-ch-ua-platform", "Windows")
+	req.Header.Set("spotify-app-version", "1.2.52.75.gd8ce7735")
+	req.Header.Set("sec-ch-ua-platform", "macOS")
 	req.Header.Set("origin", "https://open.spotify.com/")
 
 	if acceptLanguage := d.TokenManager.ConfigManager.Get().AcceptLanguage; len(acceptLanguage) > 0 {
