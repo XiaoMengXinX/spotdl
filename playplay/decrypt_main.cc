@@ -1,2124 +1,2139 @@
 #include "main.h"
 #include "ppdecrypt.h"
 
-void decrypt_main(const uint8 key_basis[16], uint8 dst[16])
-{
-    int v3;                // ebp
-    int v4;                // r15d
-    int v5;                // r13d
-    int v6;                // eax
-    int v7;                // r13d
-    int v8;                // r14d
-    int v9;                // ebp
-    int v10;               // eax
-    int v11;               // r13d
-    int v12;               // r14d
-    int v13;               // ebp
-    int v14;               // edx
-    int v15;               // r13d
-    int v16;               // r14d
-    int v17;               // eax
-    int v18;               // r13d
-    int v19;               // r14d
-    int v20;               // ecx
-    int v21;               // ebx
-    int v22;               // r13d
-    unsigned int v23;      // r14d
-    unsigned int v24;      // r15d
-    int v25;               // eax
-    int v26;               // r14d
-    unsigned int v27;      // r15d
-    unsigned int v28;      // ebp
-    unsigned int v29;      // r12d
-    unsigned int v30;      // r13d
-    unsigned int v31;      // r15d
-    unsigned int v32;      // eax
-    unsigned int v33;      // ebx
-    int v34;               // r12d
-    int v35;               // r15d
-    int v36;               // ebx
-    unsigned int v37;      // r12d
-    unsigned int v38;      // r15d
-    unsigned int v39;      // ebp
-    unsigned int v40;      // r12d
-    int v41;               // eax
-    int v42;               // ebp
-    int v43;               // r12d
-    int v44;               // r15d
-    int v45;               // eax
-    int v46;               // r12d
-    int v47;               // r15d
-    int v48;               // ebp
-    int v49;               // ebp
-    int v50;               // r12d
-    unsigned int v51;      // r13d
-    unsigned int v52;      // ecx
-    int v53;               // ebp
-    int v54;               // eax
-    int v55;               // edx
-    unsigned int v56;      // r14d
-    int v57;               // ecx
-    int v58;               // edx
-    int v59;               // ecx
-    int v60;               // eax
-    int v61;               // edx
-    unsigned int v62;      // r14d
-    int v63;               // ebp
-    int v64;               // eax
-    int v65;               // r14d
-    unsigned int v66;      // ebp
-    __int64 v67;           // r12
-    unsigned int v68;      // ebx
-    int v69;               // r15d
-    int v70;               // r14d
-    int v71;               // ebx
-    unsigned int v72;      // ebp
-    int v73;               // ecx
-    unsigned int v74;      // r14d
-    int v75;               // eax
-    int v76;               // ecx
-    int v77;               // ebp
-    unsigned int v78;      // r14d
-    int v79;               // ebx
-    int v80;               // eax
-    unsigned int v81;      // r13d
-    unsigned int v82;      // r15d
-    unsigned int v83;      // r14d
-    int v84;               // ebx
-    unsigned int v85;      // r13d
-    unsigned int v86;      // r15d
-    int v87;               // eax
-    int v88;               // r13d
-    int v89;               // r15d
-    int v90;               // eax
-    int v91;               // r13d
-    int v92;               // r15d
-    int v93;               // eax
-    int v94;               // r13d
-    int v95;               // r15d
-    int v96;               // r12d
-    int v97;               // eax
-    int v98;               // ecx
-    int v99;               // eax
-    int v100;              // esi
-    int v101;              // eax
-    int v102;              // edx
-    int v103;              // r12d
-    int v104;              // ecx
-    int v105;              // edx
-    int v106;              // r12d
-    int v107;              // eax
-    int v108;              // edx
-    int v109;              // ecx
-    int v110;              // r13d
-    unsigned int v111;     // ebx
-    unsigned int v112;     // r12d
-    unsigned int v113;     // r15d
-    unsigned int v114;     // r13d
-    __int64 v115;          // r8
-    int v116;              // r12d
-    int v117;              // r15d
-    int v118;              // r13d
-    int v119;              // r8d
-    int v120;              // esi
-    int v121;              // edx
-    int v122;              // r15d
-    int v123;              // ecx
-    int v124;              // r8d
-    int v125;              // r15d
-    int v126;              // ecx
-    int v127;              // r8d
-    int v128;              // r15d
-    unsigned int v129;     // r14d
-    int v130;              // r15d
-    unsigned int v131;     // eax
-    int v132;              // ebp
-    int v133;              // r15d
-    int v134;              // eax
-    int v135;              // ebp
-    int v136;              // r15d
-    int v137;              // ecx
-    int v138;              // r15d
-    int v139;              // ebp
-    unsigned int v140;     // ebx
-    __int64 v141;          // r15
-    int v142;              // eax
-    int v143;              // eax
-    int v144;              // r13d
-    int v145;              // ecx
-    int v146;              // r15d
-    int v147;              // r8d
-    int v148;              // r15d
-    int v149;              // r13d
-    int v150;              // r8d
-    int v151;              // r15d
-    int v152;              // eax
-    int v153;              // r8d
-    int v154;              // r15d
-    int v155;              // r15d
-    int v156;              // eax
-    int v157;              // r12d
-    int v158;              // r8d
-    int v159;              // r15d
-    int v160;              // eax
-    int v161;              // edx
-    int v162;              // r8d
-    int v163;              // r15d
-    int v164;              // eax
-    int v165;              // r12d
-    int v166;              // r8d
-    unsigned int v167;     // r15d
-    unsigned int v168;     // r13d
-    int v169;              // ebx
-    unsigned int v170;     // r12d
-    unsigned int v171;     // ebp
-    int v172;              // r14d
-    unsigned int v173;     // ebx
-    int v174;              // eax
-    int v175;              // r12d
-    unsigned int v176;     // ebx
-    int v177;              // r13d
-    int v178;              // r12d
-    unsigned int v179;     // ebx
-    unsigned int v180;     // eax
-    unsigned int v181;     // r15d
-    unsigned int v182;     // eax
-    unsigned int v183;     // r15d
-    int v184;              // r15d
-    unsigned int v185;     // r13d
-    unsigned int v186;     // ebp
-    unsigned int v187;     // r12d
-    int v188;              // eax
-    int v189;              // r13d
-    int v190;              // ebp
-    unsigned int v191;     // r12d
-    unsigned int v192;     // r15d
-    int v193;              // edx
-    int v194;              // eax
-    int v195;              // ebp
-    int v196;              // r13d
-    int v197;              // r14d
-    int v198;              // ebp
-    int v199;              // r13d
-    unsigned int v200;     // r14d
-    int v201;              // ebx
-    __int64 v202;          // rdi
-    unsigned int v203;     // ebx
-    int v204;              // r13d
-    unsigned int v205;     // r14d
-    int v206;              // eax
-    int v207;              // edx
-    int v208;              // eax
-    int v209;              // ebx
-    int v210;              // r12d
-    int v211;              // eax
-    int v212;              // ecx
-    int v213;              // r12d
-    int v214;              // ebp
-    int v215;              // ecx
-    int v216;              // ebx
-    int v217;              // r12d
-    int v218;              // ebp
-    int v219;              // eax
-    int v220;              // ebx
-    int v221;              // r12d
-    int v222;              // ebp
-    int v223;              // eax
-    int v224;              // ebx
-    int v225;              // r12d
-    int v226;              // ebp
-    unsigned int v227;     // r14d
-    unsigned int v228;     // r13d
-    unsigned int v229;     // r15d
-    int v230;              // eax
-    int v231;              // ebx
-    int v232;              // r13d
-    unsigned int v233;     // r15d
-    unsigned int v234;     // r14d
-    int v235;              // edx
-    int v236;              // eax
-    unsigned int v237;     // r14d
-    unsigned int v238;     // r15d
-    int v239;              // ecx
-    int v240;              // eax
-    unsigned int v241;     // r15d
-    int v242;              // edx
-    int v243;              // ebp
-    int v244;              // esi
-    int v245;              // ecx
-    int v246;              // edx
-    int v247;              // eax
-    int v248;              // ebp
-    int v249;              // r14d
-    int v250;              // edx
-    int v251;              // ebp
-    int v252;              // eax
-    int v253;              // r14d
-    int v254;              // ecx
-    int v255;              // ebp
-    int v256;              // ebx
-    int v257;              // r14d
-    unsigned int v258;     // r13d
-    unsigned int v259;     // ebp
-    unsigned int v260;     // ebx
-    int v261;              // eax
-    int v262;              // r13d
-    int v263;              // edx
-    int v264;              // ecx
-    int v265;              // r13d
-    int v266;              // eax
-    int v267;              // r12d
-    int v268;              // ecx
-    unsigned int v269;     // edx
-    int v270;              // r13d
-    int v271;              // eax
-    int v272;              // r12d
-    int v273;              // r13d
-    int v274;              // esi
-    int v275;              // edi
-    int v276;              // esi
-    int v277;              // edi
-    int v278;              // r13d
-    int v279;              // r13d
-    int v280;              // eax
-    int v281;              // ecx
-    int v282;              // r12d
-    int v283;              // r13d
-    int v284;              // r15d
-    unsigned int v285;     // ebp
-    unsigned int v286;     // r12d
-    int v287;              // ebx
-    int v288;              // r15d
-    int v289;              // ecx
-    unsigned int v290;     // eax
-    int v291;              // r14d
-    int v292;              // esi
-    unsigned int v293;     // ecx
-    int v294;              // r14d
-    int v295;              // eax
-    int v296;              // ecx
-    int v297;              // r14d
-    int v298;              // ebp
-    int v299;              // r13d
-    int v300;              // eax
-    int v301;              // r13d
-    unsigned int v302;     // ebx
-    int v303;              // eax
-    int v304;              // ebp
-    int v305;              // ebx
-    int v306;              // eax
-    int v307;              // ecx
-    int v308;              // ebx
-    int v309;              // eax
-    int v310;              // ecx
-    int v311;              // ebx
-    int v312;              // eax
-    int v313;              // ebp
-    int v314;              // r13d
-    int v315;              // eax
-    int v316;              // r13d
-    int v317;              // r15d
-    int v318;              // r12d
-    unsigned int v319;     // eax
-    int v320;              // ecx
-    int v321;              // r15d
-    int v322;              // r12d
-    int v323;              // eax
-    int v324;              // ecx
-    int v325;              // r15d
-    int v326;              // r12d
-    int v327;              // ebx
-    unsigned int v328;     // r15d
-    unsigned int v329;     // r13d
-    unsigned int v330;     // r12d
-    int v331;              // eax
-    int v332;              // ebx
-    int v333;              // eax
-    int v334;              // r15d
-    unsigned int v335;     // r13d
-    unsigned int v336;     // r12d
-    int v337;              // r15d
-    int v338;              // ebp
-    int v339;              // r12d
-    unsigned int v340;     // r13d
-    int v341;              // eax
-    int v342;              // ebp
-    int v343;              // ebp
-    unsigned int v344;     // r15d
-    unsigned int v345;     // r13d
-    unsigned int v346;     // r14d
-    int v347;              // ebp
-    unsigned int v348;     // r15d
-    unsigned int v349;     // r13d
-    unsigned int v350;     // r14d
-    int v351;              // ebp
-    unsigned int v352;     // eax
-    unsigned int v353;     // r14d
-    int v354;              // r15d
-    unsigned int v355;     // eax
-    int v356;              // ecx
-    int v357;              // r14d
-    int v358;              // edx
-    unsigned int v359;     // eax
-    unsigned int v360;     // ecx
-    unsigned int v361;     // r14d
-    int v362;              // r15d
-    unsigned int v363;     // eax
-    unsigned int v364;     // ebp
-    unsigned int v365;     // r15d
-    unsigned int v366;     // r12d
-    unsigned int v367;     // ebx
-    unsigned int v368;     // ebp
-    int v369;              // eax
-    int v370;              // r12d
-    unsigned int v371;     // r15d
-    int v372;              // ebp
-    int v373;              // r13d
-    int v374;              // r15d
-    int v375;              // eax
-    int v376;              // ecx
-    int v377;              // r13d
-    int v378;              // r12d
-    unsigned int v379;     // r15d
-    unsigned int v380;     // r14d
-    unsigned int v381;     // r13d
-    unsigned int v382;     // eax
-    int v383;              // ebx
-    unsigned int v384;     // r15d
-    unsigned int v385;     // r14d
-    unsigned int v386;     // r12d
-    unsigned int v387;     // ebp
-    unsigned int v388;     // ebx
-    unsigned int v389;     // r14d
-    unsigned int v390;     // r15d
-    int v391;              // eax
-    unsigned int v392;     // ebx
-    unsigned int v393;     // r14d
-    int v394;              // esi
-    int v395;              // eax
-    unsigned int v396;     // edi
-    int v397;              // ecx
-    int v398;              // edx
-    int v399;              // eax
-    unsigned int v400;     // esi
-    int v401;              // ecx
-    int v402;              // edx
-    int v403;              // eax
-    int v404;              // edi
-    int v405;              // ecx
-    int v406;              // r14d
-    int v407;              // eax
-    __int64 v408;          // rbp
-    int v409;              // edi
-    int v410;              // r14d
-    int v411;              // r15d
-    int v412;              // edi
-    int v413;              // eax
-    int v414;              // r15d
-    int v415;              // r13d
-    unsigned int v416;     // r14d
-    unsigned int v417;     // r15d
-    unsigned int v418;     // ebp
-    int v419;              // eax
-    int v420;              // r14d
-    unsigned int v421;     // r15d
-    int v422;              // ecx
-    int v423;              // edx
-    int v424;              // r13d
-    int v425;              // ecx
-    int v426;              // r15d
-    int v427;              // r13d
-    int v428;              // r13d
-    int v429;              // r12d
-    int v430;              // ecx
-    int v431;              // eax
-    int v432;              // edx
-    int v433;              // eax
-    unsigned int v434;     // edi
-    int v435;              // r15d
-    int v436;              // r12d
-    unsigned int v437;     // edi
-    int v438;              // eax
-    int v439;              // edi
-    int v440;              // r15d
-    int v441;              // r12d
-    int v442;              // eax
-    int v443;              // r15d
-    int v444;              // r12d
-    int v445;              // eax
-    int v446;              // r15d
-    int v447;              // r12d
-    unsigned int v448;     // ebx
-    unsigned int v449;     // r15d
-    unsigned int v450;     // r14d
-    int v451;              // eax
-    unsigned int v452;     // r15d
-    unsigned int v453;     // r14d
-    unsigned int v454;     // r15d
-    int v455;              // r15d
-    unsigned int v456;     // ecx
-    int v457;              // ebx
-    int v458;              // edx
-    int v459;              // r12d
-    int v460;              // r13d
-    int v461;              // ebx
-    unsigned int v462;     // r14d
-    unsigned int v463;     // r12d
-    unsigned int v464;     // r13d
-    int v465;              // eax
-    int v466;              // ecx
-    unsigned int v467;     // r13d
-    int v468;              // ebx
-    int v469;              // ecx
-    unsigned int v470;     // eax
-    int v471;              // ebx
-    int v472;              // ecx
-    unsigned int v473;     // eax
-    unsigned int v474;     // ebx
-    int v475;              // r12d
-    unsigned int v476;     // eax
-    unsigned int v477;     // ebx
-    unsigned int v478;     // r12d
-    int v479;              // r12d
-    int v480;              // r13d
-    int v481;              // edx
-    int v482;              // r12d
-    int v483;              // ecx
-    int v484;              // r15d
-    int v485;              // eax
-    int v486;              // r13d
-    int v487;              // ecx
-    int v488;              // r15d
-    int v489;              // eax
-    int v490;              // r12d
-    unsigned int v491;     // ecx
-    unsigned int v492;     // r15d
-    unsigned int v493;     // ebx
-    int v494;              // r14d
-    int v495;              // r12d
-    int v496;              // r13d
-    int v497;              // r14d
-    int v498;              // ecx
-    int v499;              // r13d
-    unsigned int v500;     // r14d
-    unsigned int v501;     // r12d
-    unsigned int v502;     // r13d
-    int v503;              // eax
-    unsigned int v504;     // eax
-    int v505;              // r12d
-    int v506;              // esi
-    unsigned int v507;     // edx
-    int v508;              // r12d
-    int v509;              // r15d
-    int v510;              // edx
-    int v511;              // eax
-    int v512;              // r15d
-    int v513;              // edx
-    int v514;              // esi
-    int v515;              // r12d
-    unsigned int v516;     // ecx
-    unsigned int v517;     // r15d
-    int v518;              // eax
-    int v519;              // r12d
-    unsigned int v520;     // ecx
-    unsigned int v521;     // r15d
-    unsigned int v522;     // eax
-    int v523;              // esi
-    unsigned int v524;     // ecx
-    unsigned int v525;     // r15d
-    unsigned int v526;     // eax
-    int v527;              // esi
-    int v528;              // r15d
-    unsigned int v529;     // eax
-    int v530;              // ebp
-    unsigned int v531;     // ecx
-    int v532;              // r15d
-    int v533;              // ebx
-    unsigned int v534;     // ebp
-    unsigned int v535;     // r12d
-    unsigned int v536;     // r15d
-    unsigned int v537;     // r14d
-    int v538;              // eax
-    int v539;              // ecx
-    int v540;              // ebx
-    int v541;              // ebp
-    int v542;              // r15d
-    int v543;              // esi
-    int v544;              // r14d
-    int v545;              // ecx
-    int v546;              // r15d
-    int v547;              // edx
-    int v548;              // r14d
-    int v549;              // ecx
-    int v550;              // edi
-    int v551;              // edx
-    int v552;              // r14d
-    int v553;              // ecx
-    int v554;              // esi
-    int v555;              // edi
-    int v556;              // r15d
-    int v557;              // ecx
-    int v558;              // esi
-    int v559;              // edi
-    int v560;              // r15d
-    int v561;              // eax
-    int v562;              // ecx
-    unsigned int v563;     // ebp
-    int v564;              // edx
-    int v565;              // edi
-    int v566;              // eax
-    int v567;              // esi
-    int v568;              // edi
-    int v569;              // r8d
-    int v570;              // esi
-    int v571;              // eax
-    int v572;              // r8d
-    int v573;              // esi
-    int v574;              // edi
-    int v575;              // eax
-    int v576;              // esi
-    int v577;              // edi
-    int v578;              // eax
-    int v579;              // ecx
-    int v580;              // r15d
-    unsigned int v581;     // r15d
-    int v582;              // eax
-    unsigned int v583;     // ebp
-    unsigned int v584;     // r15d
-    unsigned int v585;     // eax
-    unsigned int v586;     // r15d
-    int v587;              // edx
-    unsigned int v588;     // eax
-    unsigned int v589;     // ebp
-    unsigned int v590;     // edx
-    int v591;              // r14d
-    int v592;              // et1
-    int v593;              // ebx
-    unsigned int v594;     // r14d
-    unsigned int v595;     // r15d
-    int v596;              // eax
-    int v597;              // r14d
-    unsigned int v598;     // r15d
-    int v599;              // eax
-    int v600;              // r15d
-    int v601;              // esi
-    int v602;              // ecx
-    int v603;              // r15d
-    int v604;              // eax
-    int v605;              // esi
-    int v606;              // ecx
-    int v607;              // edi
-    int v608;              // eax
-    int v609;              // esi
-    int v610;              // r8d
-    int v611;              // edi
-    int v612;              // eax
-    int v613;              // esi
-    int v614;              // ecx
-    int v615;              // edi
-    int v616;              // eax
-    int v617;              // r8d
-    int v618;              // r12d
-    int v619;              // ebx
-    int v620;              // eax
-    int v621;              // ecx
-    int v622;              // r12d
-    int v623;              // ebx
-    int v624;              // esi
-    int v625;              // ecx
-    int v626;              // r12d
-    int v627;              // ebx
-    int v628;              // r15d
-    unsigned int v629;     // eax
-    unsigned int v630;     // r12d
-    int v631;              // ecx
-    unsigned int v632;     // ebx
-    unsigned int v633;     // esi
-    unsigned int v634;     // edi
-    int v635;              // eax
-    unsigned int v636;     // ebx
-    unsigned int v637;     // esi
-    unsigned int v638;     // ebx
-    unsigned int v639;     // edi
-    unsigned int v640;     // esi
-    unsigned int v641;     // ebx
-    int v642;              // r15d
-    int v643;              // esi
-    unsigned int v644;     // ebx
-    int v645;              // eax
-    int v646;              // ecx
-    unsigned int v647;     // edi
-    unsigned int v648;     // esi
-    int v649;              // r12d
-    unsigned int v650;     // edi
-    unsigned int v651;     // esi
-    unsigned int v652;     // r12d
-    unsigned int v653;     // edi
-    unsigned int v654;     // esi
-    unsigned int v655;     // r12d
-    int v656;              // edi
-    int v657;              // esi
-    unsigned int v658;     // r12d
-    int v659;              // ebx
-    int v660;              // esi
-    int v661;              // r12d
-    int v662;              // ebx
-    int v663;              // ebx
-    unsigned int v664;     // r15d
-    unsigned int v665;     // r14d
-    unsigned int v666;     // r12d
-    unsigned int v667;     // ebp
-    unsigned int v668;     // r15d
-    unsigned int v669;     // ebx
-    int v670;              // eax
-    unsigned int v671;     // ecx
-    int v672;              // r15d
-    unsigned int v673;     // ebx
-    int v674;              // esi
-    unsigned int v675;     // ecx
-    int v676;              // r15d
-    int v677;              // edx
-    int v678;              // r12d
-    int v679;              // ecx
-    int v680;              // r15d
-    int v681;              // edx
-    int v682;              // r12d
-    int v683;              // ebx
-    unsigned int v684;     // r15d
-    unsigned int v685;     // r13d
-    unsigned int v686;     // r12d
-    int v687;              // eax
-    int v688;              // ecx
-    int v689;              // r15d
-    unsigned int v690;     // r13d
-    unsigned int v691;     // ecx
-    int v692;              // r15d
-    unsigned int v693;     // r13d
-    int v694;              // ebx
-    int v695;              // r15d
-    unsigned int v696;     // r13d
-    int v697;              // ebx
-    unsigned int v698;     // ebp
-    unsigned int v699;     // r14d
-    unsigned int v700;     // r15d
-    unsigned int v701;     // ebx
-    int v702;              // eax
-    unsigned int v703;     // ecx
-    int v704;              // eax
-    int v705;              // ebp
-    int v706;              // ecx
-    int v707;              // edx
-    int v708;              // eax
-    int v709;              // ebp
-    int v710;              // ecx
-    int v711;              // r14d
-    unsigned int v712;     // ebx
-    unsigned int v713;     // ebp
-    __int64 v714;          // r12
-    unsigned int v715;     // r14d
-    unsigned int v716;     // r15d
-    int v717;              // eax
-    int v718;              // ebx
-    int v719;              // eax
-    int v720;              // ecx
-    int v721;              // r15d
-    unsigned int v722;     // ebx
-    unsigned int v723;     // ebp
-    int v724;              // r13d
-    int v725;              // ecx
-    int v726;              // r15d
-    int v727;              // r13d
-    int v728;              // eax
-    int v729;              // r12d
-    unsigned int v730;     // r15d
-    int v731;              // r13d
-    int v732;              // ecx
-    int v733;              // r12d
-    int v734;              // r13d
-    int v735;              // ecx
-    int v736;              // eax
-    int v737;              // ecx
-    int v738;              // eax
-    int v739;              // ecx
-    unsigned int v740;     // ebx
-    unsigned int v741;     // ebp
-    int v742;              // eax
-    int v743;              // r12d
-    unsigned int v744;     // ebp
-    int v745;              // ecx
-    int v746;              // edx
-    int v747;              // eax
-    int v748;              // r13d
-    int v749;              // esi
-    int v750;              // eax
-    unsigned int v751;     // esi
-    int v752;              // r13d
-    int v753;              // eax
-    unsigned int v754;     // r15d
-    int v755;              // r13d
-    int v756;              // edx
-    int v757;              // esi
-    int v758;              // r13d
-    int v759;              // edx
-    int v760;              // esi
-    int v761;              // r8d
-    int v762;              // eax
-    int v763;              // esi
-    int v764;              // edi
-    int v765;              // edx
-    int v766;              // r12d
-    int v767;              // r13d
-    int v768;              // esi
-    int v769;              // eax
-    int v770;              // r12d
-    int v771;              // r13d
-    int v772;              // eax
-    int v773;              // r12d
-    int v774;              // r13d
-    int v775;              // r13d
-    int v776;              // eax
-    int v777;              // r12d
-    int v778;              // ebx
-    int v779;              // ebp
-    unsigned int v780;     // r15d
-    int v781;              // r13d
-    int v782;              // ebx
-    unsigned int v783;     // ebp
-    unsigned int v784;     // r15d
-    unsigned int v785;     // r13d
-    unsigned int v786;     // ebx
-    int v787;              // ecx
-    int v788;              // r15d
-    unsigned int v789;     // ebx
-    int v790;              // ecx
-    int v791;              // eax
-    int v792;              // ecx
-    unsigned int v793;     // esi
-    unsigned int v794;     // r13d
-    unsigned int v795;     // ecx
-    int v796;              // eax
-    int v797;              // r15d
-    int v798;              // ebx
-    int v799;              // ecx
-    int v800;              // r12d
-    unsigned int v801;     // r13d
-    unsigned int v802;     // r15d
-    unsigned int v803;     // ebx
-    int v804;              // eax
-    unsigned int v805;     // r13d
-    int v806;              // r15d
-    unsigned int v807;     // ebx
-    int v808;              // eax
-    int v809;              // r13d
-    int v810;              // ecx
-    int v811;              // eax
-    int v812;              // edx
-    int v813;              // ebp
-    int v814;              // r12d
-    int v815;              // r15d
-    int v816;              // edx
-    int v817;              // ebp
-    unsigned int v818;     // eax
-    int v819;              // ecx
-    int v820;              // r15d
-    int v821;              // edx
-    int v822;              // ecx
-    int v823;              // r15d
-    int v824;              // edx
-    int v825;              // ecx
-    int v826;              // edx
-    int v827;              // r15d
-    int v828;              // ecx
-    int v829;              // edi
-    int v830;              // edx
-    int v831;              // ecx
-    int v832;              // r15d
-    int v833;              // edx
-    int v834;              // r12d
-    int v835;              // r12d
-    int v836;              // r15d
-    unsigned int v837;     // ebp
-    unsigned int v838;     // ebx
-    int v839;              // eax
-    int v840;              // r12d
-    int v841;              // ebp
-    int v842;              // ecx
-    unsigned int v843;     // edx
-    int v844;              // eax
-    int v845;              // r12d
-    int v846;              // ebp
-    int v847;              // r15d
-    int v848;              // ecx
-    int v849;              // r12d
-    int v850;              // r13d
-    int v851;              // r15d
-    int v852;              // ecx
-    int v853;              // r12d
-    int v854;              // r13d
-    unsigned int v855;     // r15d
-    int v856;              // r14d
-    unsigned int v857;     // r12d
-    unsigned int v858;     // r13d
-    int v859;              // r14d
-    int v860;              // r12d
-    unsigned int v861;     // r13d
-    unsigned int v862;     // r14d
-    int v863;              // eax
-    int v864;              // edx
-    int v865;              // esi
-    int v866;              // r15d
-    int v867;              // eax
-    int v868;              // edx
-    int v869;              // ecx
-    int v870;              // r15d
-    int v871;              // eax
-    int v872;              // edx
-    int v873;              // ecx
-    int v874;              // r15d
-    int v875;              // eax
-    int v876;              // ecx
-    int v877;              // r15d
-    int v878;              // edi
-    int v879;              // edx
-    int v880;              // r9d
-    int v881;              // r15d
-    int v882;              // ebx
-    int v883;              // r9d
-    int v884;              // ebx
-    int v885;              // edx
-    int v886;              // r13d
-    int v887;              // r15d
-    int v888;              // eax
-    int v889;              // ebx
-    unsigned int v890;     // r13d
-    unsigned int v891;     // r15d
-    unsigned int v892;     // r14d
-    unsigned int v893;     // r12d
-    unsigned int v894;     // r13d
-    unsigned int v895;     // r15d
-    unsigned int v896;     // ebx
-    int v897;              // eax
-    int v898;              // edx
-    __int64 v899;          // rbx
-    __int64 v900;          // rbp
-    unsigned __int64 v901; // r12
-    //__int64 v902;          // r14
-
-    unsigned int v1075;     // [rsp+0h] [rbp-138h]
-    int v1077;              // [rsp+8h] [rbp-130h]
-
-    v3 = U8TOU32(key_basis);
-    v4 = U8TOU32(key_basis + 4);
-    v5 = U8TOU32(key_basis + 8);
-    v6 = U8TOU32(key_basis + 12) - v3;
-    v7 = playIntentKey[(unsigned __int8)v6 + 5] ^ v5;
-    v8 = v4 ^ __ROL4__(v7, 26);
-    v9 = v8 + v3;
-    v10 = playIntentKey[(unsigned __int8)v9 + 41] + v6;
-    v11 = v10 ^ v7;
-    v12 = v11 ^ v8;
-    v13 = v12 ^ v9;
-    v14 = (__ROL4__(v13, 26) - 5575) ^ v10 ^ (v12 + 6978);
-    v15 = v11 - v14;
-    v16 = v12 - v15;
-    v17 = v13 ^ (1161522586 * v16);
-    v18 = v15 - playIntentKey[(unsigned __int8)(v14 + 10 * v17) + 161];
-    v19 = v18 ^ v16;
-    v20 = v17 ^ (v19 + v18);
-    v21 = v14 + 2109023498 * v17 - ((__ROL4__(v20, 8) + 8915) ^ (v19 + 14171));
-    v22 = v21 + v18;
-    v23 = v22 ^ v19;
-    v24 = v20 ^ (v23 + 1754773603);
-    v25 = process(v21 - v24 - 2145813339, v21 - v24, v24, v23, 1363753160LL);
-    v26 = playIntentKey[(unsigned __int8)(v22 ^ v25) + 29] ^ v23;
-    v27 = 976882793 - v26 + v24;
-    v28 = v21 + 976882793 - v26;
-    v29 = (v22 ^ v25) - v28;
-    v30 = v26 ^ process(v29 - 1303859818, v29, v28, v27, 851393042LL);
-    v31 = v30 ^ v27;
-    if ((v31 & 2) != 0)
-    {
-        v29 ^= (__ROL4__(v30 + v28 + 1611120792, 24) + 1720) ^ (v30 + 30865);
-        v32 = v30 + ((__ROL4__(v29, 13) + 9680) ^ (v30 + v28 + 1611095866));
-        v28 = v31 ^ (v30 + v28 + 1611120792);
-        v30 = v32;
-    }
-    if ((v30 & 0x1000) != 0)
-    {
-        v33 = v28 ^ (__ROL4__(v31, 7) + __ROL4__(v29, 12));
-        v34 = v29 - process(v33 - 1325816497, v33, v31, v30, 292722083LL);
-        v35 = v34 + v31;
-        v36 = v35 ^ v33;
-        v37 = v34 - v36;
-        v38 = playIntentKey[(unsigned __int8)v37 + 176] ^ v35;
-        v39 = v36 + process(v38 + 1342240622, v38, v37, v30, 3684303098LL);
-        v40 = v39 ^ v37;
-        v41 = v38 + process(v40 + 1293449252, v40, v39, v30, 3419615356LL);
-        v42 = v39 - v41;
-        v43 = playIntentKey[(unsigned __int8)v42 + 262] ^ v40;
-        v44 = v41 ^ __ROL4__(v43, 26);
-        v45 = v42 ^ __ROL4__(v44, 9);
-        v46 = v45 + v44 + v43;
-        v47 = playIntentKey[(unsigned __int8)v46 + 38] + v44;
-        v48 = v45 + 578331952 * v47;
-        v29 = playIntentKey[(unsigned __int8)(v45 + 48 * v47) + 176] ^ v46;
-        v31 = v47 - v29;
-        v28 = v30 ^ v48;
-    }
-    v49 = v31 ^ v28;
-    v50 = v49 ^ v29;
-    v51 = v49 + v30;
-    v52 = v31 + __ROR4__(v50 + v51, 1);
-    v53 = v49 - v52 - 149063553;
-    v54 = v50 ^ __ROL4__(v53, 23);
-    v55 = v50 + v51 + 115624190;
-    v56 = v52 + v55;
-    v57 = v55 + v52 + 1257722743;
-    v58 = v55 - v54;
-    v59 = v53 ^ v57;
-    v60 = playIntentKey[(unsigned __int8)v59 + 290] + v54;
-    v61 = v60 ^ v58;
-    v62 = v56 - v61;
-    v63 = (__ROL4__(v62, 1) - 1202) ^ v59 ^ (v61 + 25604);
-    v64 = v60 - v63;
-    v65 = playIntentKey[(unsigned __int8)(v61 + 84 * v64) + 85] ^ v62;
-    v66 = v63 - v65;
-    v67 = (__ROL4__(v66, 6) - 15156) ^ v64 ^ (unsigned int)(v65 + 7545);
-    v68 = v61 + 243798868 * v64 - v67;
-    v69 = v65 + process(v68 - 1694478679, v68, v67, v66, 1797834273LL);
-    v70 = v67 - (v69 ^ v66) + 478230746;
-    v71 = v68 - v67;
-    v72 = (v71 + 2089301558) ^ v66;
-    v73 = __ROL4__(v72, 14);
-    v74 = v72 ^ v70;
-    v75 = __ROL4__(v74, 26);
-    LODWORD(v67) = v75 + v71 + v73 - 478230746;
-    v76 = ((v71 + 2089301558) ^ v69) + process((unsigned int)(v75 + v71 + v73 + 1111123788), (unsigned int)v67, v74, v72, 3884691695LL);
-    v77 = v72 - v76;
-    v78 = v74 - ((__ROL4__(v77, 6) + 26700) ^ (v76 - 145));
-    v79 = (__ROL4__(v78 + v67 + v76, 10) + 20749) ^ v77 ^ (v78 + v67 - 7901);
-    v80 = __ROL4__(v79, 29);
-    v81 = v78 + ((v80 - 16516) ^ (v78 + v67 + v76 - 22409));
-    v82 = playIntentKey[(unsigned __int8)(v78 + ((v80 + 124) ^ (v78 + v67 + v76 + 119))) + 411] ^ (v78 + v67);
-    v83 = v82 ^ (v78 + v67 + v76);
-    v84 = v79 - process(v83 + 781236043, v83, v82, v81, 2822189948LL);
-    v85 = v84 + v81;
-    v86 = v85 + v82 - 1737470809;
-    LODWORD(v67) = v83 ^ (v86 + v85);
-    v87 = v84 + process((unsigned int)(v67 - 803835789), (unsigned int)v67, v86, v85, 1722804801LL);
-    v88 = playIntentKey[(unsigned __int8)v87 + 447] ^ v85;
-    v89 = v86 - v88 - 1652947861;
-    LODWORD(v67) = v67 - playIntentKey[(unsigned __int8)v89 + 320];
-    v90 = v67 + v87;
-    v91 = v88 - v90 + 813749319;
-    v92 = playIntentKey[(unsigned __int8)v91 + 356] ^ v89;
-    LODWORD(v67) = v92 ^ v67;
-    v93 = playIntentKey[(unsigned __int8)v67 + 370] ^ v90;
-    v94 = v91 - v93;
-    v95 = v92 - v94;
-    v96 = v67 - __ROL4__(v95, 10);
-    if ((v96 & 0x20000) != 0)
-    {
-        v97 = v93 - v95;
-        v98 = v97 ^ v96;
-        v99 = __ROL4__(v97, 30);
-        v100 = __ROL4__((v99 - 8483) ^ v94 ^ (v95 + 4745), 19);
-        v94 ^= (v99 - 8483) ^ (v95 + 4745);
-        v93 = v98;
-        v95 ^= v100;
-    }
-    if ((v95 & 0x200) != 0)
-    {
-        v101 = v96 + v93;
-        v102 = v94 + ((__ROL4__(v101, 3) - 16968) ^ (v96 - 20093));
-        v103 = v102 ^ v96;
-        v104 = v101 ^ __ROL4__(v103, 16);
-        v105 = v104 + v102;
-        v106 = v103 - v105 + 613360723;
-        v107 = v104 ^ (-809550363 * v106);
-        v108 = v107 ^ v105;
-        v96 = v106 - v108;
-        v93 = v95 ^ v107;
-        v94 = v108;
-    }
-    v109 = v93 + __ROL4__(v96, 7);
-    v110 = v109 ^ v94;
-    v111 = v95 - 1873671667 * v110;
-    v112 = v111 ^ v96;
-    v113 = 1482645505 * v112 + v109;
-    v114 = v110 - process(v113 + 1960862996, v113, v112, v111, 2415619455LL);
-    v115 = v114 + v111;
-    v116 = v115 + v112;
-    if ((v116 & 0x10) != 0)
-    {
-        v117 = (v115 + 1444403267) ^ v113;
-        v118 = playIntentKey[(unsigned __int8)v117 + 495] ^ v114;
-        v119 = v118 ^ v115;
-        v120 = v117 - __ROL4__(v119, 24);
-        v121 = v119 + ((__ROL4__(v120 + v118, 21) + 1768) ^ (v120 + 13719));
-        v122 = (__ROL4__(v121, 4) - 13167) ^ v120 ^ (v120 + v118 - 3783);
-        v123 = v120 + v118 - v122;
-        v124 = v121 + 1246311832 * v123;
-        v125 = v124 + v122;
-        v126 = v123 - playIntentKey[(unsigned __int8)v125 + 79];
-        v127 = playIntentKey[(unsigned __int8)v126 + 100] ^ v124;
-        v128 = v125 - v127;
-        v114 = v128 + v126 + 379999725;
-        v115 = (unsigned int)(v127 - playIntentKey[(unsigned __int8)(v128 + v126 - 19) + 409]);
-        v113 = v116 ^ v128;
-    }
-    v129 = (((unsigned int)v115 >> 26) & 7) + 1;
-    do
-    {
-        v130 = v113 - v116;
-        v131 = v114 + __ROL4__(v130, 7);
-        v132 = v116 ^ (146926685 * v131);
-        v133 = v130 - v132;
-        v134 = v133 + v131 - 1828110148;
-        v135 = v132 - v134;
-        v136 = v133 - playIntentKey[(unsigned __int8)v135 + 115];
-        v137 = v134 ^ __ROL4__(v136, 22);
-        v135 += 264462239;
-        v138 = v135 ^ v136;
-        v139 = v137 ^ (v135 - v137);
-        v140 = v138 + v139;
-        v114 = v137 - (v138 + v139 + v138);
-        v141 = v115;
-        v142 = process(v114 + 923454031, v114, v140, (unsigned int)v115, 2161356342LL);
-        v115 = v141;
-        v116 = v139 + v142;
-        v113 = v141 ^ v140;
-        --v129;
-    } while (v129);
-    if ((v116 & 4) != 0)
-    {
-        v143 = v113 ^ (v115 + v114);
-        v144 = v114 - v143;
-        v145 = v144 + v115;
-        v146 = v143 ^ (v115 + v144 + 1839562849);
-        v144 += 627068795;
-        v147 = v146 - v144 + v145 + 1839562849;
-        v148 = -(v145 - v144 + 1839562849);
-        v149 = v144 - v147;
-        v150 = v147 - ((__ROL4__(v149, 2) + 1841) ^ (v148 + 31128));
-        v151 = v148 - v150;
-        v152 = v149 ^ __ROL4__(v151, 16);
-        v153 = v152 + v150;
-        v154 = v153 ^ v151;
-        v114 = v152 + __ROL4__(v154, 4);
-        LODWORD(v115) = v153 - v114;
-        v113 = v116 ^ v154;
-    }
-    v155 = v115 + v113;
-    v156 = v114 ^ (__ROL4__(v155, 8) + __ROL4__(v115, 28));
-    v157 = v116 - __ROL4__(v156, 19);
-    v158 = v157 ^ v115;
-    v159 = v155 - playIntentKey[(unsigned __int8)v158 + 386];
-    v160 = v156 - v159;
-    v161 = v157 ^ (__ROL4__(v160, 13) + __ROL4__(v159, 26));
-    v162 = v158 - __ROL4__(v161, 24);
-    v163 = v159 - (v162 + __ROL4__(v161, 9));
-    v164 = playIntentKey[(unsigned __int8)v163 + 264] + v160;
-    v165 = v161 ^ (-715252002 * v164);
-    v166 = v162 - v165;
-    v167 = v163 - playIntentKey[(unsigned __int8)(v166 + 12) + 300];
-    v168 = v164 + 1113083650 * v167;
-    v169 = v166;
-    v170 = v165 - process(v168 - 1472326775, v168, v167, (unsigned int)(v166 - 1504109812), 2046057600LL);
-    v171 = v169 + v170 - 1504109812;
-    v172 = ((v171 >> 25) & 7) + 1;
-    do
-    {
-        v173 = v167 ^ (-1077858558 * v170);
-        v174 = v168 ^ process(v173 + 2050005553, v173, v170, v171, 946606917LL);
-        v175 = v170 - v174;
-        v176 = v173 - playIntentKey[(unsigned __int8)v175 + 209];
-        v177 = v174 + 485789351 * v176;
-        v178 = v175 - playIntentKey[(unsigned __int8)(v174 - 89 * v176) + 82];
-        v179 = playIntentKey[(unsigned __int8)v178 + 259] + v176;
-        v168 = v177 - __ROL4__(v179, 5);
-        v170 = v168 + v178;
-        v167 = v171 ^ v179;
-        --v172;
-    } while (v172);
-    v180 = (~v170 >> 19) | 0xFFFFFFF8;
-    do
-    {
-        v181 = v167 - playIntentKey[(unsigned __int8)v171 + 204];
-        v168 ^= v181;
-        v171 += v168 + v181;
-        v167 = v170 ^ v181;
-        ++v180;
-    } while (v180);
-    v182 = (~v171 >> 20) | 0xFFFFFFF8;
-    do
-    {
-        v183 = v167 - v170;
-        v168 += v183;
-        v170 -= __ROL4__(v168, 5);
-        v167 = v171 ^ v183;
-        ++v182;
-    } while (v182);
-    v184 = v170 ^ v167;
-    v185 = v168 - (v184 + __ROL4__(v170, 5));
-    v186 = v185 + v171;
-    v187 = v170 - (__ROL4__(v186, 2) + __ROL4__(v185, 3));
-    v188 = v184 ^ __ROL4__(v187, 3);
-    v189 = v188 ^ v185;
-    v190 = v189 + v186 + 743521795;
-    v191 = v187 - playIntentKey[(unsigned __int8)v190 + 430];
-    v192 = (~v191 >> 18) | 0xFFFFFFF8;
-    do
-    {
-        v193 = (__ROL4__(v190, 26) + 8113) ^ v188 ^ (v189 + 27526);
-        v194 = v193 + v189;
-        v195 = (v193 + v189) ^ v190;
-        v196 = (__ROL4__(v195, 28) - 30759) ^ v193 ^ (v193 + v189 + 28205);
-        v197 = v194 + __ROL4__(v196, 25);
-        v198 = v195 - v197;
-        v199 = v198 + v196;
-        v200 = v197 - (__ROL4__(v199, 6) + __ROL4__(v198, 4));
-        v201 = playIntentKey[(unsigned __int8)v200 + 430];
-        v202 = (unsigned int)(v201 + v198 + 558648383);
-        v203 = v198 + v201;
-        v204 = v199 - process(v202, v203, v200, v191, 380920957LL);
-        v205 = v200 - playIntentKey[(unsigned __int8)v204 + 466];
-        v206 = v204 ^ (v205 + v203 + 1944226139);
-        v207 = playIntentKey[(unsigned __int8)(v204 ^ (v205 + v203 + 91)) + 262];
-        v189 = v207 + v205;
-        v190 = (v205 + v203) ^ (v207 + v205 + 1679538396);
-        v188 = v191 ^ v206;
-        ++v192;
-    } while (v192);
-    v208 = v188 - (__ROL4__(v190, 2) + __ROL4__(v191, 8));
-    v209 = v189 ^ (-263883735 * v208);
-    v210 = playIntentKey[(unsigned __int8)(v189 ^ (41 * v208)) + 151] ^ v191;
-    v211 = v208 - playIntentKey[(unsigned __int8)(v190 - v210) + 206];
-    v212 = playIntentKey[(unsigned __int8)(v209 - v211) + 459];
-    v213 = v210 - v212;
-    v214 = v190 - v212;
-    v215 = playIntentKey[(unsigned __int8)v214 + 3];
-    v216 = v215 + v209;
-    v217 = v213 - __ROL4__(v216, 10);
-    v218 = v217 + v214;
-    v219 = v218 + v215 + v211;
-    v220 = v219 + v216;
-    v221 = v217 - __ROL4__(v220, 26);
-    v222 = v221 ^ v218;
-    v223 = v222 + v219;
-    v224 = v220 - __ROL4__(v223, 18);
-    v225 = v224 + v221;
-    v226 = v225 + v222;
-    v227 = v223 + __ROL4__(v226, 17);
-    v228 = v225 + 395150012 * (v224 - v227);
-    v229 = v226 ^ process(v228 - 1019028630, v228, v224 - v227, v227, 1133287441LL);
-    v230 = process(v229 + 910151551, v229, v228, v224 - v227, 482174618LL);
-    v231 = v224 - v230;
-    v232 = v231 + v228;
-    v233 = v229 - playIntentKey[(unsigned __int8)v232 + 368];
-    v234 = v233 + v227 - v230;
-    v235 = v234 + v231;
-    v236 = v232 ^ (__ROL4__(v231 + v234 - 471162094, 6) + __ROL4__(v234, 1));
-    v237 = v233 + v234;
-    v238 = v233 - v236;
-    v239 = v235 + __ROL4__(v237, 30) - 471162094;
-    v240 = v239 ^ v236;
-    v241 = playIntentKey[(unsigned __int8)v240 + 372] + v238;
-    v242 = v237 ^ (v241 + v240);
-    v243 = v239 - 599336772 * v242;
-    v244 = v241 ^ (-864090051 * (v240 - v243));
-    v245 = v242 ^ (v244 + v240 - v243);
-    v246 = __ROL4__(v245, 14);
-    v247 = v240 - v246 - 1098456393;
-    v248 = v243 - v246;
-    v249 = v244 ^ (v248 + __ROL4__(v247, 12));
-    v250 = v245 ^ (v249 - 1489482555);
-    v251 = v248 - (__ROL4__(v250, 26) + __ROL4__(v249, 8));
-    v252 = v251 ^ v247;
-    v253 = v249 - v252;
-    v254 = v250 + __ROL4__(v253, 3);
-    v255 = v254 ^ v251;
-    v256 = v252 ^ (-1226696607 * v255);
-    v257 = playIntentKey[(unsigned __int8)(v252 ^ (97 * v255)) + 12] + v253;
-    v258 = v254 ^ (-1617657232 * v257);
-    v259 = playIntentKey[(unsigned __int8)(v254 ^ (112 * v257)) + 27] + v255;
-    v260 = v259 ^ v256;
-    v261 = v257 + process(v260 + 1837751933, v260, v259, v258, 3345596271LL);
-    v262 = v261 ^ v258;
-    v263 = v259 ^ (2050015765 * v262);
-    v264 = v261 + __ROL4__(v263 + v260 + 1557496618, 4);
-    v265 = playIntentKey[(unsigned __int8)v264 + 350] + v262;
-    v266 = v263 + __ROL4__(v265, 19);
-    v267 = v263 + v260 + 1557496618 - v266 - v265;
-    v268 = playIntentKey[(unsigned __int8)(v263 + v260 + 42 - v266 - v265) + 7] + v264;
-    v269 = ((unsigned int)~v268 >> 13) | 0xFFFFFFF8;
-    do
-    {
-        v270 = v267 + v265;
-        v271 = v270 + v266;
-        v272 = v267 - playIntentKey[(unsigned __int8)v271 + 204];
-        v273 = playIntentKey[(unsigned __int8)v272 + 259] + v270;
-        v274 = __ROL4__(v273, 24);
-        v275 = v274 + v271 - 1801454077;
-        v276 = v271 + v274;
-        v277 = v272 ^ v275;
-        v278 = v273 - __ROL4__(v277, 25);
-        v266 = v278 + v276;
-        v267 = v277 + ((__ROL4__(v278 + v276, 16) + 13371) ^ (v278 + 25791));
-        v265 = v268 ^ v278;
-        ++v269;
-    } while (v269);
-    v279 = v267 + v265;
-    v280 = v266 - (__ROL4__(v279, 22) + __ROL4__(v267, 5));
-    v281 = v280 + v268;
-    v282 = v267 - (__ROL4__(v281, 27) + __ROL4__(v280, 10));
-    v283 = v279 - v282;
-    v284 = v280 ^ (__ROL4__(v283, 19) + __ROL4__(v282, 19));
-    v285 = v281 ^ __ROL4__(v284, 19);
-    v286 = v285 + v282;
-    v287 = ((v286 >> 21) & 7) + 1;
-    do
-    {
-        v288 = v284 - process(v285 + v283 + 1943856007, v285 + v283, v285, v286, 1031461698LL);
-        v289 = playIntentKey[(unsigned __int8)v288 + 151];
-        v290 = v285 - v289;
-        v291 = playIntentKey[(unsigned __int8)(v285 - v289) + 207] ^ (v285 + v283);
-        v292 = (__ROL4__(v291, 24) - 23722) ^ v288 ^ (v285 - v289 - 14494);
-        v293 = v292 + v285 - v289;
-        v294 = v291 - (__ROL4__(v293, 24) + __ROL4__(v292, 14));
-        v295 = v292 + ((__ROL4__(v294, 13) + 22595) ^ (v292 + v290 + 25815));
-        v296 = v295 ^ v293;
-        v297 = v296 ^ v294;
-        v298 = v296 ^ (v297 + v295 - 1596258462);
-        v299 = v297 ^ (v298 - 1987219088);
-        v284 = playIntentKey[(unsigned __int8)(v297 ^ ((v296 ^ (v297 + v295 + 98)) + 112)) + 283] + v297 + v295;
-        v285 = v284 ^ v298;
-        v283 = v286 ^ v299;
-        --v287;
-    } while (v287);
-    v300 = (v285 & 7) + 1;
-    do
-    {
-        v301 = playIntentKey[(unsigned __int8)v286 + 95] + v283;
-        v284 += __ROL4__(v301, 20);
-        v286 ^= v284;
-        v283 = v285 ^ v301;
-        --v300;
-    } while (v300);
-    if ((v286 & 0x80000) != 0)
-    {
-        v302 = playIntentKey[(unsigned __int8)v285 + 398] + v283;
-        v303 = v284 ^ process(v302 - 1449168714, v302, v285, v286, 1236722849LL);
-        v304 = v303 + v285;
-        v305 = v304 + v302;
-        v306 = v305 + v303;
-        v307 = v304 ^ (-1040016083 * v306);
-        v308 = v307 ^ v305;
-        v309 = v308 ^ v306;
-        v310 = v309 + v307;
-        v311 = v310 + v308;
-        v312 = v311 + v310 + v309;
-        v313 = v310 + __ROL4__(v312, 25);
-        v314 = v311 ^ __ROL4__(v313, 7);
-        v315 = v312 - v314;
-        v285 = v313 - playIntentKey[(unsigned __int8)v315 + 292];
-        v283 = v286 ^ v314;
-        v284 = v315;
-    }
-    v316 = v285 ^ v283;
-    v317 = v316 + v284;
-    v318 = v286 - v316 - v317;
-    v319 = v285 - __ROL4__(v318, 30);
-    v320 = v316 ^ (v319 + 1093064319);
-    v321 = playIntentKey[(unsigned __int8)v320 + 42] ^ v317;
-    v322 = v321 + v318;
-    v323 = v322 + v321 + v319;
-    v324 = v320 - v323;
-    v325 = v321 - v324;
-    v326 = v322 - __ROL4__(v325, 22);
-    v327 = v324 ^ (v326 + v323 + 2186) ^ (v326 + 230);
-    v328 = v325 - v327;
-    v329 = v326 - 700136363 * v328;
-    v330 = (__ROL4__(v329, 8) + 23844) ^ (v326 + v323) ^ (v328 - 26235);
-    v331 = (v330 >> 30) + 1;
-    do
-    {
-        v332 = v329 ^ v327;
-        v328 += v332 + v329;
-        v329 ^= v328;
-        v327 = v330 ^ v332;
-        --v331;
-    } while (v331);
-    v333 = process(v329 + 557300954, v329, v330, v328, 2666740031LL);
-    v334 = (v327 + v333) ^ v328;
-    v335 = v330 + v329;
-    v336 = v330 - v334;
-    v337 = v327 + v333 + v334;
-    v338 = v327 + v333 - v335;
-    v339 = playIntentKey[(unsigned __int8)v337 + 372] ^ v336;
-    v340 = v339 + v335;
-    v341 = ((v340 >> 28) & 7) + 1;
-    do
-    {
-        v342 = (__ROL4__(v339, 8) + __ROL4__(v337, 19)) ^ v338;
-        v337 ^= v342;
-        v339 -= v337;
-        v338 = v340 ^ v342;
-        --v341;
-    } while (v341);
-    v343 = v339 ^ v338;
-    v344 = v343 + v337;
-    v345 = v344 ^ v340;
-    v346 = v339 + v345;
-    v347 = v343 - process(v339 + v345 - 320268553, v339 + v345, v345, v344, 1659671511LL);
-    v348 = v347 + v344;
-    v349 = playIntentKey[(unsigned __int8)v348 + 295] + v345;
-    v350 = v349 ^ v346;
-    v351 = process(v350 + 1510384990, v350, v349, v348, 3222982411LL) + v347;
-    v352 = v349 + 1141841825 * (v348 ^ v351);
-    v353 = v350 - playIntentKey[(unsigned __int8)(v349 - 95 * (v348 ^ v351)) + 204];
-    v354 = v353 ^ v348;
-    v355 = playIntentKey[(unsigned __int8)v354 + 299] + v352;
-    v356 = v353 ^ v355;
-    v357 = __ROL4__(v353 ^ v355, 9) ^ v351 ^ v353;
-    v358 = v354 + v357 - 2008219468;
-    v359 = v355 - playIntentKey[(unsigned __int8)(v354 + v357 - 76) + 95];
-    v360 = v356 - v359;
-    v361 = v357 - v360;
-    v362 = v358 ^ __ROL4__(v361, 14);
-    v363 = v359 - v362;
-    v364 = v361 + ((__ROL4__(v360 - 330574507 * v363, 25) - 16905) ^ (v363 - 15832));
-    v365 = v364 + v362;
-    v366 = v363 ^ (2053674788 * v365);
-    v367 = v360 - 330574507 * v363 + __ROL4__(v366, 15);
-    v368 = v367 ^ v364;
-    v369 = v365 ^ process(v368 + 2000534085, v368, v367, v366, 2595622576LL);
-    v370 = v366 - v369;
-    v371 = v367 + __ROL4__(v370, 14);
-    v372 = v368 - v371 - v370;
-    v373 = v369 ^ __ROL4__(v372, 28);
-    v370 -= 1642285863;
-    v374 = (v370 - v373) ^ v371;
-    v375 = v372 ^ (v374 + v370 - v373);
-    v376 = __ROL4__(v375, 16);
-    v377 = v373 - v376;
-    v378 = v370 - v376;
-    v379 = v378 + v377 + v374;
-    v380 = v375 ^ __ROL4__(v379, 18);
-    v381 = v377 - v380;
-    v382 = process(v381 + 1242239579, v381, v380, v379, 4262940966LL);
-    v383 = v378 ^ v382;
-    v384 = playIntentKey[(unsigned __int8)(v378 ^ v382) + 122] ^ v379;
-    v385 = process(v384 - 2084284022, v384, v378 ^ v382, v381, 3871980340LL) ^ v380;
-    v386 = v381 + 598310620 * v385;
-    v387 = v383 - ((__ROL4__(v386, 26) + 5681) ^ (v385 + 3437));
-    v388 = v384 + process(v387 + 1833376546, v387, v386, v385, 3555744326LL);
-    v389 = v385 - v388;
-    v390 = v386 ^ (v389 - 1906628798);
-    v391 = v387 + process(v390 - 1859948925, v390, v389, v388, 3163490283LL);
-    v392 = playIntentKey[(unsigned __int8)v391 + 319] + v388;
-    v393 = v389 - v392;
-    v394 = v390 ^ __ROL4__(v393, 23);
-    v395 = v391 - v394;
-    v396 = -886816887 * v395 + v392;
-    v397 = v393 ^ (v396 + __ROL4__(v395, 28));
-    v398 = v394 + ((__ROL4__(v397, 3) - 8755) ^ (v392 - 886816887 * v395 - 29158));
-    v399 = v398 ^ v395;
-    v400 = v396 + 2104654697 * v399;
-    v401 = playIntentKey[(unsigned __int8)(v396 + 105 * v399) + 460] ^ v397;
-    v402 = v398 - v401;
-    v403 = v399 - v402 - 20504780;
-    v404 = v400 ^ __ROL4__(v403, 2);
-    v405 = v404 ^ v401;
-    v406 = __ROL4__(v405, 19) + v402 + __ROL4__(v404, 5);
-    v407 = v403 - v406;
-    v408 = (v404 ^ (unsigned int)(1090861915 * v407)) + v407 + 884109382;
-    v409 = v405 + __ROL4__(v404 ^ (1090861915 * v407), 20);
-    v410 = v409 ^ v406;
-    v411 = v407 + 884109382;
-    v412 = v409 - v408;
-    v413 = process(
-        (unsigned int)(v412 - 1702366366),
-        (unsigned int)(v412 + 1275070007),
-        v408,
-        (unsigned int)(v407 + 884109382 - v410),
-        3952805703LL);
-    v414 = v411 - v413;
-    LODWORD(v408) = v414 + v408;
-    v415 = v408 ^ (v412 + 1275070007);
-    v416 = v415 + v408 + v410 - v413;
-    v417 = v416 ^ v414;
-    v418 = v417 ^ v408;
-    if ((v418 & 0x100) != 0)
-    {
-        v419 = v415 + process(v417 - 638289709, v417, v416, v418, 2853420555LL);
-        v420 = v419 ^ v416;
-        v421 = v417 - v420;
-        v422 = v420 ^ (v421 + v419 - 74094190);
-        v423 = playIntentKey[(unsigned __int8)v422 + 302] ^ (v421 + 1511403681);
-        v424 = v421 + v419 + 1511403681 - __ROL4__(v423, 12) - 1902429842;
-        v425 = v422 - v424;
-        v426 = v423 ^ (__ROL4__(v425, 10) + __ROL4__(v424, 20));
-        v427 = v424 - ((__ROL4__(v426, 15) - 8683) ^ (v425 - 11749));
-        v416 = (__ROL4__(v427, 4) - 722) ^ v425 ^ (v426 - 2004);
-        v417 = v416 ^ v426;
-        v415 = v418 ^ v427;
-    }
-    v428 = v415 - playIntentKey[(unsigned __int8)v417 + 403];
-    v429 = v416 ^ __ROL4__(v428, 21);
-    v430 = __ROL4__(v429, 11);
-    v431 = __ROL4__(v428, 22);
-    v432 = v430 + v418 + v431 - 1460;
-    v433 = v430 + v418 + v431;
-    v434 = v417 + (v432 ^ (v429 - 5272));
-    v435 = v428 + 493436508 * v434;
-    v436 = v429 - playIntentKey[(unsigned __int8)(v428 + 92 * v434) + 7];
-    v437 = v433 ^ v434;
-    v438 = v433 - v436;
-    v1075 = v437;
-    v439 = ((v437 >> 19) & 7) + 1;
-    do
-    {
-        v1077 = v439;
-        v440 = playIntentKey[(unsigned __int8)v438 + 2] ^ v435;
-        v441 = v436 - playIntentKey[(unsigned __int8)v440 + 23];
-        v442 = v441 + v438 - 1409813011;
-        v443 = v440 - (__ROL4__(v442, 11) + __ROL4__(v441, 19));
-        v444 = playIntentKey[(unsigned __int8)v443 + 73] + v441;
-        v445 = v442 - v444;
-        v446 = v443 - v445;
-        v447 = v446 + v444;
-        v448 = v445 + ((__ROL4__(v447, 14) + 19719) ^ (v446 + 12945));
-        v449 = __ROL4__(v448, 15) + v446 + __ROL4__(v447, 23);
-        v450 = v447 ^ process(v449 + 1067732014, v449, v448, v1075, 781948493LL);
-        v451 = process(v450 - 1705541536, v450, v449, v1075, 62272032LL);
-        v452 = (v448 ^ v451) + v449;
-        v453 = v450 - playIntentKey[(unsigned __int8)v452 + 428];
-        v454 = playIntentKey[(unsigned __int8)(v453 ^ v448 ^ v451) + 464] ^ v452;
-        v436 = v454 + v453;
-        v438 = (v453 ^ v448 ^ v451) + process(v454 + v453 + 717313069, v454 + v453, v454, v1075, 2167927547LL);
-        v435 = v1075 ^ v454;
-        --v439;
-    } while (v1077 != 1);
-    v455 = v435 - v438;
-    v456 = v436 - 1681706036 * v455;
-    v457 = (__PAIR64__(v436, v456) >> 2) + v1075 + __ROL4__(v455, 24);
-    v458 = v438 + __ROL4__(v457, 18);
-    v459 = v455 - __ROL4__(v458, 19);
-    v460 = v456 ^ (v459 - 81386498);
-    v461 = v457 - v460 - 2137975315;
-    v462 = v458 ^ __ROL4__(v461, 9);
-    if ((v462 & 0x20000) != 0)
-    {
-        v463 = v461 ^ v459;
-        v464 = v463 ^ v460;
-        v465 = v461 + process(v464 + 1304013820, v464, v463, v462, 3350170807LL);
-        v466 = v463 ^ __ROL4__(v465, 21);
-        v467 = v464 - v466;
-        v468 = (__ROL4__(v467, 11) + 30495) ^ v465 ^ (v466 - 28525);
-        v469 = v468 ^ v466;
-        v470 = v467 + __ROL4__(v469, 26);
-        v471 = v470 ^ v468;
-        v472 = v469 - playIntentKey[(unsigned __int8)v471 + 153];
-        v473 = v472 + v470;
-        v474 = v473 + v471;
-        v475 = v472 ^ (v474 + v473);
-        v476 = v473 - v475;
-        v477 = v474 - v476;
-        v478 = v477 + v475;
-        v460 = v476 - ((__ROL4__(v478, 15) - 15919) ^ (v477 - 23101));
-        v461 = v477 - __ROL4__(v460, 4);
-        v459 = v462 ^ v478;
-    }
-    v479 = v459 - v461;
-    v480 = v460 - playIntentKey[(unsigned __int8)v479 + 146];
-    v481 = __ROL4__(v480, 18);
-    v482 = playIntentKey[(unsigned __int8)(v461 ^ (v481 + v462 + 125)) + 181] ^ v479;
-    v483 = v480 ^ (v481 + v462);
-    v484 = (v461 ^ (v481 + v462 + 411230333)) - __ROL4__(v483, 18);
-    v485 = v484 + v482;
-    v486 = v480 - (v482 + __ROL4__(v484 + v482, 1));
-    v487 = v486 + v483;
-    v488 = v484 - v487;
-    v489 = v488 + v485;
-    v490 = v486 ^ (__ROR4__(v489, 1) + __ROL4__(v488, 1));
-    v491 = v487 - __ROL4__(v490, 10);
-    v492 = v488 - v491;
-    v493 = (~v492 >> 24) | 0xFFFFFFF8;
-    do
-    {
-        v494 = (__ROL4__(v491, 24) + 11501) ^ v489 ^ (v490 + 2151);
-        v495 = v490 - v494;
-        v496 = v491 ^ (__ROL4__(v495, 14) + __ROL4__(v494, 10));
-        v497 = v496 ^ v494;
-        v498 = (__ROL4__(v497, 2) + 1266) ^ v495 ^ (v496 - 13331);
-        v499 = v496 - v498;
-        v500 = v497 - v499;
-        v501 = v498 + v500 + 1042723588;
-        v502 = v499 - process(v498 + v500 + 555136590, v501, v500, v492, 1975697538LL);
-        v503 = v500 + process(v502 + 71007353, v502, v501, v492, 1584671376LL);
-        v490 = playIntentKey[(unsigned __int8)v503 + 208] ^ v501;
-        v491 = v502 - v490;
-        v489 = v492 ^ v503;
-        ++v493;
-    } while (v493);
-    if ((v491 & 0x10000) != 0)
-    {
-        v504 = v489 - v492;
-        v505 = __ROL4__(v504, 9) + __ROL4__(v492, 27) + v490;
-        v506 = v492 ^ __ROL4__(v505, 20);
-        v507 = v504 + 680117032 * v506;
-        v508 = v505 - playIntentKey[(unsigned __int8)v507 + 211];
-        v509 = v506 + 415429289 * v508;
-        v510 = v509 ^ v507;
-        v511 = v508 - 2051267891 * v510;
-        v512 = v509 - v511;
-        v513 = v512 + v510;
-        v490 = v513 ^ v511;
-        v492 = v512 - (__ROL4__(v513 ^ v511, 19) + __ROL4__(v513, 1));
-        v489 = v491 ^ v513;
-    }
-    v514 = v489 + __ROL4__(v492, 26);
-    v515 = v514 ^ v490;
-    v516 = playIntentKey[(unsigned __int8)v515 + 206] + v491;
-    v517 = v492 - __ROL4__(v516, 16);
-    v518 = v514 ^ (__ROL4__(v517, 19) + __ROL4__(v516, 5));
-    v519 = v515 - playIntentKey[(unsigned __int8)v518 + 241];
-    v520 = v519 + v516;
-    v521 = v517 - playIntentKey[(unsigned __int8)v520 + 115];
-    v522 = v521 + v518;
-    v523 = v519 - 1950014230 * v522;
-    v524 = v520 - playIntentKey[(unsigned __int8)(v519 - 22 * v522) + 402];
-    v525 = v524 + v521;
-    v526 = playIntentKey[(unsigned __int8)v525 + 458] + v522;
-    v527 = playIntentKey[(unsigned __int8)v526 + 438] ^ v523;
-    v528 = v524 ^ v525;
-    v529 = v526 - __ROL4__(v528, 3);
-    v530 = v527 ^ (v529 + v528);
-    v531 = v524 - (v527 + __ROL4__(v530, 4));
-    v532 = v531 ^ v528;
-    v533 = v529 + __ROL4__(v532, 20);
-    v534 = v530 - v533;
-    v535 = v531 - 282695840 * v534;
-    v536 = v532 - __ROL4__(v535, 11);
-    v537 = (~v536 >> 2) | 0xFFFFFFF8;
-    do
-    {
-        v538 = v533 ^ process(v535 + 2136666838, v535, v534, v536, 3454834097LL);
-        v539 = v534 - v538;
-        v540 = (v535 + 636153095 * (v534 - v538)) ^ v538;
-        v534 = v534 - v538 + __ROR4__(v540, 1);
-        v535 += playIntentKey[(unsigned __int8)v534 + 230] + 636153095 * v539;
-        v533 = v536 ^ v540;
-        ++v537;
-    } while (v537);
-    v541 = v534 - process(v535 + v533 + 261504297, v535 + v533, v535, v536, 2938209801LL);
-    v542 = playIntentKey[(unsigned __int8)v541 + 73] ^ v536;
-    v543 = v535 ^ __ROL4__(v542, 30);
-    v544 = playIntentKey[(unsigned __int8)v543 + 88] ^ (v535 + v533);
-    v545 = v541 ^ __ROL4__(v544, 13);
-    v546 = v542 - v545 - 206884696;
-    v547 = v543 ^ (__ROL4__(v546, 19) + __ROL4__(v545, 7));
-    v548 = v544 - (__ROR4__(v547, 1) + __ROL4__(v546, 25));
-    v549 = v545 - __ROL4__(v548, 30);
-    v550 = v546 ^ __ROL4__(v549, 20);
-    v551 = v547 - v550;
-    v552 = v548 - v551;
-    v553 = v549 - v552;
-    v554 = v550 ^ (__ROL4__(v553, 11) + __ROL4__(v552, 20));
-    v555 = v554 + v551;
-    v556 = v552 ^ (v554 + v551 - 80470985);
-    v557 = playIntentKey[(unsigned __int8)(v552 ^ (v554 + v551 + 55)) + 482] + v553;
-    v558 = v554 - v557;
-    v559 = playIntentKey[(unsigned __int8)v558 + 458] ^ v555;
-    v560 = v559 ^ v556;
-    v561 = v557 ^ (v560 - 592831104);
-    v562 = v561 + v558;
-    v563 = v559 ^ (v561 + v558 - 857518846);
-    v564 = (v563 >> 31) + 1;
-    do
-    {
-        v565 = v560 ^ (__ROL4__(v562, 16) + __ROL4__(v561, 11));
-        v566 = v561 - v565;
-        v567 = v562 ^ (__ROL4__(v566, 12) + __ROL4__(v565, 15));
-        v568 = v565 - v567;
-        v569 = __ROL4__(v568, 16) + v566 + __ROL4__(v567, 15);
-        v570 = v569 ^ v567;
-        v571 = __ROL4__(v570, 7);
-        v572 = v568 - v571 + v569;
-        v573 = v570 - (v572 + v568 - v571);
-        v574 = v568 - v571 + 1692216251;
-        v575 = v572 ^ (v574 - v573);
-        v576 = v573 - v575;
-        v577 = v574 - v575;
-        v578 = v575 - v576 - v577;
-        v579 = playIntentKey[(unsigned __int8)v578 + 209] + v576;
-        v580 = v577 ^ (__ROL4__(v579, 20) + __ROL4__(v578, 1));
-        v561 = v578 - ((__ROL4__(v580, 18) - 11849) ^ (v579 - 15031));
-        v562 = v579 - (__ROL4__(v561, 26) + __ROL4__(v580, 6));
-        v560 = v563 ^ v580;
-        --v564;
-    } while (v564);
-    if ((v562 & 0x40000) != 0)
-    {
-        v581 = v560 - v563;
-        v582 = v581 + v561 + 1975391211;
-        v583 = v563 - playIntentKey[(unsigned __int8)v582 + 406];
-        v584 = playIntentKey[(unsigned __int8)v583 + 461] + v581;
-        v585 = v584 + v582;
-        v586 = v584 - v583;
-        v587 = (__ROL4__(v586, 11) + 27007) ^ (v583 - v585 + 440);
-        v588 = v585 - v587;
-        v589 = v583 - v587;
-        v590 = v586 + __ROL4__(v589, 23);
-        v561 = v588 - (__ROL4__(v590, 14) + __ROL4__(v589, 13));
-        v563 = v561 + v589;
-        v560 = v562 ^ v590;
-    }
-    if ((v563 & 0x80u) != 0)
-    {
-        v591 = (__ROL4__(v561 + v560 + v562 + 659453660, 28) + 8593) ^ v562 ^ (v560 + v562 - 82);
-        v592 = __ROL4__(v591, 5) + v560 + v562;
-        v593 = v592 + v561 + v560 + v562 + 659453660;
-        v594 = v591 - ((__ROL4__(v593, 16) - 9602) ^ (v592 - 25310));
-        v595 = v592 ^ (-1688017295 * v594);
-        v596 = v593 ^ process(v595 - 2123587957, v595, v594, v563, 3085272242LL);
-        v597 = v594 - v596;
-        v598 = v595 - playIntentKey[(unsigned __int8)v597 + 62];
-        v561 = v598 ^ v596;
-        v560 = v563 ^ v598;
-        v562 = v561 + v597;
-    }
-    v599 = v560 ^ v561;
-    v600 = v560 - v562;
-    v601 = v563 ^ __ROL4__(v599, 13);
-    v602 = playIntentKey[(unsigned __int8)v601 + 85] ^ v562;
-    v603 = v602 + v600;
-    v604 = v599 - playIntentKey[(unsigned __int8)v603 + 141];
-    v605 = v601 - __ROL4__(v604, 2);
-    v606 = v605 + v602;
-    v607 = v603 - 764295805 * v606;
-    v608 = v604 - v607;
-    v609 = v605 - v608;
-    v610 = v606 - 96015316 * v609;
-    v611 = v610 ^ v607;
-    v612 = v608 - playIntentKey[(unsigned __int8)v611 + 55];
-    v613 = v612 ^ v609;
-    v614 = v610 - 1467230048 * v613;
-    v615 = playIntentKey[(unsigned __int8)(v610 - 96 * v613) + 150] ^ v611;
-    v616 = v612 - v615;
-    v617 = v613 ^ (v616 - 962392959);
-    v618 = v614 + playIntentKey[(unsigned __int8)(v613 ^ (v616 - 127)) + 44];
-    v619 = v615 ^ (v618 + 2036999550);
-    v620 = playIntentKey[(unsigned __int8)(v615 ^ (v614 + LOBYTE(playIntentKey[(unsigned __int8)(v613 ^ (v616 - 127)) + 44]) + 126)) + 297] + v616;
-    v621 = v617 + __ROL4__(v620, 30);
-    v622 = v618 - v620 - v621;
-    v623 = v622 ^ v619;
-    v624 = v620 ^ (v623 - 1980647883);
-    v625 = v624 ^ v621;
-    v626 = v622 - v625;
-    v627 = v626 ^ v623;
-    v628 = v624 + ((__ROL4__(v627, 4) - 30012) ^ (v626 + 14641));
-    v629 = v625 + __ROL4__(v628, 24);
-    v630 = v629 ^ v626;
-    v631 = (HIWORD(v630) & 7) + 1;
-    do
-    {
-        v632 = v629 + v627;
-        v633 = v629 + playIntentKey[(unsigned __int8)v632 + 403] - v628;
-        v634 = v632 + v629;
-        v635 = v632 + v629 - 10197;
-        v636 = v633 + v632;
-        v637 = v634 + v633;
-        v638 = v636 - ((__ROL4__(v637, 8) + 27039) ^ v635);
-        v639 = v634 - __ROL4__(v638, 29);
-        v640 = v639 + v637;
-        v641 = v640 + v638;
-        v642 = __ROL4__(v641, 21) + v639 + __ROL4__(v640, 1);
-        v643 = v642 ^ v640;
-        v644 = v641 - playIntentKey[(unsigned __int8)v643 + 403];
-        v645 = v644 + v642 + 1725028027;
-        v628 = v644 + v642;
-        v629 = v643 ^ v645;
-        v627 = v630 ^ v644;
-        --v631;
-    } while (v631);
-    v646 = ((v629 >> 2) & 7) + 1;
-    do
-    {
-        v647 = v627 - v630;
-        v648 = v627 - v630 + v628;
-        v649 = v627 + v628 - 2132895561;
-        v650 = v648 + v649 + v647;
-        v651 = v648 - __ROL4__(v650, 11);
-        v652 = v649 - v651;
-        v653 = v652 + v650;
-        v654 = v651 - (__ROL4__(v653, 3) + __ROL4__(v652, 29));
-        v655 = v652 - __ROL4__(v654, 2);
-        v656 = playIntentKey[(unsigned __int8)v655 + 239] ^ v653;
-        v657 = v656 ^ v654;
-        v658 = v655 - v657;
-        v659 = v656 ^ (429453240 * v658);
-        v660 = v657 - playIntentKey[(unsigned __int8)(v656 ^ (-72 * v658)) + 312];
-        v661 = v660 ^ v658;
-        v662 = v661 ^ v659;
-        v628 = v660 - 706707567 * v662;
-        v630 = v661 - (__ROL4__(v628, 15) + __ROL4__(v662, 6));
-        v627 = v629 ^ v662;
-        --v646;
-    } while (v646);
-    v663 = v630 ^ v627;
-    v664 = v663 + v628;
-    v665 = v629 - 1761151959 * v664;
-    v666 = v630 - v665;
-    v667 = v663 + process(v666 + 12813317, v666, v665, v664, 4166917641LL);
-    v668 = v667 ^ v664;
-    v669 = v665 + 197906595 * v668;
-    v670 = v666 + process(v669 - 260229908, v669, v668, v667, 540230834LL);
-    v671 = v667 + 588867220 * v670;
-    v672 = v671 ^ v668;
-    v673 = v669 - (__ROL4__(v672, 19) + __ROL4__(v671, 7));
-    v674 = v670 + __ROL4__(v673, 30);
-    v675 = playIntentKey[(unsigned __int8)v674 + 56] + v671;
-    v676 = v672 - v675 + 1064218701;
-    v677 = __ROL4__(v676, 7) + v673 + __ROL4__(v675, 20);
-    v678 = v674 ^ __ROL4__(v677, 18);
-    v679 = v678 + v677 + v675;
-    v680 = v679 ^ v676;
-    v681 = v680 ^ v677;
-    v682 = playIntentKey[(unsigned __int8)v681 + 218] + v678;
-    v683 = v679 + __ROL4__(v682, 16);
-    v684 = v683 + v680;
-    v685 = v681 ^ (-1836855344 * v684);
-    v686 = playIntentKey[(unsigned __int8)(v681 ^ (-48 * v684)) + 377] + v682;
-    v687 = ((v686 >> 21) & 7) + 1;
-    do
-    {
-        v688 = v683 ^ (v685 - 2071287222);
-        v689 = v688 ^ v684;
-        v690 = v685 - v688 - v689;
-        v691 = v688 - v690;
-        v692 = v689 - (__ROL4__(v691 + 507976322, 30) + __ROL4__(v690, 26));
-        v693 = v690 - playIntentKey[(unsigned __int8)v692 + 62];
-        v694 = __ROL4__(v693, 22) + v691 + 507976322;
-        v695 = v694 + v692;
-        v696 = v693 - 1830752117 * v695;
-        v697 = v694 - __ROL4__(v696, 10);
-        v684 = v695 - v697;
-        v685 = v684 + v696;
-        v683 = v686 ^ v697;
-        --v687;
-    } while (v687);
-    v698 = (~v685 >> 27) | 0xFFFFFFF8;
-    do
-    {
-        v699 = v683 + v686;
-        v700 = (v686 + v683 + 59891385) ^ v684;
-        v701 = v700 + v683;
-        v702 = v699 ^ process(2020347603 - v701, -v701, v700, v685, 601839173LL);
-        v684 = playIntentKey[(unsigned __int8)v702 + 410] ^ v700;
-        v703 = v684 + v701;
-        v686 = -337145712 - (v684 + v701);
-        v683 = v685 ^ v702;
-        ++v698;
-    } while (v698);
-    v704 = v683 + process(-468729058 - v703, v686, v685, v684, 2324939453LL);
-    v705 = v704 + v684;
-    v706 = v685 ^ (v684 + v704 + 2060245992);
-    v707 = v686 ^ (__ROL4__(v706, 8) + __ROL4__(v704 + v684, 20));
-    v708 = v704 - ((__ROL4__(v707, 19) + 1780) ^ (v706 - 7017));
-    v709 = v708 + v705;
-    v710 = v706 - ((__ROL4__(v709, 21) - 5198) ^ (v708 - 17321));
-    v711 = v707 + __ROL4__(v710, 9);
-    v712 = v708 + __ROL4__(v710, 2) + __ROL4__(v711, 22);
-    v713 = v712 ^ v709;
-    v714 = (__ROL4__(v713, 9) - 24417) ^ v710 ^ (v712 + 22988);
-    v715 = v711 - process((unsigned int)(v714 - 661800693), v714, v713, v712, 4188381947LL);
-    v716 = v715 + v712;
-    v717 = process(v715 + v712 + 1975354298, v715 + v712, v715, (unsigned int)v714, 3797355786LL);
-    v718 = v713 + v717;
-    v719 = playIntentKey[(unsigned __int8)(v713 + v717) + 95];
-    v720 = v715 ^ (v714 + v719 - 762304971);
-    v721 = playIntentKey[(unsigned __int8)(v715 ^ (v714 + v719 + 53)) + 150] ^ v716;
-    LODWORD(v714) = v718 + v714;
-    v722 = v718 - v721;
-    LODWORD(v714) = v719 + v714;
-    v723 = v720 - (v714 + v722);
-    v724 = v721 + process(v723 - 199131622, v723, (unsigned int)v714, v722, 2894035042LL);
-    v725 = v722 ^ __ROL4__(v724, 11);
-    LODWORD(v714) = v725 ^ v714;
-    v726 = __ROL4__(v714, 8) + v723 + __ROL4__(v725, 16);
-    v727 = playIntentKey[(unsigned __int8)v726 + 145] ^ v724;
-    v728 = v725 + v727;
-    v729 = v725 + v727 + v714;
-    v730 = v726 - ((__ROL4__(v729, 30) + 2951) ^ (v727 + v725 - 30646));
-    if ((v730 & 0x4000000) != 0)
-    {
-        v731 = v727 - v729;
-        v732 = v728 ^ (-483382455 * v731);
-        v733 = playIntentKey[(unsigned __int8)(v728 ^ (73 * v731)) + 242] + v729;
-        v734 = playIntentKey[(unsigned __int8)v733 | 0x100] + v731;
-        v735 = v734 ^ v732;
-        v736 = v733 ^ (-206062592 * v735);
-        v737 = playIntentKey[(unsigned __int8)(v734 ^ v733) + 327] + v735;
-        v738 = v737 ^ v736;
-        v739 = v734 ^ v737;
-        v740 = v738 + ((__ROR4__(v734, 1) - 20729) ^ (v739 + 27199));
-        v741 = v739 - playIntentKey[(unsigned __int8)v740 + 251];
-        v742 = v734 + process(v741 + 1084058581, v741, v740, v730, 1725949259LL);
-        v743 = v740 + v742;
-        v744 = v741 - (v740 + v742);
-        v728 = v742 - ((__ROR4__(v744, 1) + 13441) ^ (v740 + v742 - 3312));
-        v729 = v743 - v728;
-        v727 = v730 ^ v744;
-    }
-    v745 = ((unsigned __int8)v729 >> 5) + 1;
-    do
-    {
-        v746 = v727 ^ (v730 + v728);
-        v747 = v728 - v746;
-        v748 = v746 ^ __ROL4__(v730 - v747, 28);
-        v749 = (__ROL4__(v748, 4) + 5981) ^ (v730 - v747 - 28150);
-        v750 = v749 + v747;
-        v751 = v730 + v749;
-        v752 = v748 - __ROL4__(v751, 17);
-        v753 = v750 - v752;
-        v754 = v751 + 346744644 * v753;
-        v755 = v752 - v754 + 700696632;
-        v756 = __ROL4__(v755, 29);
-        v757 = v753 + __ROL4__(v754, 20);
-        v728 = v756 + v757;
-        v730 = playIntentKey[(unsigned __int8)(v756 + v757) + 155] ^ v754;
-        v727 = v729 ^ v755;
-        --v745;
-    } while (v745);
-    if ((v730 & 0x1000000) != 0)
-    {
-        v758 = v727 - v729 - v728;
-        v759 = playIntentKey[(unsigned __int8)v758 + 275];
-        v760 = v729 ^ (v759 + v728 + 1690684137);
-        v761 = v759 + v728;
-        v762 = v758 - __ROL4__(v760, 2);
-        v763 = v760 - ((__ROL4__(v762 + v761, 21) - 12434) ^ (v762 - 28673));
-        v764 = ((__ROL4__(v763, 8) - 23651) ^ (v762 + v761 + 21939)) + v762;
-        v765 = v764 ^ (v762 + v761);
-        v766 = (__ROL4__(v765, 9) - 31653) ^ v763 ^ (v764 + 11636);
-        v767 = v764 ^ (__ROL4__(v766, 11) + __ROL4__(v765, 11));
-        v768 = __ROL4__(v767, 13) + 27932;
-        v769 = v765 + (v768 ^ (v766 + 3880));
-        v770 = playIntentKey[(unsigned __int8)(v765 + (v768 ^ (v766 + 40))) + 351] + v766;
-        v771 = playIntentKey[(unsigned __int8)v770 + 407] ^ v767;
-        v772 = v769 - v771;
-        v773 = playIntentKey[(unsigned __int8)v772 + 148] ^ v770;
-        v774 = v771 - playIntentKey[(unsigned __int8)v773 + 203];
-        v728 = v774 ^ v772;
-        v729 = v728 ^ v773;
-        v727 = v730 ^ v774;
-    }
-    v775 = v729 ^ v727;
-    v776 = v728 - v775 + 144454253;
-    v777 = v730 ^ v729;
-    v778 = playIntentKey[(unsigned __int8)v777 + 436] + v775;
-    v779 = v776 ^ (v778 + 964204938);
-    v780 = v779 + v778 + v730 - v776;
-    v781 = ((__ROL4__(v780, 26) + 8645) ^ (v779 - 23939)) + v777;
-    v782 = v778 - v781;
-    v783 = v779 - ((__ROL4__(v782, 20) - 922) ^ (v781 - 18498));
-    v784 = v780 - v783;
-    v785 = v784 + v781;
-    if ((v785 & 0x10) != 0)
-    {
-        v786 = v784 + v782;
-        v787 = v783 ^ (__ROL4__(v786, 3) + __ROL4__(v784, 11));
-        v788 = v787 ^ v784;
-        v789 = v786 - v788;
-        v790 = v789 ^ v787;
-        v784 = v788 - v790 + 1375274710;
-        v782 = v785 ^ v789;
-        v783 = v790;
-    }
-    v791 = ((v784 >> 10) & 7) + 1;
-    do
-    {
-        v792 = v782 + 1624052262 * v785;
-        v793 = v783 - playIntentKey[(unsigned __int8)v792 + 465];
-        v794 = v785 - v793;
-        v795 = v794 + v792;
-        v783 = v793 + 1107267125 * v795;
-        v785 = v783 + v795 + v794;
-        v782 = v784 ^ v795;
-        --v791;
-    } while (v791);
-    if ((v785 & 4) != 0)
-    {
-        v796 = v782 + process(v784 - 1547037017, v784, v783, v785, 2630262813LL);
-        v797 = v783 ^ v784;
-        v798 = v797 + v796 + 1676589091;
-        v783 -= playIntentKey[(unsigned __int8)v798 + 460] + v796;
-        v784 = v797 - __ROL4__(v783, 1);
-        v782 = v785 ^ v798;
-    }
-    v799 = v782 + ((__ROL4__(v784, 5) - 23619) ^ (v785 + 11302));
-    v800 = v783 ^ __ROL4__(v799, 26);
-    v801 = v785 - v800;
-    v802 = playIntentKey[(unsigned __int8)v801 + 59] ^ v784;
-    v803 = v802 + v799;
-    v804 = v800 ^ process(v802 + v799 - 130239392, v802 + v799, v802, v801, 439320605LL);
-    v805 = playIntentKey[(unsigned __int8)v804 + 95] + v801;
-    v806 = v805 ^ v802;
-    v807 = v803 - v806;
-    v808 = v804 - v807;
-    v809 = playIntentKey[(unsigned __int8)v808 + 145] ^ v805;
-    v810 = v806 ^ __ROL4__(v809, 6);
-    v811 = v808 - __ROL4__(v807 ^ (v810 + v809), 29);
-    v812 = v811 + v809 + 1049294792;
-    v813 = v812 + v810 + v811;
-    v814 = v807 ^ (v810 + v809) ^ __ROL4__(v813, 1);
-    v815 = v814 + v811 - 1417402388;
-    v816 = v812 - __ROL4__(v815, 2);
-    v817 = v816 + v813;
-    v818 = ((unsigned int)~v817 >> 9) | 0xFFFFFFF8;
-    do
-    {
-        v819 = v814 - 1080843959 * v816;
-        v820 = v819 ^ v815;
-        v821 = v816 - v820;
-        v822 = v821 + v819;
-        v823 = v822 ^ v820;
-        v824 = v823 + v822 + v821;
-        v825 = playIntentKey[(unsigned __int8)v824 + 181] ^ v822;
-        v826 = v823 ^ v824;
-        v827 = v823 - v825;
-        v828 = v826 ^ v825;
-        v829 = v827 + playIntentKey[(unsigned __int8)v828 + 90];
-        v830 = v829 ^ v826;
-        v831 = v828 - ((__ROL4__(v830, 25) + 27746) ^ (v829 + 20240));
-        v832 = v829 ^ (__ROL4__(v831, 1) + __ROL4__(v830, 17));
-        v833 = playIntentKey[(unsigned __int8)v832 + 480] ^ v830;
-        v834 = v831 + ((__ROL4__(v833, 15) - 15470) ^ (v832 - 2024));
-        v815 = v832 - v834;
-        v816 = v833 - v815;
-        v814 = v817 ^ v834;
-        ++v818;
-    } while (v818);
-    v835 = v814 - v816;
-    v836 = v815 - v835;
-    v837 = playIntentKey[(unsigned __int8)(v836 + 79) + 92] ^ v817;
-    v838 = __ROL4__(v837, 29) + v816;
-    v839 = v835 ^ process(v838 + 46159881, v838, v837, (unsigned int)(v836 + 412762447), 1415513387LL);
-    v840 = __ROL4__(v839, 11) + v836 + 412762447;
-    v841 = v840 ^ v837;
-    v842 = __ROL4__(v841, 18);
-    v843 = v838 + __ROL4__(v840, 3);
-    v844 = v839 - (v843 + v842);
-    v845 = v840 - ((__ROL4__(v844, 18) + 1066) ^ (v843 + v842 - 29825));
-    v846 = v845 + v841;
-    v847 = v846 ^ (v843 + v842);
-    v848 = v844 ^ __ROL4__(v847, 1);
-    v849 = v845 - v848;
-    v850 = v846 ^ (__ROL4__(v849, 10) + __ROL4__(v848, 16));
-    v851 = v847 - v850;
-    v852 = v851 + v848;
-    v853 = v849 - playIntentKey[(unsigned __int8)v852 + 225];
-    v854 = v850 - __ROL4__(v853, 21);
-    v855 = playIntentKey[(unsigned __int8)v854 + 6] + v851;
-    if ((v855 & 0x80u) != 0)
-    {
-        v856 = (__ROL4__(v854, 27) + 24041) ^ v852 ^ (v853 + 2205);
-        v857 = v853 - v856;
-        v858 = v854 - v857;
-        v859 = v856 - process(v858 - 1337828203, v858, v857, v855, 2260363948LL);
-        v860 = playIntentKey[(unsigned __int8)v859 + 239] ^ v857;
-        v861 = v858 - v860;
-        v862 = v859 - v861;
-        v853 = v860 ^ process(v862 - 299071805, v862, v861, v855, 3824011857LL);
-        v852 = v855 ^ v862;
-        v854 = (__ROL4__(v853, 4) - 31150) ^ v861 ^ (v862 - 10168);
-    }
-    v863 = v852 + __ROL4__(v855, 15) + __ROL4__(v854, 11);
-    v864 = v853 + ((v863 + 15557) ^ (v854 - 22633));
-    v865 = v855 ^ __ROL4__(v864, 29);
-    v866 = __ROL4__(v865, 20) + v854 + __ROL4__(v864, 10);
-    v867 = playIntentKey[(unsigned __int8)v866 + 458] ^ v863;
-    v868 = v864 - v867;
-    v869 = v865 + 1810732786 * v868;
-    v870 = v866 - v869;
-    v871 = v867 - playIntentKey[(unsigned __int8)v870 + 254];
-    v872 = v868 - v871;
-    v873 = v869 - v872 + 1375575319;
-    v874 = playIntentKey[(unsigned __int8)v873 + 148] ^ v870;
-    v875 = v871 - v874;
-    v876 = v873 - __ROL4__(v875 + v872 + 1766535944, 30);
-    v877 = v876 + v874;
-    v878 = playIntentKey[(unsigned __int8)v877 + 258];
-    v879 = (v875 + v872 + 1766535944) ^ __ROL4__(v875 + v878 + 1766535944, 2);
-    v880 = v877;
-    v881 = (v875 + v878 + 1766535944) ^ v877;
-    v882 = (__ROL4__(v879, 10) + 31419) ^ v876 ^ (v875 + v878 + 1766511009);
-    v883 = v880 - v882;
-    v884 = v882 - v879;
-    v885 = v879 - v881;
-    v886 = __ROL4__(v884, 16) + v883 + __ROL4__(v885, 12);
-    v887 = playIntentKey[(unsigned __int8)v886 + 486] ^ v881;
-    v888 = v885 ^ __ROL4__(v887, 27);
-    v889 = v884 - v888;
-    v890 = playIntentKey[(unsigned __int8)v889 + 143] ^ v886;
-    v891 = v890 + v887;
-    v892 = v888 ^ (-744082064 * v891);
-    v893 = v889 + process(v892 - 1941374416, v892, v891, v890, 188891886LL);
-    v894 = v893 ^ v890;
-    if ((v894 & 0x2000000) != 0)
-    {
-        v895 = 456959289 * v893 + v891;
-        v896 = v895 + v892;
-        v893 -= process(v892 + v895 - 1740136979, v895 + v892, v895, v894, 2216400012LL);
-        v891 = v894 ^ v895;
-        v892 = v896;
-    }
-    v897 = (v893 >> 31) + 1;
-    do
-    {
-        v898 = v891 ^ (v894 + v892);
-        v892 -= __ROL4__(v898, 28);
-        v894 ^= v892 + v898;
-        v891 = v893 ^ v898;
-        --v897;
-    } while (v897);
-    v899 = v891 ^ (v894 + 146824026);
-    v900 = (unsigned int)v899 + v892;
-    v901 = (unsigned int)v900 ^ v893;
-    //v902 = (v901 << 32) | (__ROL4__(v901, 10) + 24183) ^ v894 ^ ((_DWORD)v899 + v892 + 29249);
-    
-    auto index_0 = (__ROL4__(v901, 10) + 24183) ^ v894 ^ ((uint32_t)v899 + v892 + 29249);
-    memcpy(dst + 3 * 4, &v899, 4);
-	memcpy(dst + 2 * 4, &v900, 4);
-	memcpy(dst + 1 * 4, &v901, 4);
-	memcpy(dst + 0 * 4, &index_0, 4);
-}
-
-void bind_key(const uint8 decrypted_key[16], const uint8 file_id[20], uint8 dst[16])
-{
-    uint64 z1, z2, z3, z4;
-    memcpy(&z1, decrypted_key + 8, 8);
-    memcpy(&z2, decrypted_key + 0, 8);
-    memcpy(&z3, file_id + 8, 8);
-    memcpy(&z4, file_id + 0, 8);
-
-    for (uint8 i = 0; i < 0x20; ++i)
-    {
-        z1 = z4 ^ (__ROR8__(z1, 8) + z2);
-        z2 = z1 ^ (__ROL8__(z2, 3));
-        z3 = i ^ (__ROR8__(z3, 8) + z4);
-        z4 = z3 ^ (__ROL8__(z4, 3));
-    }
-
-    memcpy(dst + 0, &z2, 8);
-    memcpy(dst + 8, &z1, 8);
-}
-
 extern "C"
 void ppdecrypt(const uint8 key_basis[16], const uint8 file_id[20], uint8 dst[16]) {
     uint8 buf[16];
     decrypt_main(key_basis, buf);
     bind_key(buf, file_id, dst);
+}
+
+void decrypt_main(const uint8 key_basis[16], uint8 dst[16]) {
+    int v3;
+    int v4;
+    int v5;
+    int v6;
+    int v7;
+    int v8;
+    int v9;
+    int v10;
+    int v11;
+    int v12;
+    int v13;
+    int v14;
+    int v15;
+    int v16;
+    int v17;
+    int v18;
+    int v19;
+    unsigned int v20;
+    unsigned int v21;
+    int v22;
+    int v23;
+    unsigned int v24;
+    int v25;
+    int v26;
+    int v27;
+    int v28;
+    int v29;
+    int v30;
+    int v31;
+    int v32;
+    int v33;
+    int v34;
+    int v35;
+    int v36;
+    int v37;
+    int v38;
+    int v39;
+    unsigned int v40;
+    unsigned int v41;
+    int v42;
+    int v43;
+    int v44;
+    unsigned int v45;
+    unsigned int v46;
+    int v47;
+    unsigned int v48;
+    unsigned int v49;
+    int v50;
+    unsigned int v51;
+    int v52;
+    int v53;
+    int v54;
+    unsigned int v55;
+    int v56;
+    int v57;
+    int v58;
+    int v59;
+    int v60;
+    int v61;
+    __int64 v62;
+    int v63;
+    int v64;
+    int v65;
+    int v66;
+    int v67;
+    unsigned int v68;
+    unsigned int v69;
+    unsigned int v70;
+    int v71;
+    unsigned int v72;
+    unsigned int v73;
+    unsigned int v74;
+    int v75;
+    int v76;
+    int v77;
+    int v78;
+    int v79;
+    int v80;
+    int v81;
+    int v82;
+    int v83;
+    int v84;
+    int v85;
+    int v86;
+    int v87;
+    int v88;
+    int v89;
+    int v90;
+    unsigned int v91;
+    unsigned int v92;
+    int v93;
+    unsigned int v94;
+    unsigned int v95;
+    int v96;
+    int v97;
+    int v98;
+    int v99;
+    int v100;
+    int v101;
+    int v102;
+    unsigned int v103;
+    unsigned int v104;
+    unsigned int v105;
+    int v106;
+    int v107;
+    int v108;
+    int v109;
+    int v110;
+    int v111;
+    int v112;
+    int v113;
+    int v114;
+    unsigned int v115;
+    int v116;
+    int v117;
+    int v118;
+    unsigned int v119;
+    int v120;
+    int v121;
+    int v122;
+    int v123;
+    int v124;
+    int v125;
+    int v126;
+    int v127;
+    int v128;
+    int v129;
+    int v130;
+    unsigned int v131;
+    int v132;
+    unsigned int v133;
+    int v134;
+    int v135;
+    int v136;
+    int v137;
+    unsigned int v138;
+    unsigned int v139;
+    int v140;
+    unsigned int v141;
+    unsigned int v142;
+    unsigned int v143;
+    int v144;
+    unsigned int v145;
+    unsigned int v146;
+    unsigned int v147;
+    int v148;
+    unsigned int v149;
+    int v150;
+    int v151;
+    int v152;
+    unsigned int v153;
+    int v154;
+    int v155;
+    unsigned int v156;
+    unsigned int v157;
+    int v158;
+    int v159;
+    unsigned int v160;
+    int v161;
+    int v162;
+    int v163;
+    unsigned int v164;
+    unsigned int v165;
+    unsigned int v166;
+    int v167;
+    unsigned int v168;
+    int v169;
+    unsigned int v170;
+    unsigned int v171;
+    unsigned int v172;
+    unsigned int v173;
+    int v174;
+    int v175;
+    int v176;
+    unsigned int v177;
+    unsigned int v178;
+    int v179;
+    unsigned int v180;
+    unsigned int v181;
+    unsigned int v182;
+    int v183;
+    int v184;
+    int v185;
+    int v186;
+    int v187;
+    int v188;
+    int v189;
+    char v190;
+    int v191;
+    int v192;
+    int v193;
+    int v194;
+    int v195;
+    int v196;
+    int v197;
+    int v198;
+    int v199;
+    int v200;
+    unsigned int v201;
+    unsigned int v202;
+    unsigned int v203;
+    unsigned int v204;
+    unsigned int v205;
+    unsigned int v206;
+    int v207;
+    unsigned int v208;
+    int v209;
+    int v210;
+    unsigned int v211;
+    int v212;
+    int v213;
+    int v214;
+    int v215;
+    int v216;
+    int v217;
+    int v218;
+    unsigned int v219;
+    unsigned int v220;
+    int v221;
+    int v222;
+    int v223;
+    unsigned int v224;
+    int v225;
+    int v226;
+    int v227;
+    unsigned int v228;
+    unsigned int v229;
+    int v230;
+    int v231;
+    int v232;
+    int v233;
+    int v234;
+    int v235;
+    unsigned int v236;
+    unsigned int v237;
+    unsigned int v238;
+    int v239;
+    unsigned int v240;
+    int v241;
+    int v242;
+    int v243;
+    unsigned int v244;
+    unsigned int v245;
+    int v246;
+    int v247;
+    int v248;
+    unsigned int v249;
+    int v250;
+    int v251;
+    int v252;
+    int v253;
+    int v254;
+    int v255;
+    int v256;
+    int v257;
+    unsigned int v258;
+    unsigned int v259;
+    int v260;
+    int v261;
+    int v262;
+    int v263;
+    unsigned int v264;
+    int v265;
+    int v266;
+    int v267;
+    int v268;
+    int v269;
+    unsigned int v270;
+    int v271;
+    int v272;
+    int v273;
+    unsigned int v274;
+    int v275;
+    unsigned int v276;
+    int v277;
+    unsigned int v278;
+    unsigned int v279;
+    int v280;
+    unsigned int v281;
+    unsigned int v282;
+    unsigned int v283;
+    unsigned int v284;
+    int v285;
+    unsigned int v286;
+    int v287;
+    int v288;
+    unsigned int v289;
+    unsigned int v290;
+    unsigned int v291;
+    int v292;
+    int v293;
+    int v294;
+    int v295;
+    int v296;
+    int v297;
+    int v298;
+    int v299;
+    int v300;
+    int v301;
+    int v302;
+    int v303;
+    unsigned int v304;
+    unsigned int v305;
+    int v306;
+    int v307;
+    int v308;
+    unsigned int v309;
+    int v310;
+    unsigned int v311;
+    unsigned int v312;
+    int v313;
+    int v314;
+    unsigned int v315;
+    char v316;
+    int v317;
+    unsigned int v318;
+    unsigned int v319;
+    int v320;
+    unsigned int v321;
+    unsigned int v322;
+    int v323;
+    int v324;
+    int v325;
+    __int64 v326;
+    int v327;
+    int v328;
+    int v329;
+    int v330;
+    int v331;
+    int v332;
+    int v333;
+    int v334;
+    int v335;
+    int v336;
+    int v337;
+    int v338;
+    int v339;
+    int v340;
+    unsigned int v341;
+    int v342;
+    int v343;
+    int v344;
+    int v345;
+    int v346;
+    unsigned int v347;
+    unsigned int v348;
+    __int64 v349;
+    int v350;
+    int v351;
+    unsigned int v352;
+    unsigned int v353;
+    int v354;
+    int v355;
+    int v356;
+    int v357;
+    int v358;
+    int v359;
+    int v360;
+    int v361;
+    int v362;
+    int v363;
+    int v364;
+    int v365;
+    int v366;
+    int v367;
+    int v368;
+    int v369;
+    int v370;
+    int v371;
+    int v372;
+    unsigned int v373;
+    int v374;
+    int v375;
+    int v376;
+    unsigned int v377;
+    unsigned int v378;
+    int v379;
+    int v380;
+    unsigned int v381;
+    unsigned int v382;
+    int v383;
+    int v384;
+    int v385;
+    int v386;
+    int v387;
+    int v388;
+    unsigned int v389;
+    unsigned int v390;
+    unsigned int v391;
+    int v392;
+    int v393;
+    unsigned int v394;
+    int v395;
+    int v396;
+    int v397;
+    int v398;
+    int v399;
+    int v400;
+    int v401;
+    int v402;
+    int v403;
+    int v404;
+    int v405;
+    unsigned int v406;
+    int v407;
+    unsigned int v408;
+    unsigned int v409;
+    unsigned int v410;
+    unsigned int v411;
+    int v412;
+    int v413;
+    unsigned int v414;
+    unsigned int v415;
+    unsigned int v416;
+    unsigned int v417;
+    int v418;
+    unsigned int v419;
+    int v420;
+    int v421;
+    int v422;
+    unsigned int v423;
+    int v424;
+    int v425;
+    unsigned int v426;
+    unsigned int v427;
+    int v428;
+    int v429;
+    int v430;
+    unsigned int v431;
+    int v432;
+    unsigned int v433;
+    unsigned int v434;
+    int v435;
+    int v436;
+    unsigned int v437;
+    unsigned int v438;
+    unsigned int v439;
+    int v440;
+    int v441;
+    int v442;
+    unsigned int v443;
+    unsigned int v444;
+    unsigned int v445;
+    unsigned int v446;
+    int v447;
+    int v448;
+    int v449;
+    int v450;
+    unsigned int v451;
+    int v452;
+    int v453;
+    int v454;
+    int v455;
+    int v456;
+    int v457;
+    int v458;
+    int v459;
+    int v460;
+    int v461;
+    int v462;
+    int v463;
+    int v464;
+    int v465;
+    int v466;
+    int v467;
+    int v468;
+    int v469;
+    unsigned int v470;
+    int v471;
+    int v472;
+    int v473;
+    int v474;
+    unsigned int v475;
+    int v476;
+    int v477;
+    int v478;
+    int v479;
+    int v480;
+    unsigned int v481;
+    unsigned int v482;
+    int v483;
+    int v484;
+    int v485;
+    unsigned int v486;
+    unsigned int v487;
+    int v488;
+    unsigned int v489;
+    unsigned int v490;
+    int v491;
+    int v492;
+    unsigned int v493;
+    int v494;
+    int v495;
+    unsigned int v496;
+    unsigned int v497;
+    int v498;
+    unsigned int v499;
+    unsigned int v500;
+    int v501;
+    int v502;
+    int v503;
+    int v504;
+    int v505;
+    int v506;
+    int v507;
+    int v508;
+    int v509;
+    unsigned int v510;
+    int v511;
+    int v512;
+    int v513;
+    int v514;
+    unsigned int v515;
+    int v516;
+    int v517;
+    int v518;
+    int v519;
+    int v520;
+    int v521;
+    int v522;
+    int v523;
+    int v524;
+    int v525;
+    int v526;
+    int v527;
+    unsigned int v528;
+    int v529;
+    unsigned int v530;
+    int v531;
+    int v532;
+    int v533;
+    unsigned int v534;
+    int v535;
+    int v536;
+    int v537;
+    unsigned int v538;
+    int v539;
+    unsigned int v540;
+    int v541;
+    unsigned int v542;
+    unsigned int v543;
+    unsigned int v544;
+    int v545;
+    int v546;
+    int v547;
+    int v548;
+    unsigned int v549;
+    unsigned int v550;
+    int v551;
+    int v552;
+    int v553;
+    unsigned int v554;
+    int v555;
+    int v556;
+    int v557;
+    unsigned int v558;
+    int v559;
+    int v560;
+    int v561;
+    unsigned int v562;
+    int v563;
+    int v564;
+    int v565;
+    int v566;
+    unsigned int v567;
+    unsigned int v568;
+    int v569;
+    int v570;
+    unsigned int v571;
+    unsigned int v572;
+    int v573;
+    int v574;
+    int v575;
+    int v576;
+    int v577;
+    int v578;
+    int v579;
+    int v580;
+    unsigned int v581;
+    unsigned int v582;
+    int v583;
+    int v584;
+    unsigned int v585;
+    unsigned int v586;
+    int v587;
+    int v588;
+    int v589;
+    unsigned int v590;
+    int v591;
+    int v592;
+    int v593;
+    int v594;
+    int v595;
+    int v596;
+    int v597;
+    int v598;
+    int v599;
+    unsigned int v600;
+    unsigned int v601;
+    int v602;
+    unsigned int v603;
+    unsigned int v604;
+    int v605;
+    int v606;
+    int v607;
+    int v608;
+    int v609;
+    int v610;
+    int v611;
+    int v612;
+    unsigned int v613;
+    int v614;
+    int v615;
+    int v616;
+    unsigned int v617;
+    unsigned int v618;
+    int v619;
+    unsigned int v620;
+    unsigned int v621;
+    unsigned int v622;
+    int v623;
+    int v624;
+    unsigned int v625;
+    int v626;
+    unsigned int v627;
+    unsigned int v628;
+    int v629;
+    int v630;
+    int v631;
+    unsigned int v632;
+    int v633;
+    int v634;
+    int v635;
+    unsigned int v636;
+    unsigned int v637;
+    int v638;
+    unsigned int v639;
+    int v640;
+    unsigned int v641;
+    int v642;
+    int v643;
+    int v644;
+    int v645;
+    int v646;
+    int v647;
+    int v648;
+    int v649;
+    int v650;
+    int v651;
+    int v652;
+    int v653;
+    unsigned int v654;
+    int v655;
+    int v656;
+    unsigned int v657;
+    int v658;
+    unsigned int v659;
+    unsigned int v660;
+    int v661;
+    unsigned int v662;
+    int v663;
+    unsigned int v664;
+    int v665;
+    unsigned int v666;
+    unsigned int v667;
+    unsigned int v668;
+    unsigned int v669;
+    int v670;
+    int v671;
+    int v672;
+    int v673;
+    int v674;
+    int v675;
+    int v676;
+    unsigned int v677;
+    unsigned int v678;
+    int v679;
+    int v680;
+    int v681;
+    int v682;
+    int v683;
+    int v684;
+    int v685;
+    int v686;
+    unsigned int v687;
+    unsigned int v688;
+    int v689;
+    int v690;
+    int v691;
+    int v692;
+    int v693;
+    int v694;
+    int v695;
+    int v696;
+    int v697;
+    int v698;
+    int v699;
+    int v700;
+    int v701;
+    int v702;
+    int v703;
+    int v704;
+    int v705;
+    int v706;
+    int v707;
+    int v708;
+    unsigned int v709;
+    unsigned int v710;
+    int v711;
+    int v712;
+    int v713;
+    int v714;
+    int v715;
+    int v716;
+    int v717;
+    int v718;
+    int v719;
+    int v720;
+    int v721;
+    int v722;
+    unsigned int v723;
+    int v724;
+    int v725;
+    int v726;
+    int v727;
+    int v728;
+    int v729;
+    int v730;
+    int v731;
+    int v732;
+    int v733;
+    int v734;
+    int v735;
+    int v736;
+    int v737;
+    int v738;
+    int v739;
+    int v740;
+    int v741;
+    unsigned int v742;
+    unsigned int v743;
+    int v744;
+    int v745;
+    int v746;
+    unsigned int v747;
+    int v748;
+    int v749;
+    int v750;
+    int v751;
+    int v752;
+    int v753;
+    int v754;
+    int v755;
+    int v756;
+    int v757;
+    int v758;
+    int v759;
+    int v760;
+    int v761;
+    int v762;
+    int v763;
+    int v764;
+    int v765;
+    int v766;
+    int v767;
+    int v768;
+    int v769;
+    int v770;
+    int v771;
+    int v772;
+    int v773;
+    int v774;
+    int v775;
+    int v776;
+    int v777;
+    unsigned int v778;
+    int v779;
+    int v780;
+    unsigned int v781;
+    int v782;
+    int v783;
+    int v784;
+    unsigned int v785;
+    unsigned int v786;
+    unsigned int v787;
+    int v788;
+    unsigned int v789;
+    unsigned int v790;
+    int v791;
+    unsigned int v792;
+    int v793;
+    unsigned int v794;
+    int v795;
+    unsigned int v796;
+    unsigned int v797;
+    unsigned int v798;
+    int v799;
+    int v800;
+    int v801;
+    unsigned int v802;
+    unsigned int v803;
+    int v804;
+    int v805;
+    unsigned int v806;
+    int v807;
+    int v808;
+    int v809;
+    int v810;
+    int v811;
+    int v812;
+    int v813;
+    int v814;
+    int v815;
+    int v816;
+    int v817;
+    int v818;
+    int v819;
+    int v820;
+    int v821;
+    int v822;
+    int v823;
+    unsigned int v824;
+    unsigned int v825;
+    unsigned int v826;
+    int v827;
+    unsigned int v828;
+    unsigned int v829;
+    unsigned int v830;
+    int v831;
+    unsigned int v832;
+    unsigned int v833;
+    int v834;
+    int v835;
+    int v836;
+    int v837;
+    int v838;
+    int v839;
+    int v840;
+    unsigned int v841;
+    int v842;
+    int v843;
+    int v844;
+    int v845;
+    int v846;
+    int v847;
+    int v848;
+    int v849;
+    int v850;
+    int v851;
+    int v852;
+    int v853;
+    int v854;
+    unsigned int v855;
+    unsigned int v856;
+    int v857;
+    int v858;
+    unsigned int v859;
+    int v860;
+    int v861;
+    int v862;
+    int v863;
+    int v864;
+    int v865;
+    int v866;
+    int v867;
+    int v868;
+    int v869;
+    int v870;
+    int v871;
+    int v872;
+    int v873;
+    int v874;
+    int v875;
+    int v876;
+    int v877;
+    int v878;
+    unsigned int v879;
+    unsigned int v880;
+    int v881;
+    int v882;
+    unsigned int v883;
+    int v884;
+    __int64 v885;
+    unsigned int v886;
+    char v887;
+    __int64 v888;
+    unsigned __int64 v889;
+    unsigned int v1063;
+    unsigned int v1064;
+    unsigned int v1065;
+    unsigned int v1066;
+    int v1068;
+
+    v3 = U8TOU32(key_basis);
+    v4 = U8TOU32(key_basis + 4);
+    v5 = U8TOU32(key_basis + 8);
+    v6 = U8TOU32(key_basis + 12) - playIntentKey[(unsigned __int8)v3 + 206];
+    v7 = v6 ^ v5;
+    v8 = v4 ^ (v7 - 1565964656);
+    v9 = v8 + v7 + v3;
+    v10 = v7 + v9 - v6;
+    v11 = v8 ^ __ROL4__(v10, 5);
+    v12 = v6 - v11;
+    v13 = v12 ^ v10;
+    v14 = __ROL4__(v13, 4) + v11 + __ROL4__(v12, 17);
+    v15 = (v9 - v11) ^ __ROL4__(v14, 15);
+    v16 = v15 + v14 + v12;
+    v17 = v13 ^ __ROL4__(v16, 11);
+    v18 = v17 ^ v14;
+    v19 = v15 + 543445239 * v18;
+    v20 = v16 - v19;
+    v21 = v17 - v20;
+    v22 = v18 - process((unsigned __int8)v21 + 116, v21, v20, v19, -1497451);
+    v23 = v22 + v19;
+    v24 = ((unsigned int)~(v22 + v19) >> 5) | 0xFFFFFFF8;
+    do
+    {
+    v25 = v20 ^ __ROL4__(v22, 24);
+    v26 = v22 ^ (playIntentKey[(unsigned __int8)v25 + 333] + v21);
+    v27 = v25 ^ v26;
+    v28 = v22 ^ v25;
+    v29 = __ROL4__(v27, 27) + v26 + __ROL4__(v28, 23);
+    v30 = v27 - v29;
+    v31 = v30 ^ v28;
+    v32 = v29 - (__ROL4__(v31, 14) + __ROL4__(v30, 11));
+    v33 = v32 ^ v30;
+    v34 = v31 + 906051795 * v33;
+    v35 = v34 ^ v32;
+    v36 = v33 - playIntentKey[(unsigned __int8)v35 + 230];
+    v37 = v36 + v34;
+    v38 = playIntentKey[(unsigned __int8)v37 + 206] + v35;
+    v39 = v36 - __ROL4__(v38, 6);
+    v21 = v37 - v39;
+    v22 = v21 + v38;
+    v20 = v23 ^ v39;
+    ++v24;
+    }
+    while ( v24 );
+    v40 = ((unsigned int)~v22 >> 23) | 0xFFFFFFF8;
+    do
+    {
+    v1063 = v40;
+    v41 = v23 + v21 + v20;
+    v42 = v41 ^ v21;
+    v43 = v42 + __ROL4__(v41 ^ (v42 + v41 + v23 + 1514318751), 21);
+    v44 = playIntentKey[(unsigned __int8)v43 + 412] + v42 + v41 + v23;
+    v45 = (v41 ^ (v42 + v41 + v23 + 1514318751)) - __ROL4__(v44, 20);
+    v46 = v45 ^ v43;
+    v47 = process((unsigned __int8)v46 + 67, v46, v45, v22, -1728242433);
+    v48 = v45 + __ROL4__(v44 ^ v47, 11);
+    v49 = v48 + v46;
+    v50 = v49 ^ v44 ^ v47;
+    v51 = v48 - __ROL4__(v50, 30);
+    v52 = v49 ^ (v50 + v51);
+    v53 = v50 - playIntentKey[(unsigned __int8)(v49 ^ (v50 + v51)) + 210];
+    v54 = v53 + v52 + v51;
+    v21 = playIntentKey[(unsigned __int8)v54 + 246] ^ v52;
+    v23 = v53 - v21;
+    v20 = v22 ^ v54;
+    v40 = v1063 + 1;
+    }
+    while ( v1063 != -1 );
+    if ( (v23 & 0x8000u) != 0 )
+    {
+    v55 = v20 + ((__ROL4__(v22, 12) + 26225) ^ (v21 + 32203));
+    v56 = v55 ^ v21;
+    v57 = v22 ^ (1662170519 * v56);
+    v58 = (__ROL4__(v57, 28) + 4311) ^ v55 ^ (v56 + 4399);
+    v59 = v56 - __ROL4__(v58, 25);
+    v60 = v57 + __ROL4__(v59, 5);
+    v61 = v58 + v59;
+    v62 = (unsigned __int8)v61;
+    v63 = v58 - (playIntentKey[(unsigned __int8)(v60 ^ LOBYTE(playIntentKey[(unsigned __int8)v61 + 407])) + 463] + v60);
+    v64 = v61 - __ROL4__(v63, 4);
+    v65 = v64 ^ v60 ^ playIntentKey[v62 + 407];
+    v66 = 372215611 - (v63 + v64);
+    v67 = 372215611 - v64;
+    v21 = v63 + 372215611;
+    v22 = v66 + v65 - __ROL4__(v63 + 372215611, 26);
+    v20 = v23 ^ v67;
+    }
+    v68 = v20 - v22;
+    v69 = v21 + 1518517707 * v68;
+    v70 = v69 + v68 + v23;
+    v71 = playIntentKey[(unsigned __int8)v70 + 352] + v22;
+    v72 = v68 - v71;
+    v73 = v69 - (v72 + 948113937);
+    v74 = v73 + v70;
+    v75 = (__ROL4__(v74, 18) - 25210) ^ v71 ^ (v73 + 26633);
+    v76 = v75 + v72 + 948113937;
+    v77 = v73 ^ (__ROL4__(v76, 21) + __ROL4__(v75, 13));
+    v78 = v74 ^ __ROL4__(v77, 12);
+    v79 = v78 ^ v75;
+    v80 = v76 - __ROL4__(v79, 27);
+    v81 = v80 + v77;
+    v82 = v81 + v78;
+    v83 = v79 - v81 - v82;
+    if ( (v83 & 0x400000) != 0 )
+    {
+    v84 = v80 ^ (__ROL4__(v82, 3) + __ROL4__(v81, 9));
+    v85 = v81 - v84;
+    v86 = v82 - v85;
+    v87 = v86 ^ v84;
+    v88 = v87 ^ v85;
+    v89 = v86 + ((__ROL4__(v88, 27) - 2235) ^ (v87 - 6873));
+    v90 = v88 - (v87 + v89 - 1666639812);
+    v91 = v89 + 287697249 * v90;
+    v92 = 1182999134 * v91 + v89 + v87 - 1666639812;
+    v81 = v90
+        - process(
+            94 * (v89 + 97 * (unsigned __int8)v90) + (unsigned __int8)v89 + (unsigned __int8)v87 + 87,
+            v92,
+            v91,
+            v83,
+            2115973084);
+    v82 = v91 - v81;
+    v80 = v83 ^ v92;
+    }
+    v93 = (v82 & 7) + 1;
+    do
+    {
+    v94 = v80 - __ROL4__(v83, 13);
+    v95 = v81 - v94;
+    v96 = v83 ^ process((unsigned __int8)v95 + 88, v95, v94, v82, 1293842264);
+    v97 = (v96 - 1419266462) ^ v94;
+    v81 = v95 - ((__ROL4__(v97, 2) - 31089) ^ (v96 - 29250));
+    v83 = v81 + v96;
+    v80 = v82 ^ v97;
+    --v93;
+    }
+    while ( v93 );
+    v98 = v80 - v82 - v83;
+    v99 = v81 ^ (v98 - 955406245);
+    v100 = v82 ^ (v99 + v98);
+    v101 = playIntentKey[(unsigned __int8)(v82 ^ ((v81 ^ (v98 + 91)) + v98)) + 496] ^ v83;
+    v102 = v98 ^ (v100 + v101);
+    v103 = v99 - playIntentKey[(unsigned __int8)(v98 ^ (v100 + v101)) + 40];
+    v104 = v103 + v100;
+    v105 = v101 ^ (__ROL4__(v104, 18) + __ROL4__(v103, 29));
+    v106 = ((v105 >> 8) & 7) + 1;
+    do
+    {
+    v107 = v102 - __ROL4__(v104, 1);
+    v108 = v103 + v107 + 1148955852;
+    v109 = v104 ^ (v107 + v107 + v103 + 1148955852);
+    v110 = playIntentKey[(unsigned __int8)(v104 ^ (v107 + v107 + v103 - 52)) + 236] ^ v107;
+    v111 = v108 ^ v109;
+    v112 = v110 ^ (v111 + 245569572);
+    v113 = 1020781174 * v112 + v108 - v110;
+    v114 = v111 + __ROL4__(v113, 1);
+    v115 = v112 - ((__ROL4__(v114, 16) + 17571) ^ (v113 + 12967));
+    v103 = v113 - v115;
+    v104 = v114 ^ process((unsigned __int8)v103 + 46, v103, v115, v105, -1232552981);
+    v102 = v105 ^ v115;
+    --v106;
+    }
+    while ( v106 );
+    v116 = v102 + __ROL4__(v104, 19);
+    v117 = v116 ^ v103;
+    v118 = v105 ^ (v117 - 472890767);
+    v119 = v104 ^ (v118 + v117);
+    if ( (((unsigned __int8)v104 ^ (unsigned __int8)((v105 ^ (v117 + 113)) + v117)) & 0x40) != 0 )
+    {
+    v120 = v118 ^ v116;
+    v121 = v117 ^ (__ROL4__(v120, 13) + __ROL4__(v118, 4));
+    v122 = v118 - __ROL4__(v121, 24);
+    v123 = v122 + v120;
+    v124 = v121 - (__ROL4__(v122 + v120, 1) + __ROL4__(v122, 17));
+    v125 = v124 + v120;
+    v126 = v123 - v125 + 450830722;
+    v127 = v124 - playIntentKey[(unsigned __int8)v126 + 302];
+    v128 = v126 - v125 - v127;
+    v129 = playIntentKey[(unsigned __int8)v128 + 98];
+    v130 = v129 + v127;
+    v118 = v129 - v125;
+    v116 = v119 ^ v128;
+    v117 = v130;
+    }
+    v131 = process((unsigned __int8)v118 - 41, v118, v119, v117, -106606636);
+    v132 = v116 ^ v131;
+    v133 = v117 - (v116 ^ v131);
+    v134 = process(v117 - ((unsigned __int8)v116 ^ (unsigned __int8)v131) - 51, v133, v116 ^ v131, v118, -371294379);
+    v135 = v119 ^ v134;
+    v136 = playIntentKey[(unsigned __int8)(v119 ^ v134) + 170] ^ v118;
+    v137 = process((unsigned __int8)v136 - 65, v136, v119 ^ v134, v133, 1456704264);
+    v138 = v132 - v137;
+    v139 = v117 - v137;
+    v140 = v135 - process((unsigned __int8)v139 - 11, v139, v138, v136, 1192016521);
+    v141 = v136 - ((__ROL4__(v140, 27) + 531) ^ (v139 - 25131));
+    v142 = v138 - __ROL4__(v141, 20);
+    v143 = v142 + v139;
+    v144 = (__ROR4__(v143, 1) - 5421) ^ v140 ^ (v142 + 32648);
+    v145 = v141 - __ROL4__(v144, 29);
+    v146 = v142 - playIntentKey[(unsigned __int8)v145 + 1];
+    v147 = v146 + v143;
+    v148 = v144 - v147;
+    v149 = playIntentKey[(unsigned __int8)v148 + 408] ^ v145;
+    v150 = v147 ^ process((unsigned __int8)v146 - (unsigned __int8)v149 + 126, v146 - v149, v149, v148, -733900935);
+    v151 = v148 - v150;
+    v152 = playIntentKey[(unsigned __int8)v151 + 204];
+    v153 = v146 - v152;
+    v154 = v150 ^ (v153 - 1687574656);
+    v155 = playIntentKey[(unsigned __int8)(v150 ^ (v153 + 0x80)) + 493] ^ v151;
+    v156 = v149 - v152 - v155;
+    v157 = v156 + v153;
+    v158 = v154 - __ROL4__(v157, 26);
+    v159 = v158 ^ v155;
+    v160 = v156 - (__ROL4__(v159, 25) + __ROL4__(v158, 17));
+    v161 = v160 ^ v157;
+    v162 = v158 ^ __ROL4__(v161, 14);
+    v163 = v162 + v159;
+    v164 = v160 - v163;
+    v165 = v164 + v161;
+    v166 = v162 - v164 - v165;
+    v167 = v164 ^ (v166 + v163 - 751286582);
+    v168 = v166 + v163;
+    v169 = v165 ^ __ROL4__(v167, 17);
+    v170 = v166 - v169;
+    v171 = v168 - 1156715587 * v170;
+    v172 = v167 - v171;
+    v173 = v170 + __ROL4__(v169 ^ (-1547741749 * v172), 22);
+    v174 = v173 ^ v171;
+    v175 = v172 ^ (-879461260 * v174);
+    v176 = v175 + (v169 ^ (-1547741749 * v172));
+    v177 = v176 + v173;
+    v178 = v174 - v176 - v177;
+    v179 = playIntentKey[(unsigned __int8)v178 + 355] + v175;
+    if ( (v179 & 4) != 0 )
+    {
+    v180 = v176 - v178;
+    v181 = v180 + v177;
+    v182 = v178;
+    v183 = process((unsigned __int8)v180 + (unsigned __int8)v177 - 44, v180 + v177, v180, v179, -869030912);
+    v176 = v179 ^ v180;
+    v177 = v181;
+    v178 = v182 ^ v183;
+    }
+    v184 = ((v178 >> 22) & 7) + 1;
+    do
+    {
+    v185 = v179 + v176;
+    v186 = (__ROL4__(v185, 24) - 25535) ^ v177 ^ (v179 + 16587);
+    v187 = v179 - __ROL4__(v186, 22);
+    v188 = v185 - __ROL4__(v187, 4);
+    v189 = v188 + v186;
+    v190 = v187 + v189 + 2;
+    v191 = v189 + v187;
+    v192 = v189 - playIntentKey[(unsigned __int8)(v188 - v190) + 75];
+    v193 = v192 + v191 - 1385660926;
+    v194 = v192 + v188;
+    v195 = v192 - playIntentKey[(unsigned __int8)v194 + 475];
+    v196 = v195 + v193;
+    v197 = v194 ^ (__ROL4__(v196, 17) + __ROL4__(v195, 19));
+    v198 = v195 - __ROL4__(v197, 26);
+    v199 = v198 + v196;
+    v200 = v197 - v199;
+    v177 = v198 ^ __ROL4__(v200, 14);
+    v179 = v177 ^ v199;
+    v176 = v178 ^ v200;
+    --v184;
+    }
+    while ( v184 );
+    if ( (v179 & 0x20000000) != 0 )
+    {
+    v201 = v178 + v176;
+    v202 = v177 + 1101371464 * v201;
+    v203 = v178 - v202;
+    v204 = v201 - playIntentKey[(unsigned __int8)v203 + 511];
+    v205 = v202 + __ROL4__(v204, 29);
+    v206 = v204 - (v203 - v205);
+    v207 = __ROL4__(v206, 23) + __ROL4__(v203 - v205, 17);
+    v208 = v203 - v207;
+    v209 = v208 ^ v206;
+    v210 = __ROL4__(v209, 11) + v205 - v207 + __ROL4__(v208, 30);
+    v211 = v208 - 1526277442 * v210;
+    v177 = playIntentKey[(unsigned __int8)(v209 ^ (-52 * v211)) + 119] + v210;
+    v176 = v179 ^ v209 ^ (-1917303604 * v211);
+    v178 = v177 ^ v211;
+    }
+    v212 = ((v178 >> 20) & 7) + 1;
+    v1064 = v178;
+    do
+    {
+    v213 = v176 ^ process((unsigned __int8)v179 - 96, v179, v177, v178, 543934105);
+    v214 = v177 - v213;
+    v215 = v213 - __ROL4__(v179 + 474077165 * v214, 14);
+    v216 = (__ROL4__(v214 - v215, 25) - 16478) ^ (v179 + 474077165 * v214) ^ (v215 - 21795);
+    v217 = (__ROL4__(v216, 8) - 31413) ^ (v214 - v215 + 26240);
+    v218 = v214 - v217;
+    v219 = playIntentKey[(unsigned __int8)v218 + 493] + v216;
+    v220 = v219 + v215 - v217;
+    v221 = v218 + v220;
+    v222 = v218 - process((unsigned __int8)v220 + (unsigned __int8)v218 + 118, v218 + v220, v219, v1064, -2083780337);
+    v223 = v222 + v219;
+    v224 = playIntentKey[(unsigned __int8)v223 + 155] + v221;
+    v225 = process(
+             ((unsigned __int8)v222 ^ (unsigned __int8)(113 * v224)) + 75,
+             v222 ^ (1750369393 * v224),
+             v224,
+             v1064,
+             -1806460474);
+    v178 = v1064;
+    v226 = v223 - v225;
+    v227 = v224 ^ __ROL4__(v226, 15);
+    v177 = (v222 ^ (1750369393 * v224)) + __ROL4__(v227, 15);
+    v179 = v177 + v226;
+    v176 = v1064 ^ v227;
+    --v212;
+    }
+    while ( v212 );
+    if ( (v179 & 0x8000000) != 0 )
+    {
+    v228 = v176 - process((unsigned __int8)v1064 - 52, v1064, v177, v179, 1192932035);
+    v229 = v228 + v177;
+    v230 = v1064 + process((unsigned __int8)v228 + (unsigned __int8)v177 + 4, v228 + v177, v228, v179, -1147763736);
+    v231 = v230 + v228;
+    v232 = v229 - v230 - v231;
+    v233 = v230 + __ROL4__(v232, 21);
+    v234 = v231 + __ROL4__(v233, 3);
+    v178 = v232 ^ v233;
+    v176 = v179 ^ v234;
+    v177 = v232 - v234;
+    }
+    v235 = v176 ^ (v178 + 1162979803);
+    v236 = v177 - playIntentKey[(unsigned __int8)(v176 ^ (v178 - 37)) + 347];
+    v237 = v236 + v179;
+    v238 = v178 - v236 - v237;
+    v239 = v235 ^ __ROL4__(v238, 7);
+    v236 -= 1440234130;
+    v240 = playIntentKey[(unsigned __int8)(v236 - v239) + 61] ^ v237;
+    v241 = v238 ^ process((unsigned __int8)v240 + 102, v240, v236 - v239, v239, -55056089);
+    v242 = __ROL4__(v241, 5) + __ROL4__(v240, 30);
+    v243 = v239 - v242;
+    v244 = v236 - v242;
+    v245 = v240 - 770051846 * v244;
+    v246 = v241 + __ROL4__(v245, 15);
+    v247 = v246 + v245 + v243;
+    v248 = v244 ^ (__ROL4__(v247, 22) + __ROL4__(v246, 15));
+    v249 = v248 + v245;
+    v250 = v246 - ((__ROL4__(v249, 9) - 5299) ^ (v248 - 32625));
+    v251 = v247 - v250;
+    v252 = __ROL4__(v251, 10) + v248 + __ROL4__(v250, 28);
+    v253 = v252 ^ v249;
+    v254 = __ROL4__(v253, 12) + v250 + __ROL4__(v252, 26);
+    v255 = v251 ^ __ROL4__(v254, 4);
+    v256 = v252 - v255;
+    v257 = v253 ^ (v256 + 2008101837);
+    v258 = v254 - v256 - v257;
+    v259 = v258 ^ v255;
+    v260 = process((unsigned __int8)v259 - 127, v259, v258, v257, -1280991918);
+    v261 = v256 + v260;
+    v262 = playIntentKey[(unsigned __int8)(v256 + v260) + 208] ^ v257;
+    v263 = v258 - v262;
+    v264 = ((unsigned int)~v263 >> 3) | 0xFFFFFFF8;
+    do
+    {
+    v265 = v259 ^ __ROL4__(v262, 23);
+    v266 = v261 - playIntentKey[(unsigned __int8)v265 + 97];
+    v267 = v266 + v262;
+    v268 = v267 + v265;
+    v269 = playIntentKey[(unsigned __int8)v268 + 405] + v266;
+    v270 = v269 ^ v267;
+    v271 = v269 + process(((unsigned __int8)v270 ^ (unsigned __int8)v268) - 24, v270 ^ v268, v270, v263, -1908286217);
+    v272 = v271 ^ v268;
+    v261 = v271 + __ROL4__(v272, 4);
+    v262 = v261 ^ v271 ^ v270;
+    v259 = v263 ^ v272;
+    ++v264;
+    }
+    while ( v264 );
+    v273 = v259 ^ (v262 + v263);
+    v274 = v261 - ((__ROL4__(v273, 19) - 19514) ^ (v262 + 4854));
+    v275 = v274 ^ v263;
+    v276 = v262 ^ (400555527 * v275);
+    v277 = ((v276 >> 11) & 7) + 1;
+    do
+    {
+    v278 = v273 + ((__ROL4__(v275, 12) - 30840) ^ (v274 + 24187));
+    v279 = v278 + v274;
+    v280 = v275 - __ROL4__(v279, 30);
+    v281 = v278 - playIntentKey[(unsigned __int8)v280 + 130];
+    v282 = v281 + v279;
+    v283 = v280 - v281 - v282;
+    v284 = v281 + __ROL4__(v283, 1);
+    v285 = v282 ^ v283;
+    v286 = v282 - v284;
+    v287 = v285 ^ v284;
+    v288 = v285 ^ __ROL4__(v286 - 37883435 * v287, 22);
+    v289 = v287 ^ __ROL4__(v288, 5);
+    v274 = v286 - 37883435 * v287 - v289;
+    v275 = v288 ^ process((unsigned __int8)v274 + 3, v274, v289, v276, 315209017);
+    v273 = v276 ^ v289;
+    --v277;
+    }
+    while ( v277 );
+    if ( (v275 & 4) != 0 )
+    {
+    v290 = 980371489 * v276 + v273;
+    v291 = v290 + v274;
+    v292 = v291 ^ v276;
+    v293 = v290 ^ __ROL4__(v292, 29);
+    v274 = v293 + v292 + v291;
+    v276 = __ROL4__(v274, 30) ^ v292;
+    v273 = v275 ^ v293;
+    }
+    if ( (v276 & 0x200) != 0 )
+    {
+    v294 = __ROL4__(v275, 24) + v273;
+    v295 = v275 ^ v294 ^ v274;
+    v296 = (v294 ^ v274) + ((__ROL4__(v275 ^ v274, 2) - 28176) ^ (v295 + 28398));
+    v297 = playIntentKey[(unsigned __int8)v294 + 150] + (v296 ^ v295);
+    v298 = playIntentKey[(unsigned __int8)v297 + 205] ^ v296;
+    v299 = v297 - v298;
+    v300 = v299 + (v298 ^ v294) + 536905247;
+    v301 = v299 + (v298 ^ v294) + 536874035;
+    v274 = v298 - (v299 + v301 + 536874035);
+    v275 = (__ROL4__(v274, 26) - 19438) ^ (v299 + 536874035) ^ v300;
+    v273 = v276 ^ v301;
+    }
+    if ( (v275 & 0x400) != 0 )
+    {
+    v302 = v276 ^ v273;
+    v303 = v274 ^ (v302 + v276);
+    v304 = v276 - playIntentKey[(unsigned __int8)v303 + 95];
+    v305 = v304 + v302 + __ROL4__(v303, 29);
+    v306 = v305 ^ v303;
+    v307 = __ROL4__(v306, 5) + v304 + __ROL4__(v305, 1);
+    v308 = v305 ^ (__ROL4__(v307, 20) + __ROL4__(v306, 9));
+    v309 = v306 - __ROL4__(v308, 29);
+    v273 = v275 ^ v308;
+    v274 = v309;
+    v276 = v309 + v307;
+    }
+    v310 = v273 - v276;
+    v311 = v274 - v310;
+    v312 = playIntentKey[(unsigned __int8)(v311 - 58) + 229] ^ v275;
+    v313 = process((unsigned __int8)v312 - 32, v312, v311 + 722639046, v310, 1036801677);
+    v314 = v276 ^ v313;
+    v315 = playIntentKey[(unsigned __int8)(v276 ^ v313) + 482] ^ v310;
+    v316 = 93 * v315 + v311 + 23;
+    v317 = -63942307 * v315 + v311 + 722639046;
+    v318 = v312 ^ process(v316, v317, v315, v276 ^ v313, 674195121);
+    v319 = v314 - v318;
+    v320 = v315 ^ process((unsigned __int8)v319 - 64, v319, v318, v317, 283234496);
+    v321 = v317 ^ __ROL4__(v320, 11);
+    v322 = v321 ^ v318;
+    v323 = process((unsigned __int8)v322 + 127, v322, v321, v320, -2057124266);
+    v324 = v320 - (v319 + v323) - v322;
+    v325 = v321 - __ROL4__(v324, 17);
+    v326 = v322 ^ (v325 + v324);
+    v327 = playIntentKey[(unsigned __int8)(v322 ^ (v325 + v324)) + 238] + v319 + v323;
+    if ( ((LOBYTE(playIntentKey[(unsigned __int8)(v322 ^ (v325 + v324)) + 238]) + (_BYTE)v319 + (_BYTE)v323) & 0x20) != 0 )
+    {
+    v328 = __ROL4__(v326, 20) + v324 + __ROL4__(v325, 15);
+    v329 = v325 - v328;
+    v330 = v326 - 688424176 * v329;
+    v331 = v330 ^ v328;
+    v332 = v329 + __ROL4__(v331, 21);
+    v333 = v332 + v330;
+    v334 = playIntentKey[(unsigned __int8)v333 + 500] ^ v331;
+    v335 = v334 ^ v332;
+    v336 = v333 ^ (v335 + v334);
+    v337 = v336 + v334;
+    v338 = v337 + v335;
+    v339 = v336 - v338 - 1385694443;
+    v340 = v337 - v339;
+    v325 = v338 + 1964716405 * v340;
+    v326 = (unsigned int)(v339 - v325);
+    v324 = v327 ^ v340;
+    }
+    v341 = (((unsigned int)v326 >> 26) & 7) + 1;
+    do
+    {
+    v342 = v327 + v324;
+    v343 = v342 ^ v325;
+    v344 = v327 ^ (v343 + 1926474167);
+    v345 = v342 ^ (v344 + v343);
+    v346 = playIntentKey[(unsigned __int8)v345 + 368] ^ v343;
+    v347 = v344 - v346;
+    v348 = v347 ^ v345;
+    v349 = v326;
+    v350 = process((unsigned __int8)v348 + 33, v348, v347, v326, 1023093605);
+    v326 = v349;
+    v351 = v346 ^ v350;
+    v352 = v347 + ((__ROL4__(v351, 23) - 16426) ^ (v348 + 19884));
+    v353 = v348 - ((__ROL4__(v352, 15) - 1697) ^ (v351 - 20099));
+    v354 = v351 - __ROL4__(v353, 4);
+    LODWORD(v349) = v352 + 1337422106 * v354;
+    v355 = v353 - v349;
+    v325 = v354 ^ __ROL4__(v355, 26);
+    v327 = v349 - v325;
+    v324 = v326 ^ v355;
+    --v341;
+    }
+    while ( v341 );
+    if ( (v327 & 0x1000) != 0 )
+    {
+    v356 = (__ROL4__(v326 + v324, 11) - 2435) ^ v325 ^ (v326 - 23367);
+    v357 = v326 + ((v356 + 5526) ^ (v326 + v324 - 13621));
+    v358 = v324 - ((v356 + 5526) ^ (v326 + v324 - 13621));
+    v359 = __ROL4__(v358, 23) + v356 + __ROL4__(v357, 12);
+    v360 = v357 ^ (v358 + v359);
+    v361 = v358 ^ (v360 + v359);
+    v325 = v359 - v361;
+    LODWORD(v326) = v325 ^ v360;
+    v324 = v327 ^ v361;
+    }
+    v362 = v324 - v326;
+    v363 = v325 + 750032515 * v362;
+    v364 = playIntentKey[(unsigned __int8)(v325 - 125 * v362) + 3] ^ v327;
+    v365 = v326 - v364;
+    v366 = v362 - playIntentKey[(unsigned __int8)v365 + 59];
+    v367 = v366 ^ v363;
+    v368 = v367 ^ v364;
+    v369 = playIntentKey[(unsigned __int8)v368 + 424] + v365;
+    v370 = v369 + v366;
+    v371 = v370 + v367;
+    v372 = v368 - v371;
+    v373 = v369 ^ (__ROL4__(v372, 15) + __ROL4__(v371, 14));
+    v374 = (HIBYTE(v373) & 7) + 1;
+    do
+    {
+    v375 = v370 - __ROL4__(v372, 24);
+    v371 -= v375;
+    v372 ^= __ROL4__(v371, 24) + __ROL4__(v375, 13);
+    v370 = v373 ^ v375;
+    --v374;
+    }
+    while ( v374 );
+    v376 = v370 + __ROL4__(v372, 16);
+    v377 = v371 ^ (1862890662 * v376);
+    v378 = v373 - process(((unsigned __int8)v371 ^ (unsigned __int8)(-90 * v376)) - 34, v377, v376, v372, -1693939205);
+    v1065 = v372 ^ process((unsigned __int8)v378 - 88, v378, v377, v376, 525357072);
+    v379 = ((v1065 >> 22) & 7) + 1;
+    do
+    {
+    v380 = playIntentKey[(unsigned __int8)v378 + 274] ^ v376;
+    v381 = v380 + v377;
+    v382 = v378 - playIntentKey[(unsigned __int8)v381 + 147];
+    v383 = v380 - v382 + 642048756;
+    v384 = playIntentKey[(unsigned __int8)v383 + 183] ^ v381;
+    v385 = v382 ^ __ROL4__(v384, 12);
+    v386 = v383 - __ROL4__(v385, 1);
+    v387 = (__ROL4__(v385 - 2143570367 * (v386 + v384), 12) + 23972) ^ v386 ^ (v386 + v384 - 23736);
+    v388 = v386 + v384 - v387;
+    v389 = v385 - 2143570367 * (v386 + v384) + 1034911177 * v388;
+    v390 = v387 ^ (__ROL4__(v389, 15) + __ROL4__(v388, 17));
+    v377 = v388 ^ process((unsigned __int8)v390 + 61, v390, v389, v1065, -492897852);
+    v378 = v389 - __ROL4__(v377, 12);
+    v376 = v1065 ^ v390;
+    --v379;
+    }
+    while ( v379 );
+    v391 = v378 + v1065 + v376;
+    v392 = v391 ^ v377;
+    v393 = v378 ^ (__ROL4__(v1065 - v392 - 276800179, 15) + __ROL4__(v392, 20));
+    v394 = v391 - v393;
+    v395 = v392 ^ (__ROL4__(v394, 29) + __ROL4__(v393, 28));
+    v396 = v395 + v1065 - v392 - 276800179;
+    v397 = __ROL4__(v396, 5) + v393 + __ROL4__(v395, 4);
+    v398 = v394 ^ __ROL4__(v397, 30);
+    v399 = v395 - v398;
+    v400 = (__ROL4__(v399, 18) - 12638) ^ v396 ^ (v398 + 16050);
+    v401 = v397 - v400;
+    v402 = v398 + v401 - 10489965;
+    v403 = playIntentKey[(unsigned __int8)v402 + 318] + v399;
+    v404 = v403 ^ v400;
+    v405 = v401 ^ (v404 + 657724987);
+    v406 = v402 ^ v403;
+    v407 = v402 - v405;
+    v408 = v404 - v406;
+    v409 = v408 + v405;
+    if ( (v409 & 0x80000) != 0 )
+    {
+    v410 = v408 + v407;
+    v411 = v406 + ((__ROL4__(v410, 23) - 21123) ^ (v408 - 8788));
+    v412 = v411 ^ v408;
+    v413 = v410 ^ __ROL4__(v412, 3);
+    v414 = v411 - v413;
+    v415 = v412 - v414;
+    v416 = v415 + 441660160;
+    v417 = v413 ^ (v415 - 196189640);
+    v418 = v414 ^ process((unsigned __int8)v417 + 71, v417, v416, v409, 1386615674);
+    v419 = v416 - v418 + v417;
+    v420 = process(
+             (unsigned __int8)v416 - (unsigned __int8)v418 + (unsigned __int8)v417 + 46,
+             v419,
+             v416 - v418,
+             v409,
+             -1345040721);
+    v421 = v416 - v420;
+    v422 = v418 - v420;
+    v423 = v419 + ((__ROL4__(v421, 25) + 24044) ^ (v422 - 6327));
+    v406 = v422 - ((__ROL4__(v423, 14) + 32005) ^ (v421 + 3418));
+    v407 = v409 ^ v423;
+    v408 = v421 - v406;
+    }
+    v424 = ((v408 >> 8) & 7) + 1;
+    do
+    {
+    v425 = v407 - process((unsigned __int8)v409 - 97, v409, v406, v408, -1707647277);
+    v426 = v406 + __ROL4__(v425, 27);
+    v427 = v426 + v409;
+    v428 = v425 - __ROR4__(v427, 1);
+    v429 = v426 ^ (__ROL4__(v428, 21) + __ROL4__(v427, 13));
+    v430 = (__ROL4__(v429, 10) + 31267) ^ v427 ^ (v428 + 150);
+    v431 = v430 + v428;
+    v432 = __ROL4__(v431, 9) + __ROL4__(v430, 26);
+    v406 = v429 - v432;
+    v409 = v430 - process((unsigned __int8)v429 - (unsigned __int8)v432 + 83, v429 - v432, v431, v408, -2063501060);
+    v407 = v408 ^ v431;
+    --v424;
+    }
+    while ( v424 );
+    if ( (v409 & 0x8000u) != 0 )
+    {
+    v433 = v407 - playIntentKey[(unsigned __int8)v408 + 410];
+    v434 = v433 + v406;
+    v435 = process((unsigned __int8)v433 + (unsigned __int8)v406 - 78, v433 + v406, v433, v409, -862459707);
+    v407 = v409 ^ v433;
+    v406 = v434;
+    v408 ^= v435;
+    }
+    v436 = ((v408 >> 6) & 7) + 1;
+    do
+    {
+    v437 = v409 + v407;
+    v438 = v406 - v437;
+    v439 = v409 - 26099833 * v438;
+    v440 = v437 ^ (-417125994 * v439);
+    v441 = v440 + v439 + v438;
+    v406 = v440 - 1183193544 - v439 - 892411939;
+    v442 = v440 - 1183193544 - v441;
+    v409 = v441 - __ROL4__(v406, 19);
+    v407 = v408 ^ v442;
+    --v436;
+    }
+    while ( v436 );
+    v443 = v408 + v409 + v407;
+    v444 = v406 - v409 - v443;
+    v445 = v444 + v408;
+    v446 = v445 + v409;
+    v447 = __ROL4__(v446, 6);
+    v448 = v447 + v443;
+    v449 = v444 ^ (v447 + v443 - 1910732399);
+    v450 = playIntentKey[(unsigned __int8)(v444 ^ (v447 + v443 - 111)) + 316] + v445;
+    v451 = v450 + v446;
+    if ( (v451 & 0x4000) != 0 )
+    {
+    v452 = v450 ^ v448;
+    v453 = v449 - 2143870976 * v452;
+    v454 = ((__PAIR64__(v449, v453) >> 2) + 19637) ^ (v452 + 8927);
+    v455 = playIntentKey[(unsigned __int8)(v450 - (((__PAIR64__(v449, v453) >> 2) - 75) ^ (v452 - 33))) + 92] + v452;
+    v456 = v455 ^ v453;
+    v457 = v450 - v454 - 1675810375;
+    v458 = v457 - v456 + v455;
+    v459 = v458 + v457 - v456 + 1284784214;
+    v460 = v456 - v459;
+    v461 = v457 - v459;
+    v462 = v461 + v458 + 1284791750;
+    v463 = v461 + v458 + 1284784214;
+    v464 = v463 + v460;
+    v465 = v461 - ((__ROL4__(v464, 8) - 1911) ^ v462);
+    v466 = v463 - (__ROL4__(v465, 9) + __ROL4__(v464, 24));
+    v449 = v464 + __ROL4__(v466, 20);
+    v450 = v449 + v465;
+    v448 = v451 ^ v466;
+    }
+    v467 = v448 - ((__ROL4__(v450, 26) + 20081) ^ (v451 - 25411));
+    v468 = v467 + v449;
+    v469 = v451 - ((__ROL4__(v468, 27) + 13103) ^ (v467 + 29822));
+    v470 = v450 - __ROL4__(v469, 16);
+    v471 = __ROL4__(v470, 29);
+    v472 = v467 + __ROR4__(v469, 1);
+    v473 = v471 + v472;
+    v474 = v468 ^ process((unsigned __int8)v471 + (unsigned __int8)v472 - 66, v471 + v472, v470, v469, -1445715878);
+    v475 = v469 - v474;
+    v476 = process((unsigned __int8)v475 + (unsigned __int8)v470 + 60, v475 + v470, v475, v474, -177267307);
+    v477 = playIntentKey[(unsigned __int8)(v473 ^ v476) + 233] ^ v474;
+    v478 = v475 ^ (v475 + v470);
+    v479 = v478 + (v473 ^ v476);
+    v480 = v477 + 1841026593 * v479;
+    v481 = v475 - (__ROL4__(v480, 28) + v477 + __ROL4__(v479, 2));
+    v482 = v481 + v478;
+    v483 = v479 - playIntentKey[(unsigned __int8)v482 + 360];
+    v484 = v483 + v480;
+    v485 = v481 ^ (__ROL4__(v484, 19) + __ROL4__(v483, 18));
+    v486 = v482 - __ROL4__(v485, 30);
+    v487 = v486 + v483;
+    v488 = v484 - ((__ROR4__(v487, 1) - 16528) ^ (v486 + 14375));
+    v489 = v488 ^ v485;
+    v490 = v486 + v489;
+    v491 = v487 - process((unsigned __int8)v486 + (unsigned __int8)v489 + 8, v486 + v489, v489, v488, -521928852);
+    v492 = v488 - v491;
+    v493 = v489 - playIntentKey[(unsigned __int8)v492 + 147];
+    v494 = v491 - process((unsigned __int8)v490 + (unsigned __int8)v493 - 39, v493 + v490, v493, v492, -699597707);
+    v495 = v494 ^ v492;
+    v496 = v493 - 776623051 * v495;
+    v497 = playIntentKey[(unsigned __int8)(v493 - -53 * v495) + 331] + v493 + v490;
+    v498 = (v497 >> 31) + 1;
+    do
+    {
+    v499 = v494 - v496;
+    v500 = v499 + v495;
+    v501 = process((unsigned __int8)v499 + (unsigned __int8)v495 - 66, v499 + v495, v499, v497, 610146318);
+    v502 = v496 + v501;
+    v503 = v499 + process((unsigned __int8)v501 + (unsigned __int8)v496 + 109, v496 + v501, v500, v497, 219185692);
+    v504 = v503 ^ v500;
+    v505 = v502 + __ROL4__(v504, 26);
+    v506 = v503 + __ROL4__(v505, 9);
+    v495 = v506 ^ v504;
+    v496 = v505 - (__ROL4__(v506 ^ v504, 6) + __ROL4__(v506, 23));
+    v494 = v497 ^ v506;
+    --v498;
+    }
+    while ( v498 );
+    v507 = v494 - __ROL4__(v496, 30);
+    v508 = v495 + v507 - 557193974;
+    v509 = v497 ^ (v507 + v507 + v495 - 557193974);
+    v510 = v496 - playIntentKey[(unsigned __int8)(v497 ^ (v507 + v507 + v495 + 10)) + 263];
+    v511 = v510 ^ v507;
+    v512 = __ROL4__(v511, 22);
+    v513 = (v512 - 8233) ^ v508 ^ (v510 + 24039);
+    v514 = v509 - playIntentKey[(unsigned __int8)((v512 - 41) ^ v508 ^ (v510 - 25)) + 299];
+    v515 = v510 + 1781534465 * v514;
+    v516 = v515 ^ v511;
+    v517 = v513 ^ (-685434188 * v516);
+    v518 = v514 + (__PAIR64__(v513, v517) >> 1);
+    v519 = v515 ^ (-950121931 * v518);
+    v520 = v519 + v518 + v516;
+    v521 = v517 - playIntentKey[(unsigned __int8)v520 + 384];
+    v522 = v521 + v518;
+    v523 = v519 - playIntentKey[(unsigned __int8)v522 + 257];
+    v524 = v520 + __ROL4__(v523, 12);
+    v525 = v521 - v523 - v524;
+    v526 = v522 ^ (v525 - 1816434038);
+    v527 = v523 - (__ROR4__(v526, 1) + __ROR4__(v525, 1));
+    v528 = v527 ^ v524;
+    v529 = v527 + v525;
+    LOBYTE(v512) = v528 + v529 - 21;
+    v530 = v528 + v529;
+    v531 = v526 - process(v512, v530, v528, v527, 787053399);
+    v532 = v527 + __ROL4__(v531, 21);
+    v533 = v532 ^ v528;
+    v534 = v530 - ((__ROL4__(v533, 27) + 12845) ^ (v532 + 28773));
+    v535 = v534 + v531;
+    v536 = v532 - (__ROL4__(v535, 17) + __ROL4__(v534, 11));
+    v537 = v533 ^ __ROL4__(v536, 7);
+    v538 = v534 - v537;
+    v539 = v535 ^ __ROL4__(v538, 8);
+    v540 = v536 + ((__ROL4__(v539, 16) - 12328) ^ (v538 - 6758));
+    v541 = __ROL4__(v540, 4) + v537 + __ROL4__(v539, 20);
+    v542 = v538 - v541;
+    v543 = v542 + v539;
+    v544 = v540 - v542 - v543;
+    v545 = v544 ^ v541;
+    v546 = v542 - v545 - 671748938;
+    v547 = v546 ^ v543;
+    v548 = v544 - v547 - 407061196;
+    v549 = playIntentKey[(unsigned __int8)v548 + 498] ^ v545;
+    v550 = v549 ^ v546;
+    v551 = v547 + process((unsigned __int8)v550 - 31, v550, v549, v548, -150376163);
+    v552 = v551 ^ v548;
+    v553 = v549 - v552 + 346505986;
+    v554 = v550 - (__ROL4__(v553, 30) + __ROL4__(v552, 24));
+    v555 = v551 + __ROL4__(v554, 9);
+    v556 = __ROL4__(v555, 4) + v552 + __ROL4__(v554, 29);
+    v557 = v553 ^ (__ROL4__(v556, 22) + __ROL4__(v555, 10));
+    v558 = v554 - __ROL4__(v557, 1);
+    v559 = v558 + v555;
+    v560 = v556 ^ (__ROR4__(v559, 1) + __ROL4__(v558, 5));
+    v561 = v560 ^ v557;
+    v562 = v558 - (__ROL4__(v561, 14) + __ROL4__(v560, 13));
+    v563 = v559 + __ROL4__(v562, 25);
+    v564 = v560 - v563;
+    v565 = playIntentKey[(unsigned __int8)v564 + 183] + v561;
+    v566 = v563 ^ (v562 + v565 - 1054996043);
+    v567 = v564 + playIntentKey[(unsigned __int8)(v563 ^ (v562 + v565 - 75)) + 352];
+    v568 = v565 ^ (v567 - 1445956669);
+    v569 = v565
+       + v562
+       + process(
+           ((unsigned __int8)v565 ^ (unsigned __int8)(v564
+                                                    + LOBYTE(playIntentKey[(unsigned __int8)(v563 ^ (v562 + v565 - 75))
+                                                                         + 352])
+                                                    - 61))
+         - 46,
+           v568,
+           v567,
+           v566,
+           -512982719);
+    v570 = v569 ^ v566;
+    v571 = v570 + v567;
+    v572 = v568 - ((__ROL4__(v571, 15) - 1518) ^ (v570 + 13587));
+    v573 = v572 ^ v569;
+    v574 = v570 + ((__ROL4__(v573, 21) - 5802) ^ (v572 + 5861));
+    v575 = v574 ^ v571;
+    v576 = playIntentKey[(unsigned __int8)v575 + 493] ^ v572;
+    v577 = v573 ^ __ROL4__(v576, 1);
+    v578 = __ROL4__(v577, 24) + v574 + __ROL4__(v576, 4);
+    v579 = v575 ^ __ROL4__(v578, 3);
+    v580 = playIntentKey[(unsigned __int8)v579 + 488] + v576;
+    v581 = v577 - v580;
+    v582 = v578 - v581;
+    v583 = v579 ^ process((unsigned __int8)v582 + 18, v582 - 2140586105, v581, v580, -1221407241);
+    v584 = v580 ^ (1944396465 * v583);
+    v585 = v581 + __ROL4__(v584, 28);
+    v586 = v582 + v585 - 2140586105;
+    v587 = v583 - process((unsigned __int8)v582 + (unsigned __int8)v585 - 9, v586, v585, v584, -1877121145);
+    v588 = v587 ^ v584;
+    v589 = v588 ^ v585;
+    v590 = v589 + v586;
+    v591 = v587 - ((__ROL4__(v590, 6) - 24216) ^ (v589 + 5339));
+    v592 = playIntentKey[(unsigned __int8)v591 + 178] + v588;
+    v593 = v589 + __ROL4__(v592, 6);
+    v594 = v593 ^ v590;
+    v595 = playIntentKey[(unsigned __int8)v594 + 346] + v591;
+    v596 = v595 ^ v592;
+    v597 = playIntentKey[(unsigned __int8)v596 + 361] + v593;
+    v598 = v594 ^ (1795859024 * v597);
+    v599 = v598 + v595;
+    v600 = v596 - 1404832863 * v599;
+    v601 = v600 ^ v597;
+    v602 = v598 + process((unsigned __int8)v601 + 120, v601, v600, v599, 1618195888);
+    v1068 = v602 ^ v599;
+    v603 = (((v602 ^ (unsigned int)v599) >> 25) & 7) + 1;
+    do
+    {
+    v1066 = v603;
+    v604 = v602 ^ v600;
+    v605 = v601 - process((unsigned __int8)v604 + 33, v604, v602, v1068, 2055239595);
+    v606 = v605 + v602;
+    v607 = v604 - v605 - v606;
+    v608 = v607 + v605;
+    v609 = v606 - playIntentKey[(unsigned __int8)v608 + 31];
+    v610 = playIntentKey[(unsigned __int8)v609 + 87] + v607;
+    v611 = v608 + __ROL4__(v610, 12);
+    v612 = v611 ^ v609;
+    v613 = v610 - playIntentKey[(unsigned __int8)v612 + 205];
+    v614 = v613 + v611;
+    v615 = process((unsigned __int8)v613 + (unsigned __int8)v611 - 92, v613 + v611, v613, v1068, 973668387);
+    v616 = v612 + v615;
+    v617 = playIntentKey[(unsigned __int8)(v612 + v615) + 1] + v613;
+    v618 = v614 - v617;
+    v619 = process((unsigned __int8)v618 + 11, v618, v617, v1068, -1757988009);
+    v620 = (v616 ^ v619) + v617;
+    v601 = v620 + (v616 ^ v619) + v618;
+    v602 = playIntentKey[(unsigned __int8)v601 + 502] ^ v616 ^ v619;
+    v600 = v1068 ^ v620;
+    v603 = v1066 - 1;
+    }
+    while ( v1066 != 1 );
+    v621 = v602 + v600;
+    v622 = v601 ^ (-321912119 * v621);
+    v623 = v1068 + process(((unsigned __int8)v601 ^ (unsigned __int8)(-55 * v621)) + 21, v622, v621, v602, 611061831);
+    v624 = v602 ^ (1632424943 * v623);
+    v625 = v621 - v624;
+    v626 = v622 ^ (__ROL4__(v625, 6) + __ROL4__(v624, 24));
+    v627 = v625 - 3578;
+    v628 = v625;
+    v629 = v626 + v625 + 993387704;
+    v630 = (__ROL4__(v626, 27) + 26925) ^ v623 ^ v627;
+    v631 = v624 - playIntentKey[(unsigned __int8)v630 + 187];
+    v632 = v628 - v631;
+    v633 = v630 ^ __ROL4__(v629, 8);
+    v634 = v633 + v629 + v631;
+    v635 = (v632 + 993387704) ^ __ROL4__(v634, 22);
+    v636 = v629 ^ (v634 + v635);
+    v637 = v633 - v636;
+    v638 = v634 ^ (v637 - 1965272087);
+    if ( (((unsigned __int8)v634 ^ (unsigned __int8)(v637 - 23)) & 2) != 0 )
+    {
+    v639 = v635 - v637;
+    v640 = v636 ^ (v639 - 2075671019);
+    v641 = v637 + ((__ROL4__(v640, 22) - 13038) ^ (v639 + 252202133));
+    v642 = ((__ROL4__(v641, 4) - 26949) ^ (v640 - 22992)) + v639 + 252207624;
+    v636 = v640 ^ __ROL4__(v642, 2);
+    v635 = v638 ^ v642;
+    v637 = v641 - v636;
+    }
+    if ( (v637 & 0x1000000) != 0 )
+    {
+    v643 = v635 ^ v638;
+    v644 = v643 ^ v636;
+    v645 = v635 ^ v636;
+    v646 = v643 + ((__ROL4__(v645, 18) - 5770) ^ (v644 - 4776));
+    v647 = v644 + __ROL4__(v646, 7);
+    v648 = v647 ^ v645;
+    v649 = v648 ^ v646;
+    v650 = v647 ^ (__ROR4__(v649, 1) + __ROL4__(v648, 24));
+    v651 = v648 - v650;
+    v652 = v649 + __ROR4__(v651, 1);
+    v653 = v652 ^ v650;
+    v638 = v651 + 1305359227 * v653;
+    v635 = v637 ^ v652;
+    v636 = v653;
+    }
+    if ( v638 < 0 )
+    {
+    v654 = -1694033282 * v637 + v635;
+    v655 = v636 + process(126 * (unsigned __int8)v637 + v635 + 74, v654, v637, v638, -1862796585);
+    v656 = v655 ^ v637;
+    v657 = v654 - v656;
+    v636 = 1971287609 * v657 + v655;
+    v635 = v638 ^ v657;
+    v637 = v656 + process(57 * (unsigned __int8)v657 + v655 + 56, v636, v657, v638, -299214212);
+    }
+    v658 = v637 ^ v635;
+    v659 = playIntentKey[(unsigned __int8)v658 + 382] + v636;
+    v660 = v659 + v638;
+    v661 = __ROL4__(v660, 9) + v637 + __ROL4__(v659, 18);
+    v662 = v658 - __ROL4__(v661, 10);
+    v663 = v662 ^ v659;
+    v664 = v660 - process((unsigned __int8)v663 - 78, v663, v662, v661, 1332720027);
+    v665 = v662 ^ process((unsigned __int8)v664 + (unsigned __int8)v661 + 75, v664 + v661, v664, v663, 1136530387);
+    v666 = v663 - v665;
+    v667 = -871836926 * v666 + v664;
+    v668 = (v664 + v661) ^ process(2 * (unsigned __int8)v666 + (unsigned __int8)v664 - 15, v667, v666, v665, 1804810876);
+    v669 = v665 + 675712822 * v668;
+    v670 = process(v665 + 54 * (unsigned __int8)v668 + 32, v669, v668, v667, 1413850250);
+    v671 = v666 ^ v670;
+    v672 = v667 + process(((unsigned __int8)v666 ^ (unsigned __int8)v670) - 87, v666 ^ v670, v669, v668, -661820768);
+    v673 = v668 ^ __ROL4__(v672, 8);
+    v674 = v669 - __ROL4__(v673, 20);
+    v675 = v671 ^ v672;
+    v676 = v671 - v674;
+    v677 = v673 - __ROL4__(v675, 28);
+    v678 = (~v677 >> 9) | 0xFFFFFFF8;
+    do
+    {
+    v679 = v674 ^ __ROL4__(v675, 5);
+    v680 = v679 ^ v676;
+    v681 = v675 ^ __ROL4__(v680, 1);
+    v682 = v679 - v681;
+    v683 = v680 - v682;
+    v684 = playIntentKey[(unsigned __int8)v683 + 164] ^ v681;
+    v676 = playIntentKey[(unsigned __int8)(v684 ^ v682) + 200] + v683;
+    v675 = v676 ^ v684;
+    v674 = v677 ^ v684 ^ v682;
+    ++v678;
+    }
+    while ( v678 );
+    if ( (v675 & 0x20000) != 0 )
+    {
+    v685 = v674 + ((__ROL4__(v677, 29) + 18472) ^ (v676 + 26483));
+    v686 = v685 ^ v676;
+    v687 = v677 - v686;
+    v688 = v685 - v687;
+    v689 = v686 ^ (1168264117 * v688);
+    v690 = playIntentKey[(unsigned __int8)(v687 ^ (v689 - 36)) + 17] ^ v688;
+    v691 = v689 + (v687 ^ (v689 - 610583076));
+    v692 = v689 - v690;
+    v693 = v690 - v691 - 561767199;
+    v694 = v691 + __ROL4__(v692 + playIntentKey[(unsigned __int8)v693 + 438], 10);
+    v695 = (__ROL4__(v694, 20) + 7088) ^ v693 ^ (v692 + playIntentKey[(unsigned __int8)v693 + 438] - 26847);
+    v696 = v695 ^ (v692 + playIntentKey[(unsigned __int8)v693 + 438]);
+    v697 = v694 - 1199635137 * v696;
+    v698 = v695 - __ROL4__(v697, 20);
+    v676 = v698 + v696;
+    v677 = v676 ^ v697;
+    v674 = v675 ^ v698;
+    }
+    v699 = ((v677 >> 7) & 7) + 1;
+    do
+    {
+    v700 = v674 ^ (__ROL4__(v675, 28) + __ROL4__(v676, 24));
+    v701 = (__ROL4__(v700, 17) + 5326) ^ v676 ^ (v675 - 30115);
+    v702 = v675 - v701;
+    v703 = v700 - v702;
+    v704 = v701 ^ (__ROL4__(v703, 5) + __ROL4__(v702, 30));
+    v705 = v702 ^ __ROL4__(v704, 5);
+    v706 = v703 ^ (v705 + v704);
+    v676 = v704 - v706;
+    v675 = v705 + v676 + 1601725754;
+    v674 = v677 ^ v706;
+    --v699;
+    }
+    while ( v699 );
+    v707 = v674 - playIntentKey[(unsigned __int8)(v705 + v676 + 58) + 96];
+    v708 = v707 + v676;
+    v709 = v677 ^ (v708 + v707);
+    v710 = v675 - v709;
+    v711 = v707 ^ process((unsigned __int8)v710 - 97, v710, v709, v708, -136352212);
+    v712 = v708 - v711;
+    v713 = v709 - v712 + 401045673;
+    v714 = playIntentKey[(unsigned __int8)v713 + 258] ^ v710;
+    v715 = 1696620461 * v714 + v711;
+    v716 = v712 + v715 + 1014336164;
+    v717 = (__ROL4__(v716, 3) - 16928) ^ v713 ^ (v715 - 7166);
+    v718 = v714 - v717;
+    v719 = v715 - __ROL4__(v718, 8);
+    v720 = v719 ^ v716;
+    v721 = v720 ^ v717;
+    v722 = v718 + ((__ROL4__(v721, 8) - 29857) ^ (v720 - 25225));
+    v723 = ((unsigned int)~v722 >> 25) | 0xFFFFFFF8;
+    do
+    {
+    v724 = v719 - v721;
+    v720 += 258867187 * v724;
+    v721 += v720;
+    v719 = v722 ^ v724;
+    ++v723;
+    }
+    while ( v723 );
+    v725 = v721 ^ v719;
+    v726 = v720 + 237057337 * v725;
+    v727 = (__ROL4__(v726, 5) - 5279) ^ v722 ^ (v725 - 21339);
+    v728 = v727 ^ v721;
+    v729 = v725 ^ __ROL4__(v728, 16);
+    v730 = v726 ^ __ROL4__(v729, 3);
+    v731 = v727 - v730;
+    v732 = __ROL4__(v731 + 712408818, 2) + v728 + __ROL4__(v730, 25);
+    v729 += 1103369444;
+    v733 = v731 - (v729 ^ v730) + 712408818;
+    v734 = playIntentKey[(unsigned __int8)(v732 + v733) + 233] ^ (v729 - v732);
+    v735 = v734 + v732 + v731 + 712408818;
+    v736 = v733 ^ __ROL4__(v735, 28);
+    v737 = v736 ^ (v732 + v733);
+    v738 = v734 - (__ROL4__(v737, 15) + __ROL4__(v736, 3));
+    v739 = v735 + __ROL4__(v738, 27);
+    v740 = v739 + v736;
+    v741 = v737 - 722998877 * v740;
+    v742 = v738 - v741;
+    v743 = v739 + 526874773 * v742;
+    v744 = v740 ^ process(-107 * (unsigned __int8)v742 + v739 - 9, v743, v742, v741, 1265012201);
+    v745 = v741 - v744;
+    v746 = v745 ^ v742;
+    v747 = v746 + v745 + v743;
+    v748 = v747 ^ v744;
+    v749 = v745 - v748 + 1339703117;
+    v750 = v746 - playIntentKey[(unsigned __int8)v749 + 235];
+    v751 = v748 ^ (v747 + v750 + 488632535);
+    v752 = playIntentKey[(unsigned __int8)(v748 ^ (v747 + v750 - 41)) + 130] ^ v749;
+    v753 = __ROL4__(v752, 20) + v750 + __ROL4__(v751, 30);
+    v754 = (v750 + v747) ^ __ROR4__(v753, 1);
+    v755 = v751 - v754;
+    v756 = v752 - ((__ROL4__(v755, 19) + 1074) ^ (v754 + 17058));
+    v757 = v756 + v753;
+    v758 = v754 - ((__ROL4__(v756 + v753, 2) - 12837) ^ (v756 - 444));
+    v759 = (__ROL4__(v758, 23) - 4877) ^ v755 ^ (v756 + v753 + 9301);
+    v760 = v759 ^ v756;
+    v761 = (__ROL4__(v760, 6) - 18789) ^ v757 ^ (v759 - 8200);
+    v762 = v758 - v761;
+    v763 = v759 - __ROL4__(v762, 22);
+    v764 = v760 - playIntentKey[(unsigned __int8)v763 + 94];
+    v765 = v764 + v763;
+    v766 = playIntentKey[(unsigned __int8)(v761 - (v764 + v763)) + 149] + v762;
+    v767 = v763 - v766;
+    v768 = v764 - v767;
+    v769 = v761 - v765 + 807007789;
+    v770 = v769 + v766;
+    v771 = v767 + __ROL4__(v769 + v766, 17);
+    v772 = ((__ROL4__(v771, 24) - 6387) ^ (v769 + v766 - 7781)) + v768 + 770607528;
+    v773 = v769 - (v768 + __ROL4__(v772, 3) + 770607528);
+    v774 = v770 ^ (__ROL4__(v773, 26) + __ROL4__(v772, 29));
+    v775 = v771 - __ROL4__(v774, 5);
+    v776 = v772 - v775;
+    v777 = __ROL4__(v776, 29) + v773 + __ROL4__(v775, 29);
+    v778 = v774 ^ __ROL4__(v777, 8);
+    v779 = __ROR4__(v778, 1);
+    v780 = v775 + __ROL4__(v777, 27);
+    LOBYTE(v773) = v779 + v780 - 59;
+    v781 = v779 + v780;
+    v782 = process(v773, v781, v778, v777, -461732781);
+    v783 = v776 + v782;
+    v784 = playIntentKey[(unsigned __int8)(v777 - (v776 + v782)) + 346];
+    v785 = v778 - v784 + v781;
+    v786 = v785 + v778 - v784;
+    v787 = v777 - v786;
+    v788 = v778 - v784 + 2066182316;
+    v789 = v788 + v785;
+    v790 = v788 - v787;
+    v791 = playIntentKey[(unsigned __int8)v789 + 39] ^ (v783 - v786);
+    v792 = v787 - v791 - v789;
+    v793 = v790 ^ (__ROL4__(v792, 8) + __ROL4__(v791, 4));
+    v794 = v789 - v793;
+    v795 = v794 ^ v791;
+    v796 = v792 - v795;
+    v797 = v796 + v793;
+    v798 = v794 - playIntentKey[(unsigned __int8)v797 + 255];
+    v799 = v798 ^ v795;
+    v800 = v796 - v799 - 1866178424;
+    v801 = playIntentKey[(unsigned __int8)v800 + 291] ^ v797;
+    v802 = v798 - v801;
+    v803 = v799 - v802;
+    v804 = playIntentKey[(unsigned __int8)v803 + 386] + v800;
+    v805 = v804 ^ v801;
+    v806 = v805 + v802;
+    v807 = (v805 + v802) ^ v803;
+    v808 = (__ROL4__(v807, 25) + 24493) ^ v804 ^ (v805 + v802 + 14750);
+    v809 = v808 + v805;
+    v810 = v809 + v806;
+    v811 = v807 - __ROL4__(v810, 15);
+    if ( (v811 & 0x40000) != 0 )
+    {
+    v812 = v808 - v810;
+    v813 = v809 - playIntentKey[(unsigned __int8)v812 + 456];
+    v814 = v810 + __ROL4__(v813, 6);
+    v815 = v814 ^ v812;
+    v816 = v814 ^ __ROL4__(v813 - v815, 29);
+    v817 = v816 + v813 - v815;
+    v818 = v815 - v816;
+    v819 = v815;
+    v820 = v815 + v815 - v817;
+    v821 = v818 + 157312917 * v820;
+    v810 = v819 - v821;
+    v808 = v811 ^ v820;
+    v809 = v821;
+    }
+    v822 = v808 - 1014101091;
+    v823 = v822 ^ v809;
+    v824 = v811 - v823;
+    v825 = v810 - v824;
+    v826 = v822
+       - (v810
+        + process((unsigned __int8)v810 - (unsigned __int8)v824 - 2, v810 - v824, v824, v823, -1963772351));
+    v827 = v824 - process((unsigned __int8)v826 + (unsigned __int8)v823 + 116, v826 + v823, v826, v810 - v824, 2066507203);
+    v828 = v825 - playIntentKey[(unsigned __int8)v827 + 279];
+    v829 = (v826 + v823) ^ process(
+                           (unsigned __int8)v826 - (unsigned __int8)v828 - 20,
+                           v826 - v828,
+                           v828,
+                           v827,
+                           -400124441);
+    v830 = v827 + v829;
+    v831 = process((unsigned __int8)v827 + (unsigned __int8)v829 - 91, v827 + v829, v829, v826 - v828, 1554147084);
+    v832 = v828 - v831;
+    v833 = v826 - v831;
+    v834 = v829 - process((unsigned __int8)v833 - 44, v833, v832, v827 + v829, 1163186459);
+    v835 = v830 - playIntentKey[(unsigned __int8)v834 + 365];
+    v836 = v832 + __ROL4__(v835, 11);
+    if ( (v836 & 0x20000000) != 0 )
+    {
+    v837 = v835 + v833 - 916754456;
+    v838 = playIntentKey[(unsigned __int8)v837 + 506] + v834;
+    v839 = v838 ^ v835;
+    v840 = v837 - v839;
+    v841 = v840 + v838;
+    v842 = __ROL4__(v841, 5);
+    v843 = v839 - v842;
+    v844 = v840 - process((unsigned __int8)v839 - (unsigned __int8)v842 + 37, v839 - v842, v841, v836, 1703900647);
+    v845 = playIntentKey[(unsigned __int8)v844 + 41] ^ v841;
+    v846 = v843 - v845;
+    v847 = v845 - __ROL4__(v844 + 258566578 * v846, 29);
+    v848 = __ROL4__(v846 - 6121164 * v847, 7) + v844 + 258566578 * v846;
+    v849 = __ROL4__(v847 ^ (v848 - 1981092462), 10);
+    v850 = v846 - 6121164 * v847 + __ROL4__(v848, 14);
+    v834 = (v847 ^ (v848 - 1981092462)) - playIntentKey[(unsigned __int8)(v848 ^ (v849 + v850 - 74)) + 310];
+    v835 = (v849 + v850) ^ (__ROL4__(v834, 30) + __ROL4__(v848 ^ (v849 + v850 - 152822346), 27));
+    v833 = v836 ^ v848 ^ (v849 + v850 - 152822346);
+    }
+    if ( (v835 & 0x4000000) != 0 )
+    {
+    v851 = v836 + v833 - 1235039827;
+    v852 = v834 - playIntentKey[(unsigned __int8)(v836 + v833 - 83) + 344];
+    v853 = v836 - __ROL4__(v852, 10);
+    v854 = v851 ^ __ROL4__(v853, 4);
+    v834 = v854 + v852;
+    v836 = v834 + v853;
+    v833 = v835 ^ v854;
+    }
+    if ( (v836 & 0x8000000) != 0 )
+    {
+    v855 = v833 - v835;
+    v856 = v834 - v855;
+    v857 = v835 ^ __ROL4__(v856, 7);
+    v858 = v855 + v857 + 851817595;
+    v859 = v856 - playIntentKey[(unsigned __int8)(v855 + v857 + 123) + 38];
+    v860 = v859 ^ v857;
+    v861 = v860 ^ v858;
+    v862 = v860 - playIntentKey[(unsigned __int8)(v861 + v859 + 32) + 459];
+    v863 = v861 + ((__ROL4__(v862, 28) - 31743) ^ (v861 + v859 - 1879591732));
+    v864 = v863 ^ (v861 + v859 - 1879567328);
+    v865 = v862 ^ (458889639 * v864);
+    v866 = v865 + v863;
+    v867 = v864 - ((__ROL4__(v866, 1) + 20864) ^ (v865 + 23073));
+    v868 = v866 + __ROL4__(v867 + v865, 13);
+    v834 = v867 + ((__ROL4__(v868, 21) + 2669) ^ (v865 + v867 - 2154));
+    v835 = v834 + v868 + v867 + v865;
+    v833 = v836 ^ v868;
+    }
+    v869 = v833 ^ v834;
+    v870 = v836 - v869;
+    v871 = v835 ^ (__ROL4__(v870, 21) + __ROL4__(v869, 2));
+    v872 = v833 - v835 + __ROL4__(v871, 13);
+    v873 = v872 ^ v869;
+    v874 = __ROL4__(v873, 24) + v870 + __ROL4__(v872, 2);
+    v875 = v871 - __ROL4__(v874, 3);
+    v876 = v872 - (__ROL4__(v875, 16) + __ROL4__(v874, 11));
+    v877 = v873 - ((__ROL4__(v876, 5) - 8767) ^ (v875 + 7626));
+    v878 = v877 + v874;
+    v879 = v875 - ((__ROL4__(v878, 6) - 15745) ^ (v877 - 2677));
+    v880 = v879 ^ v876;
+    v881 = process((unsigned __int8)v880 + 90, v880, v879, v878, -770023306);
+    v882 = v877 + v881;
+    v883 = v878 - playIntentKey[(unsigned __int8)(v877 + v881) + 185];
+    v884 = v883 + v879 + 251611279;
+    v885 = v880 - (unsigned int)process((unsigned __int8)v883 + (unsigned __int8)v879 + 34, v884, v883, v882, 1058312346);
+    v886 = v885 + v882;
+    v887 = v885 + v882 - 119;
+    v888 = (unsigned int)(v885 + v882);
+    v889 = v883 - (unsigned int)process(v887, v886, v885, v884, 793624603);
+
+    auto _v884 = (unsigned int)(v884 - playIntentKey[(unsigned __int8)v889 + 368]);
+
+    memcpy(dst + 3 * 4, &v885, 4);
+    memcpy(dst + 2 * 4, &v888, 4);
+    memcpy(dst + 1 * 4, &v889, 4);
+    memcpy(dst + 0 * 4, &_v884, 4);
+}
+
+void bind_key(const uint8 decrypted_key[16], const uint8 file_id[20], uint8 dst[16]) {
+    uint64 key_p1, key_p2, fid_p1, fid_p2;
+    memcpy(&key_p1, decrypted_key + 8, 8);
+    memcpy(&key_p2, decrypted_key + 0, 8);
+    memcpy(&fid_p1, file_id       + 8, 8);
+    memcpy(&fid_p2, file_id       + 0, 8);
+
+    for (uint8 i = 0; i < 0x20; ++i) {
+        key_p1 = fid_p2 ^ (__ROR8__(key_p1, 8) + key_p2);
+        key_p2 = key_p1 ^ (__ROL8__(key_p2, 3));
+        fid_p1 = i  ^ (__ROR8__(fid_p1, 8) + fid_p2);
+        fid_p2 = fid_p1 ^ (__ROL8__(fid_p2, 3));
+    }
+
+    memcpy(dst + 0, &key_p2, 8);
+    memcpy(dst + 8, &key_p1, 8);
 }
