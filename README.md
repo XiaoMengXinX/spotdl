@@ -2,7 +2,10 @@
 
 A simple downloader for downloading spotify songs/products with metadata.
 
-Credits: [DevLARLEY/spotify-oggmp4-dl](https://github.com/DevLARLEY/spotify-oggmp4-dl)
+Credits:
+
+- [DevLARLEY/spotify-oggmp4-dl](https://github.com/DevLARLEY/spotify-oggmp4-dl)
+- [uhwot/unplayplay](https://git.gay/uhwot/unplayplay)
 
 # Installation
 
@@ -10,7 +13,7 @@ Credits: [DevLARLEY/spotify-oggmp4-dl](https://github.com/DevLARLEY/spotify-oggm
 go install github.com/XiaoMengXinX/spotdl/cmd/spotdl@latest
 ```
 
-For macOS, you may need to codesign your binary file:
+For macOS, you may need to codesign the binary file:
 
 ```shell
 sudo codesign --force --deep --sign - ~/go/bin/spotdl
