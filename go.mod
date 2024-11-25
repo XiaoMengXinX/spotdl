@@ -7,6 +7,7 @@ require (
 	github.com/XiaoMengXinX/SimpleDownloader v0.0.0-20241104184306-5642193c58ed
 	github.com/bogem/id3v2 v1.2.0
 	github.com/iyear/gowidevine v0.1.1
+	github.com/spf13/pflag v1.0.5
 	github.com/u2takey/ffmpeg-go v0.5.0
 	google.golang.org/protobuf v1.35.1
 )

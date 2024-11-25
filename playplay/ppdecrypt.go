@@ -1,26 +1,48 @@
 package playplay
 
-/*
-#cgo CXXFLAGS: -std=c++17
-#include "ppdecrypt.h"
-#include <stdlib.h>
-*/
-import "C"
-
 import (
-	"unsafe"
+	"encoding/hex"
+	"fmt"
+	"os/exec"
+	"strings"
 )
 
-const PlayPlayToken = `0101bf34c8d0393bcda8b1d3eeaf8f3b2`
+var PathToReUnplayplayBinary string
+var playPlayToken string
 
-// PlayPlayDecrypt currently does not work
-func PlayPlayDecrypt(keyBasis [16]byte, fileID [20]byte) [16]byte {
-	var buf [16]byte
+func initDecrypt() error {
+	if PathToReUnplayplayBinary == "" {
+		return fmt.Errorf("re-unplayplay binary path not set")
+	}
 
-	C.ppdecrypt(
-		(*C.uint8_t)(unsafe.Pointer(&keyBasis[0])),
-		(*C.uint8_t)(unsafe.Pointer(&fileID[0])),
-		(*C.uint8_t)(unsafe.Pointer(&buf[0])),
-	)
-	return buf
+	cmd := exec.Command(PathToReUnplayplayBinary, "token")
+	output, err := cmd.Output()
+	if err != nil {
+		return fmt.Errorf("failed to execute playplay binary: %v", err)
+	}
+
+	playPlayToken = strings.TrimSpace(string(output))
+	return nil
+}
+
+func GetPlayPlayToken() (string, error) {
+	if playPlayToken == "" {
+		err := initDecrypt()
+		if err != nil {
+			return "", err
+		}
+	}
+	return playPlayToken, nil
+}
+
+func PlayPlayDecrypt(encKey []byte, fileID []byte) (decrypted []byte, err error) {
+	cmd := exec.Command(PathToReUnplayplayBinary, hex.EncodeToString(fileID), hex.EncodeToString(encKey))
+	output, err := cmd.Output()
+	if err != nil {
+		return decrypted, fmt.Errorf("failed to execute playplay decryption command: %v", err)
+	}
+
+	decrypted, _ = hex.DecodeString(string(output))
+
+	return
 }

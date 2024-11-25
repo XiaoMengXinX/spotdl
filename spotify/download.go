@@ -155,7 +155,7 @@ func (d *Downloader) downloadAndDecrypt(fileName string, format string, fileID s
 		if err != nil {
 			return fmt.Errorf("get decrypt key failed: %v", err)
 		}
-		err = playplay.DecryptFileStream(key[:], tmpFile, outFile)
+		err = playplay.DecryptFileStream(key, tmpFile, outFile)
 		if err != nil {
 			return fmt.Errorf("failed to decrypt file: %v", err)
 		}

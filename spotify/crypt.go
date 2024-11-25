@@ -75,9 +75,15 @@ func (d *Downloader) getMp4Keys(psshStr string) ([]*widevine.Key, error) {
 	return keys, nil
 }
 
-func (d *Downloader) getOggKeys(fileID string) (key [16]byte, err error) {
+func (d *Downloader) getOggKeys(fileID string) (key []byte, err error) {
+	playplayToken, err := playplay.GetPlayPlayToken()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get playplay token: %w", err)
+	}
+	log.Debugf("[UnPlayPlay] Token: [%s]", playplayToken)
+
 	protoVersion := int32(2)
-	reqToken, _ := hex.DecodeString(playplay.PlayPlayToken)
+	reqToken, _ := hex.DecodeString(playplayToken)
 
 	req := &playplay.PlayPlayLicenseRequest{
 		Version:       &protoVersion,
@@ -102,12 +108,12 @@ func (d *Downloader) getOggKeys(fileID string) (key [16]byte, err error) {
 	}
 
 	hexFileID, _ := hex.DecodeString(fileID)
-	obfuscatedKey := [16]byte(playplayResponse.GetObfuscatedKey()[:])
+	obfuscatedKey := playplayResponse.GetObfuscatedKey()
 
 	log.Debugf("[OGG Crypt] file id: %x", hexFileID)
 	log.Debugf("[OGG Crypt] obfuscated key: %x", obfuscatedKey)
 
-	key = playplay.PlayPlayDecrypt(obfuscatedKey, [20]byte(hexFileID[:]))
+	key, err = playplay.PlayPlayDecrypt(obfuscatedKey, hexFileID)
 
 	log.Debugf("[OGG Crypt] deobfuscated key: %x", key)
 
