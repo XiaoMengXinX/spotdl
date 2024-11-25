@@ -1,39 +1,44 @@
 package main
 
 import (
-	"flag"
 	"fmt"
-	log "github.com/XiaoMengXinX/spotdl/logger"
-	"github.com/XiaoMengXinX/spotdl/spotify"
 	"os"
+
+	log "github.com/XiaoMengXinX/spotdl/logger"
+	"github.com/XiaoMengXinX/spotdl/playplay"
+	"github.com/XiaoMengXinX/spotdl/spotify"
+	"github.com/spf13/pflag"
 )
 
 func main() {
-	showHelp := flag.Bool("help", false, "Show this help message.")
-	id := flag.String("id", "", "Spotify URL/URI/ID (required). Example usage: -id https://open.spotify.com/track/4jTrKMoc44RYZsoFsIlQev")
-	quality := flag.String("quality", spotify.Quality128MP4Dual, "Quality level. Options: MP4_128, MP4_128_DUAL, MP4_256, MP4_256_DUAL, OGG_VORBIS_320, OGG_VORBIS_160, OGG_VORBIS_96")
-	output := flag.String("output", "./output", "Output path.")
-	config := flag.String("c", "config.json", "Path to config file")
-	debug := flag.Bool("debug", false, "Print debug information. Use this to enable more detailed logging for troubleshooting.")
-	isConvertToMP3 := flag.Bool("mp3", false, "Convert downloaded music to mp3 format")
-	isSkipAddingMetadata := flag.Bool("no-metadata", false, "Skip adding metadata to downloaded files.")
+	// Set up flag definitions using pflag
+	var (
+		showHelp           = pflag.BoolP("help", "h", false, "Show this help message")
+		id                 = pflag.StringP("id", "i", "", "ID/URL/URI of a spotify track/playlist/album/podcast to download (Required)\nExample: -i https://open.spotify.com/track/4jTrKMoc44RYZsoFsIlQev")
+		quality            = pflag.StringP("quality", "q", "", "Audio quality level. (default \"MP4_128_DUAL\")\nOptions:\tMP4_128, MP4_128_DUAL, MP4_256, MP4_256_DUAL,\n\t\tOGG_VORBIS_320, OGG_VORBIS_160, OGG_VORBIS_96\n\t\t")
+		output             = pflag.StringP("output", "o", "./output", "Output directory for downloaded files")
+		config             = pflag.StringP("config", "c", "config.json", "Path to configuration file")
+		debug              = pflag.BoolP("debug", "d", false, "Debug mode")
+		convertToMP3       = pflag.BoolP("mp3", "", false, "Convert downloaded files to mp3 format")
+		skipAddingMetadata = pflag.BoolP("no-metadata", "", false, "Skip adding metadata to downloaded files")
+		pathToReUnplayplay = pflag.StringP("playplay", "", "", "Path to your re-unplayplay binary (only needed for OGG decryption)")
+	)
 
-	flag.Parse()
+	pflag.Parse()
 
 	if *showHelp {
-		flag.Usage()
+		pflag.Usage()
 		os.Exit(0)
 	}
-
 	if *id == "" {
 		fmt.Println("Error: -id is required")
-		flag.Usage()
+		pflag.Usage()
 		os.Exit(1)
 	}
-
 	if *debug {
 		log.SetLevel(log.LevelDebug)
 	}
+	playplay.PathToReUnplayplayBinary = *pathToReUnplayplay
 
 	sp := spotify.NewDownloader()
 
@@ -43,18 +48,21 @@ func main() {
 	sp.SetOutputPath(*output)
 	log.Infof("Set Output path: %s", *output)
 
+	if *quality == "" {
+		*quality = spotify.Quality128MP4Dual
+	}
 	if err := sp.SetQuality(*quality); err != nil {
-		log.Fatalf("Error: %v", err)
+		log.Fatalf("Error setting quality level: %v", err)
 	}
 	log.Infof("Set quality level: %s", *quality)
 
-	if *isConvertToMP3 {
-		sp.ConvertToMP3(*isConvertToMP3)
+	if *convertToMP3 {
+		sp.ConvertToMP3(*convertToMP3)
 		log.Infoln("Downloaded music will be converted to mp3")
 	}
 
-	if *isSkipAddingMetadata {
-		sp.SkipAddingMetadata(*isSkipAddingMetadata)
+	if *skipAddingMetadata {
+		sp.SkipAddingMetadata(*skipAddingMetadata)
 		log.Infoln("Skip adding metadata to downloaded files")
 	}
 
