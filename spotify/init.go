@@ -11,16 +11,15 @@ import (
 	"strings"
 )
 
-var cdmData []byte
-
 func readCDMs() []string {
 	cdms, err := filepath.Glob(filepath.Join("cdm", "*.wvd"))
 	if err != nil || len(cdms) == 0 {
-		log.Fatal(`No CDMs found in "./cdm" folder`)
+		log.Warnf(`No CDMs found in "./cdm" folder, using embedded CDM instead`)
+		return nil
 	}
 	cdmData, err = os.ReadFile(cdms[0])
 	if err != nil {
-		log.Fatal("Failed to read CDM file")
+		log.Fatalf("Failed to read CDM file: %s", cdms[0])
 	}
 	return cdms
 }
