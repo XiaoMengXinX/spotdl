@@ -19,6 +19,13 @@ type Manager struct {
 	ConfigManager     *config.Manager
 }
 
+type accessTokenData struct {
+	ClientId    string `json:"clientId"`
+	AccessToken string `json:"accessToken"`
+	ExpireTime  int64  `json:"accessTokenExpirationTimestampMs"`
+	IsAnonymous bool   `json:"isAnonymous"`
+}
+
 func NewTokenManager() *Manager {
 	log.Debugln("New Token Manager Created")
 	return &Manager{
@@ -51,7 +58,7 @@ func (tm *Manager) QuerySpDc() {
 	tm.AccessToken, tm.AccessTokenExpire = tm.GetAccessToken()
 }
 
-func (tm *Manager) _requestAccessToken(spDc string) (string, int64, error) {
+func (tm *Manager) requestAccessToken(spDc string) (string, int64, error) {
 	log.Debugln("Requesting access token from Spotify")
 	client := &http.Client{}
 
@@ -61,12 +68,17 @@ func (tm *Manager) _requestAccessToken(spDc string) (string, int64, error) {
 		return "", -1, fmt.Errorf("unable to create request: %w", err)
 	}
 
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36")
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("app-platform", "WebPlayer")
+	req.Header.Set("sec-ch-ua-platform", "macOS")
+	req.Header.Set("origin", "https://open.spotify.com/")
 	req.Header.Set("Cookie", fmt.Sprintf("sp_dc=%s", spDc))
 	log.Debugf("Sending request to %s with sp_dc: %s", tm.TokenURL, spDc)
 
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Errorf("Error sending request: %v", err)
+		log.Errorf("Error while sending request: %v", err)
 		return "", -1, fmt.Errorf("unable to send request: %w", err)
 	}
 	defer resp.Body.Close()
@@ -78,30 +90,27 @@ func (tm *Manager) _requestAccessToken(spDc string) (string, int64, error) {
 		log.Fatalf("Failed to request token (status %d): %s", resp.StatusCode, string(body))
 	}
 
-	var tokenResponse map[string]interface{}
-	if err := json.NewDecoder(resp.Body).Decode(&tokenResponse); err != nil {
-		log.Errorf("Error parsing token response: %v", err)
+	var tokenResp accessTokenData
+	if err := json.NewDecoder(resp.Body).Decode(&tokenResp); err != nil {
+		log.Errorf("Error while parsing token response: %v", err)
 		return "", -1, fmt.Errorf("unable to parse token response: %w", err)
 	}
 
-	log.Debugf("Token response: %+v", tokenResponse)
+	log.Debugf("Token response: %+v", tokenResp)
 
-	if isAnonymous, ok := tokenResponse["isAnonymous"].(bool); ok && isAnonymous {
+	if tokenResp.IsAnonymous {
 		log.Fatal("Invalid sp_dc cookie, forcing config reset")
 		tm.ConfigManager.Set(config.Data{})
 		os.Exit(1)
 	}
 
-	accessToken := tokenResponse["accessToken"].(string)
-	expireTimestamp := int64(tokenResponse["accessTokenExpirationTimestampMs"].(float64))
-
 	conf, _ := tm.ConfigManager.ReadAndGet()
-	conf.AccessToken = accessToken
-	conf.AccessTokenExpire = expireTimestamp
+	conf.AccessToken = tokenResp.AccessToken
+	conf.AccessTokenExpire = tokenResp.ExpireTime
 	tm.ConfigManager.Set(conf)
 
 	log.Debugln("Access token successfully retrieved and saved to config")
-	return accessToken, expireTimestamp, nil
+	return tokenResp.AccessToken, tokenResp.ExpireTime, nil
 }
 
 func (tm *Manager) GetAccessToken() (string, int64) {
@@ -117,9 +126,9 @@ func (tm *Manager) GetAccessToken() (string, int64) {
 
 	if currentTime >= conf.AccessTokenExpire {
 		log.Warnln("Access token expired, requesting new token")
-		token, expire, err := tm._requestAccessToken(tm.SpDc)
+		token, expire, err := tm.requestAccessToken(tm.SpDc)
 		if err != nil {
-			log.Fatalf("Error requesting new token: %v", err)
+			log.Fatalf("Error while requesting new token: %v", err)
 		}
 		log.Debugln("New access token obtained")
 		return token, expire
