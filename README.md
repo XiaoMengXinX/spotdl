@@ -5,8 +5,6 @@ A simple downloader for downloading spotify songs/products with metadata.
 Credits:
 
 - [DevLARLEY/spotify-oggmp4-dl](https://github.com/DevLARLEY/spotify-oggmp4-dl)
-- [uhwot/unplayplay](https://git.gay/uhwot/unplayplay)
-- [es3n1n/re-unplayplay](https://github.com/es3n1n/re-unplayplay)
 
 # Installation
 
@@ -32,10 +30,8 @@ Usage of spotdl:
       --mp3               Convert downloaded files to mp3 format
       --no-metadata       Skip adding metadata to downloaded files
   -o, --output string     Output directory for downloaded files (default "./output")
-      --playplay string   Path to your re-unplayplay binary (only needed for OGG decryption)
   -q, --quality string    Audio quality level. (default "MP4_128_DUAL")
-                          Options:	MP4_128, MP4_128_DUAL, MP4_256, MP4_256_DUAL,
-                          		OGG_VORBIS_320, OGG_VORBIS_160, OGG_VORBIS_96
+                          Options:	MP4_128, MP4_128_DUAL, MP4_256, MP4_256_DUAL
 ```
 
 # Notice
@@ -44,5 +40,3 @@ Usage of spotdl:
   in: https://github.com/hyugogirubato/KeyDive.
 
 - Get the `sp_dc` cookie value from your browser and enter to the cli at first run.
-
-- To download ogg format, you need to compile [re-unplayplay](https://github.com/es3n1n/re-unplayplay) and pass the path of your binary file using the `--playplay` parameter.
