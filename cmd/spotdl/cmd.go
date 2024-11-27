@@ -54,18 +54,17 @@ func main() {
 	sp := spotify.NewDownloader()
 
 	sp.TokenManager.ConfigManager.SetConfigPath(*config)
-	log.Infof("Set Config Path: %s", *config)
+	log.Infof("Set config path: %s", *config)
 
 	sp.SetOutputPath(*output)
-	log.Infof("Set Output path: %s", *output)
+	log.Infof("Set output path: %s", *output)
 
-	if *quality == "" {
-		*quality = spotify.Quality128MP4Dual
+	if *quality != "" {
+		if err := sp.SetQuality(*quality); err != nil {
+			log.Fatalf("Failed to set quality level: %v", err)
+		}
+		log.Infof("Set quality level: %s", *quality)
 	}
-	if err := sp.SetQuality(*quality); err != nil {
-		log.Fatalf("Error setting quality level: %v", err)
-	}
-	log.Infof("Set quality level: %s", *quality)
 
 	if *convertToMP3 {
 		sp.ConvertToMP3(*convertToMP3)
@@ -79,6 +78,10 @@ func main() {
 
 	log.Infof("Initializing Downloader")
 	sp.Initialize()
+
+	if *quality == "" {
+		log.Infof("Using quality level: %s", sp.TokenManager.ConfigManager.Get().DefaultQuality)
+	}
 
 	err := sp.Download(*id)
 	if err != nil {

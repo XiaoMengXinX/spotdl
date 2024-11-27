@@ -9,6 +9,7 @@ import (
 )
 
 type Data struct {
+	DefaultQuality    string   `json:"quality"`
 	SpDc              string   `json:"sp_dc"`
 	AccessToken       string   `json:"accessToken"`
 	AccessTokenExpire int64    `json:"accessTokenExpire"`
@@ -28,6 +29,7 @@ func NewConfigManager() *Manager {
 		AccessToken:       "",
 		AccessTokenExpire: -1,
 		AcceptLanguage:    []string{},
+		DefaultQuality:    "MP4_128_DUAL",
 	}
 	return &Manager{
 		configPath: "config.json",

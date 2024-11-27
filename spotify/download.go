@@ -90,6 +90,11 @@ func (d *Downloader) downloadContent(ID string, content IDType) (outFilePath str
 		}
 	}
 
+	if config := d.TokenManager.ConfigManager.Get(); d.quality != config.DefaultQuality {
+		config.DefaultQuality = d.quality
+		d.TokenManager.ConfigManager.Set(config)
+	}
+
 	log.Infof("Download complete for %s [%s]", content, fileName)
 	return
 }
@@ -114,7 +119,6 @@ func (d *Downloader) downloadAndDecrypt(fileName string, format string, fileID s
 	dl := downloader.NewDownloader().SetSavePath(d.outputFolder).SetDownloadRoutine(4)
 	task, _ := dl.NewDownloadTask(cdnUrl)
 	err = task.SetFileName(tmpFileName).Download()
-	// err = d.downloadURL(cdnUrl, tmpFileName)
 	defer os.Remove(tmpFilePath)
 	if err != nil {
 		return err
