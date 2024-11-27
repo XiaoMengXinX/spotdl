@@ -5,13 +5,11 @@ import (
 	"os"
 
 	log "github.com/XiaoMengXinX/spotdl/logger"
-	"github.com/XiaoMengXinX/spotdl/playplay"
 	"github.com/XiaoMengXinX/spotdl/spotify"
 	"github.com/spf13/pflag"
 )
 
 func main() {
-	// Set up flag definitions using pflag
 	var (
 		showHelp           = pflag.BoolP("help", "h", false, "Show this help message")
 		id                 = pflag.StringP("id", "i", "", "ID/URL/URI of a spotify track/playlist/album/podcast to download (Required)\nExample: -i https://open.spotify.com/track/4jTrKMoc44RYZsoFsIlQev")
@@ -21,7 +19,6 @@ func main() {
 		debug              = pflag.BoolP("debug", "d", false, "Debug mode")
 		convertToMP3       = pflag.BoolP("mp3", "", false, "Convert downloaded files to mp3 format")
 		skipAddingMetadata = pflag.BoolP("no-metadata", "", false, "Skip adding metadata to downloaded files")
-		pathToReUnplayplay = pflag.StringP("playplay", "", "", "Path to your re-unplayplay binary (only needed for OGG decryption)")
 	)
 
 	pflag.Parse()
@@ -38,7 +35,6 @@ func main() {
 	if *debug {
 		log.SetLevel(log.LevelDebug)
 	}
-	playplay.PathToReUnplayplayBinary = *pathToReUnplayplay
 
 	sp := spotify.NewDownloader()
 
