@@ -13,7 +13,7 @@ func main() {
 	var (
 		showHelp           = pflag.BoolP("help", "h", false, "Show this help message")
 		id                 = pflag.StringP("id", "i", "", "ID/URL/URI of a spotify track/playlist/album/podcast to download (Required)\nExample: -i https://open.spotify.com/track/4jTrKMoc44RYZsoFsIlQev")
-		quality            = pflag.StringP("quality", "q", "", "Audio quality level. (default \"MP4_128_DUAL\")\nOptions:\tMP4_128, MP4_128_DUAL, MP4_256, MP4_256_DUAL,\n\t\tOGG_VORBIS_320, OGG_VORBIS_160, OGG_VORBIS_96\n\t\t")
+		quality            = pflag.StringP("quality", "q", "", "Audio quality level. (default \"MP4_128_DUAL\")\nOptions: MP4_128, MP4_128_DUAL, MP4_256, MP4_256_DUAL")
 		output             = pflag.StringP("output", "o", "./output", "Output directory for downloaded files")
 		config             = pflag.StringP("config", "c", "config.json", "Path to configuration file")
 		debug              = pflag.BoolP("debug", "d", false, "Debug mode")
