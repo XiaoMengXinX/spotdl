@@ -71,23 +71,23 @@ func (tm *Manager) requestAccessToken(spDc string) (string, int64, error) {
 	log.Debugln("Requesting access token from Spotify")
 	client := &http.Client{}
 
-	totp, totpTime, err := tm.getTotp()
+	totpStr, totpTime, err := tm.getTotp()
 	if err != nil {
 		return "", -1, fmt.Errorf("failed to get totp: %w", err)
 	}
 	timeStr := fmt.Sprint(totpTime.Unix())
 
-	url := tm.TokenURL + "?" + url.Values{
+	reqUrl := tm.TokenURL + "?" + url.Values{
 		"reason":      {"transport"},
 		"productType": {"web-player"},
-		"totp":        {totp},
-		"totpServer":  {totp},
+		"totp":        {totpStr},
+		"totpServer":  {totpStr},
 		"totpVer":     {"5"},
 		"sTime":       {timeStr},
 		"cTime":       {timeStr + "420"},
 	}.Encode()
 
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest("GET", reqUrl, nil)
 	if err != nil {
 		log.Errorf("Unable to create HTTP request: %v", err)
 		return "", -1, fmt.Errorf("unable to create request: %w", err)
@@ -197,9 +197,9 @@ func (tm *Manager) getTotp() (string, time.Time, error) {
 	if err != nil {
 		serverTime = time.Now()
 	}
-	totp, err := totp.GenerateCode(TotpSecret, serverTime)
+	totpStr, err := totp.GenerateCode(TotpSecret, serverTime)
 	if err != nil {
 		return "", time.Time{}, err
 	}
-	return totp, serverTime, nil
+	return totpStr, serverTime, nil
 }
