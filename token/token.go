@@ -5,14 +5,22 @@ import (
 	"fmt"
 	"github.com/XiaoMengXinX/spotdl/config"
 	log "github.com/XiaoMengXinX/spotdl/logger"
+	"github.com/pquerna/otp/totp"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"time"
 )
 
+const (
+	UserAgent  = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+	TotpSecret = "GU2TANZRGQ2TQNJTGQ4DONBZHE2TSMRSGQ4DMMZQGMZDSMZUG4"
+)
+
 type Manager struct {
 	TokenURL          string
+	ServerTimeURL     string
 	SpDc              string
 	AccessToken       string
 	AccessTokenExpire int64
@@ -30,6 +38,7 @@ func NewTokenManager() *Manager {
 	log.Debugln("New Token Manager Created")
 	return &Manager{
 		TokenURL:      "https://open.spotify.com/get_access_token",
+		ServerTimeURL: "https://open.spotify.com/server-time",
 		ConfigManager: config.NewConfigManager(),
 	}
 }
@@ -62,13 +71,29 @@ func (tm *Manager) requestAccessToken(spDc string) (string, int64, error) {
 	log.Debugln("Requesting access token from Spotify")
 	client := &http.Client{}
 
-	req, err := http.NewRequest("GET", tm.TokenURL, nil)
+	totp, totpTime, err := tm.getTotp()
+	if err != nil {
+		return "", -1, fmt.Errorf("failed to get totp: %w", err)
+	}
+	timeStr := fmt.Sprint(totpTime.Unix())
+
+	url := tm.TokenURL + "?" + url.Values{
+		"reason":      {"transport"},
+		"productType": {"web-player"},
+		"totp":        {totp},
+		"totpServer":  {totp},
+		"totpVer":     {"5"},
+		"sTime":       {timeStr},
+		"cTime":       {timeStr + "420"},
+	}.Encode()
+
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		log.Errorf("Unable to create HTTP request: %v", err)
 		return "", -1, fmt.Errorf("unable to create request: %w", err)
 	}
 
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36")
+	req.Header.Set("User-Agent", UserAgent)
 	req.Header.Set("Accept", "application/json")
 	req.Header.Set("app-platform", "WebPlayer")
 	req.Header.Set("sec-ch-ua-platform", "macOS")
@@ -136,4 +161,45 @@ func (tm *Manager) GetAccessToken() (string, int64) {
 
 	log.Debugln("Using cached access token")
 	return conf.AccessToken, conf.AccessTokenExpire
+}
+
+func (tm *Manager) getServerTime() (time.Time, error) {
+	client := &http.Client{}
+
+	req, _ := http.NewRequest("GET", tm.ServerTimeURL, nil)
+	req.Header = http.Header{
+		"referer":             {"https://open.spotify.com/"},
+		"origin":              {"https://open.spotify.com/"},
+		"accept":              {"application/json"},
+		"app-platform":        {"WebPlayer"},
+		"spotify-app-version": {"1.2.61.20.g3b4cd5b2"},
+		"user-agent":          {UserAgent},
+	}
+	resp, err := client.Do(req)
+	if err != nil {
+		return time.Time{}, err
+	}
+	defer resp.Body.Close()
+
+	type responseType struct {
+		ServerTime int64 `json:"serverTime"`
+	}
+
+	var response responseType
+	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+		return time.Time{}, err
+	}
+	return time.Unix(response.ServerTime, 0), nil
+}
+
+func (tm *Manager) getTotp() (string, time.Time, error) {
+	serverTime, err := tm.getServerTime()
+	if err != nil {
+		serverTime = time.Now()
+	}
+	totp, err := totp.GenerateCode(TotpSecret, serverTime)
+	if err != nil {
+		return "", time.Time{}, err
+	}
+	return totp, serverTime, nil
 }
