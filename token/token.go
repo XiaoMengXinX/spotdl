@@ -37,8 +37,8 @@ type accessTokenData struct {
 func NewTokenManager() *Manager {
 	log.Debugln("New Token Manager Created")
 	return &Manager{
-		TokenURL:      "https://open.spotify.com/get_access_token",
-		ServerTimeURL: "https://open.spotify.com/server-time",
+		TokenURL:      "https://open.spotify.com/api/token",
+		ServerTimeURL: "https://open.spotify.com/api/server-time",
 		ConfigManager: config.NewConfigManager(),
 	}
 }
