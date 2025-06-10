@@ -20,7 +20,6 @@ const (
 
 type Manager struct {
 	TokenURL          string
-	ServerTimeURL     string
 	SpDc              string
 	AccessToken       string
 	AccessTokenExpire int64
@@ -38,7 +37,6 @@ func NewTokenManager() *Manager {
 	log.Debugln("New Token Manager Created")
 	return &Manager{
 		TokenURL:      "https://open.spotify.com/api/token",
-		ServerTimeURL: "https://open.spotify.com/api/server-time",
 		ConfigManager: config.NewConfigManager(),
 	}
 }
@@ -63,7 +61,6 @@ func (tm *Manager) QuerySpDc() {
 		log.Debugln("sp_dc cookie found in config")
 		tm.SpDc = conf.SpDc
 	}
-
 	tm.AccessToken, tm.AccessTokenExpire = tm.GetAccessToken()
 }
 
@@ -163,43 +160,11 @@ func (tm *Manager) GetAccessToken() (string, int64) {
 	return conf.AccessToken, conf.AccessTokenExpire
 }
 
-func (tm *Manager) getServerTime() (time.Time, error) {
-	client := &http.Client{}
-
-	req, _ := http.NewRequest("GET", tm.ServerTimeURL, nil)
-	req.Header = http.Header{
-		"referer":             {"https://open.spotify.com/"},
-		"origin":              {"https://open.spotify.com/"},
-		"accept":              {"application/json"},
-		"app-platform":        {"WebPlayer"},
-		"spotify-app-version": {"1.2.61.20.g3b4cd5b2"},
-		"user-agent":          {UserAgent},
-	}
-	resp, err := client.Do(req)
-	if err != nil {
-		return time.Time{}, err
-	}
-	defer resp.Body.Close()
-
-	type responseType struct {
-		ServerTime int64 `json:"serverTime"`
-	}
-
-	var response responseType
-	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
-		return time.Time{}, err
-	}
-	return time.Unix(response.ServerTime, 0), nil
-}
-
 func (tm *Manager) getTotp() (string, time.Time, error) {
-	serverTime, err := tm.getServerTime()
-	if err != nil {
-		serverTime = time.Now()
-	}
-	totpStr, err := totp.GenerateCode(TotpSecret, serverTime)
+	timeNow := time.Now()
+	totpStr, err := totp.GenerateCode(TotpSecret, timeNow)
 	if err != nil {
 		return "", time.Time{}, err
 	}
-	return totpStr, serverTime, nil
+	return totpStr, timeNow, nil
 }
