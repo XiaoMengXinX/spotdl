@@ -92,7 +92,7 @@ func (d *Downloader) SkipAddingMetadata(b bool) *Downloader {
 func (d *Downloader) GetTracks(url string) ([]string, error) {
 	url, idType, err := GetIDType(url)
 	if err != nil {
-		log.Debugf("Get IDType Failed: %v", err)
+		log.Debugf("Get IDType failed: %v", err)
 		return nil, err
 	}
 	switch idType {
@@ -161,7 +161,7 @@ func (d *Downloader) getTrackCredits(trackID string) (credits trackCredits, err 
 	url := fmt.Sprintf("https://spclient.wg.spotify.com/track-credits-view/v0/experimental/%s/credits", trackID)
 	resp, err := d.makeRequest(http.MethodGet, url, nil)
 	if err != nil {
-		log.Debugf("Fetch track credits Failed: %v", err)
+		log.Debugf("Fetch track credits failed: %v", err)
 		return
 	}
 
@@ -176,7 +176,7 @@ func (d *Downloader) getTrackMetadata(trackID string) (name string, artist strin
 	url := fmt.Sprintf("https://spclient.wg.spotify.com/metadata/4/track/%s", SpIDToHex(trackID))
 	resp, err := d.makeRequest(http.MethodGet, url, nil)
 	if err != nil {
-		log.Debugf("Fetch track metadata Failed: %v", err)
+		log.Debugf("Fetch track metadata failed: %v", err)
 		return "", "", "", metadata, err
 	}
 
@@ -218,7 +218,7 @@ func (d *Downloader) getEpisodeMetadata(episodeID string) (name string, creator 
 	}
 	resp, err := d.makeRequest(http.MethodGet, url+"?"+buildQueryParams(params), nil)
 	if err != nil {
-		log.Debugf("Fetch episode metadata Failed: %v", err)
+		log.Debugf("Fetch episode metadata failed: %v", err)
 		return "", "", "", metadata, err
 	}
 

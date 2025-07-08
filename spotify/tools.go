@@ -206,7 +206,7 @@ func (d *Downloader) selectFromQuality(entries []fileEntry) (string, error) {
 			return entry.testFileIDOrFileId(), nil
 		}
 	}
-	log.Warn("Unable to find desired quality. Falling back to best.")
+	log.Warn("Failed to find desired quality. Falling back to best.")
 
 	for _, entry := range entries {
 		if d.isSupportedFormat(entry.Format) {

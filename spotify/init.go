@@ -27,14 +27,14 @@ func readCDMs() []string {
 func requestClientBases() []string {
 	resp, err := http.Get("https://apresolve.spotify.com?type=spclient")
 	if err != nil {
-		log.Errorf("Unable to request client bases: %v", err)
+		log.Errorf("Failed to request client bases: %v", err)
 		return nil
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
-		log.Errorf("Unable to request client bases (%d): %s", resp.StatusCode, body)
+		log.Errorf("Failed to request client bases (%d): %s", resp.StatusCode, body)
 		return nil
 	}
 
@@ -43,7 +43,7 @@ func requestClientBases() []string {
 	}
 
 	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
-		log.Errorf("Error decoding client bases response: %v", err)
+		log.Errorf("Error while decoding client bases response: %v", err)
 		return nil
 	}
 

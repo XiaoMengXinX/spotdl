@@ -43,7 +43,7 @@ func main() {
 		} else {
 			configDir := filepath.Join(homeDir, ".config", "spotdl")
 			if err := os.MkdirAll(configDir, 0755); err != nil {
-				log.Warnf("Failed to create config directory: %v", err)
+				log.Errorf("Failed to create config directory: %v", err)
 				*config = "config.json"
 			} else {
 				*config = filepath.Join(configDir, "config.json")
@@ -85,6 +85,6 @@ func main() {
 
 	err := sp.Download(*id)
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatalf("Download failed: %v", err)
 	}
 }

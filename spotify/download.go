@@ -20,7 +20,7 @@ func (d *Downloader) downloadContent(ID string, content IDType) (outFilePath str
 		if err != nil {
 			defer func(ID string, err *error) {
 				if *err != nil {
-					log.Errorln((*err).Error())
+					log.Errorf("Error while downloading track: %v", (*err).Error())
 				}
 			}(ID, &err)
 			return outFilePath, fmt.Errorf("failed to get metadata of trackID [%s]: %v", ID, err)
@@ -30,7 +30,7 @@ func (d *Downloader) downloadContent(ID string, content IDType) (outFilePath str
 		if err != nil {
 			defer func(ID string, err *error) {
 				if *err != nil {
-					log.Errorln((*err).Error())
+					log.Errorf("Error while downloading episode: %v", (*err).Error())
 				}
 			}(ID, &err)
 			return outFilePath, fmt.Errorf("failed to get metadata of episodeID [%s]: %v", ID, err)
@@ -182,8 +182,7 @@ func (d *Downloader) Download(url string) (err error) {
 	}
 
 	if len(tracks) == 0 {
-		log.Info("No tracks to download")
-		return nil
+		return fmt.Errorf("no tracks to download")
 	}
 
 	_, idType, _ := GetIDType(url)

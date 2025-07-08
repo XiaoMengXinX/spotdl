@@ -13,6 +13,10 @@ import (
 
 func (d *Downloader) makeRequest(method, url string, body []byte) ([]byte, error) {
 	accessToken, _ := d.TokenManager.GetAccessToken()
+	if accessToken == "" {
+		return nil, fmt.Errorf("invalid access token")
+	}
+
 	var requestBody io.Reader
 	if body != nil {
 		requestBody = bytes.NewBuffer(body)

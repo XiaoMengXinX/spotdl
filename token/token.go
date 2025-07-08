@@ -72,7 +72,7 @@ func (tm *Manager) QuerySpDc() {
 	log.Debugln("Querying sp_dc cookie")
 	conf, err := tm.ConfigManager.ReadAndGet()
 	if err != nil {
-		log.Warnf("Failed to read config: %v", err)
+		log.Errorf("Failed to read config: %v", err)
 	}
 	if conf.SpDc == "" {
 		if tm.SpDc == "" {
@@ -113,8 +113,7 @@ func (tm *Manager) requestAccessToken(spDc string) (string, int64, error) {
 
 	req, err := http.NewRequest("GET", reqUrl, nil)
 	if err != nil {
-		log.Errorf("Unable to create HTTP request: %v", err)
-		return "", -1, fmt.Errorf("unable to create request: %w", err)
+		return "", -1, fmt.Errorf("failed to create request: %w", err)
 	}
 
 	req.Header.Set("User-Agent", UserAgent)
@@ -128,8 +127,7 @@ func (tm *Manager) requestAccessToken(spDc string) (string, int64, error) {
 
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Errorf("Error while sending request: %v", err)
-		return "", -1, fmt.Errorf("unable to send request: %w", err)
+		return "", -1, fmt.Errorf("failed to send request: %w", err)
 	}
 	defer resp.Body.Close()
 
@@ -137,13 +135,13 @@ func (tm *Manager) requestAccessToken(spDc string) (string, int64, error) {
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
-		log.Fatalf("Failed to request token (status %d): %s", resp.StatusCode, string(body))
+		log.Debugf("Failed to request token (status %d): %s", resp.StatusCode, string(body))
+		return "", -1, fmt.Errorf("failed to make request: HTTP status code %d", resp.StatusCode)
 	}
 
 	var tokenResp accessTokenData
 	if err := json.NewDecoder(resp.Body).Decode(&tokenResp); err != nil {
-		log.Errorf("Error while parsing token response: %v", err)
-		return "", -1, fmt.Errorf("unable to parse token response: %w", err)
+		return "", -1, fmt.Errorf("failed to parse token response: %v", err)
 	}
 
 	log.Debugf("Token response: %+v", tokenResp)
@@ -173,7 +171,7 @@ func (tm *Manager) GetAccessToken() (string, int64) {
 
 	conf, err := tm.ConfigManager.ReadAndGet()
 	if err != nil {
-		log.Fatalf("Error reading config: %v", err)
+		log.Fatalf("Failed to read config: %v", err)
 	}
 
 	currentTime := time.Now().UnixNano() / 1e6
@@ -183,7 +181,8 @@ func (tm *Manager) GetAccessToken() (string, int64) {
 		log.Warnln("Access token expired, requesting new token")
 		token, expire, err := tm.requestAccessToken(tm.SpDc)
 		if err != nil {
-			log.Fatalf("Error while requesting new token: %v", err)
+			log.Errorf("Error while requesting new access token: %v", err)
+			return "", 0
 		}
 		log.Debugln("New access token obtained")
 		return token, expire
