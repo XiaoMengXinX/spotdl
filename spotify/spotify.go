@@ -58,7 +58,7 @@ func (d *Downloader) Initialize() *Downloader {
 	d.TokenManager.ConfigManager.Initialize()
 	d.TokenManager.QuerySpDc()
 	d.clientBases = requestClientBases()
-	d.licenseURL = buildLicenseURL(d.clientBases)
+	d.licenseURL = d.buildLicenseURL()
 	_ = readCDMs()
 	if err := checkDirExist(d.outputFolder); err != nil {
 		log.Fatalln(err)
@@ -240,7 +240,7 @@ func (d *Downloader) getEpisodeMetadata(episodeID string) (name string, creator 
 }
 
 func (d *Downloader) requestCDNURL(fileID string) (string, error) {
-	url := fmt.Sprintf("https://gew4-spclient.spotify.com/storage-resolve/files/audio/interactive/%s", fileID)
+	url := fmt.Sprintf("%s/storage-resolve/files/audio/interactive/%s", d.randomClientBase(), fileID)
 	params := buildQueryParams(map[string]interface{}{"alt": "json"})
 
 	respBody, err := d.makeRequest(http.MethodGet, url+"?"+params, nil)

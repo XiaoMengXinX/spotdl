@@ -5,11 +5,13 @@ import (
 	"fmt"
 	log "github.com/XiaoMengXinX/spotdl/logger"
 	"math/big"
+	"math/rand"
 	"net/url"
 	"os"
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
 var spBase62Charset = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -170,6 +172,21 @@ func (e *fileEntry) testFileIDOrFileId() string {
 		return e.FileID
 	}
 	return e.FileId
+}
+
+func (d *Downloader) randomClientBase() string {
+	if len(d.clientBases) == 0 {
+		log.Warn("No client bases available, use built-in url")
+		d.clientBases = []string{"gew4-spclient.spotify.com:443"}
+	}
+
+	rand.Seed(time.Now().UnixNano())
+	randomIndex := rand.Intn(len(d.clientBases))
+	return d.clientBases[randomIndex]
+}
+
+func (d *Downloader) buildLicenseURL() string {
+	return fmt.Sprintf("%s/widevine-license/v1/audio/license", d.randomClientBase())
 }
 
 func (d *Downloader) isSupportedFormat(format string) bool {

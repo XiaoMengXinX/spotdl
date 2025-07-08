@@ -58,29 +58,18 @@ func requestClientBases() []string {
 	return formattedEndpoints
 }
 
-func buildLicenseURL(clientBases []string) string {
-	if len(clientBases) == 0 {
-		log.Warn("No client bases available to build license URL")
-		return ""
-	}
-	return fmt.Sprintf("%s/widevine-license/v1/audio/license", clientBases[0])
-}
-
 func formatEndpoint(endpoint string) string {
 	parts := strings.Split(endpoint, ":")
 	if len(parts) != 2 {
-		log.Warnf("Invalid endpoint format: %s", endpoint)
-		return ""
+		log.Errorf("Invalid endpoint format: %s", endpoint)
+		return endpoint
 	}
 	domain, port := parts[0], parts[1]
 
 	switch port {
 	case "80":
 		return fmt.Sprintf("http://%s", domain)
-	case "443":
-		return fmt.Sprintf("https://%s", domain)
 	default:
-		log.Warnf("Unknown port: %s", port)
-		return ""
+		return fmt.Sprintf("https://%s", domain)
 	}
 }
