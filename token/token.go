@@ -14,8 +14,15 @@ import (
 )
 
 const (
-	UserAgent  = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
-	TotpSecret = "GEYDEMZZGM2TMOJYGI3DQNBUGY4TCMRQGEZDCNBXGEZDEMZUHE2DQMRZGQYTANZXGMZTMNRYG4YA"
+	UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+)
+
+var (
+	totpEnvInit   = false
+	totpVersion   = "11"
+	totpSecretRaw = "o-(I_J#Uik<n7HEFrS?X["
+	// totpSecret = GEYDEMZZGM2TMOJYGI3DQNBUGY4TCMRQGEZDCNBXGEZDEMZUHE2DQMRZGQYTANZXGMZTMNRYG4YA
+	totpSecret = EncodeTotpStr(totpSecretRaw)
 )
 
 type Manager struct {
@@ -79,7 +86,7 @@ func (tm *Manager) requestAccessToken(spDc string) (string, int64, error) {
 		"productType": {"web-player"},
 		"totp":        {totpStr},
 		"totpServer":  {totpStr},
-		"totpVer":     {"11"},
+		"totpVer":     {totpVersion},
 		"sTime":       {timeStr},
 		"cTime":       {timeStr + "420"},
 	}.Encode()
@@ -162,7 +169,7 @@ func (tm *Manager) GetAccessToken() (string, int64) {
 
 func (tm *Manager) getTotp() (string, time.Time, error) {
 	timeNow := time.Now()
-	totpStr, err := totp.GenerateCode(TotpSecret, timeNow)
+	totpStr, err := totp.GenerateCode(totpSecret, timeNow)
 	if err != nil {
 		return "", time.Time{}, err
 	}
