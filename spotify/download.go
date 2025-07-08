@@ -186,11 +186,16 @@ func (d *Downloader) Download(url string) (err error) {
 		return nil
 	}
 
-	log.Infof("Downloading %d track(s)", len(tracks))
-
 	_, idType, _ := GetIDType(url)
-
 	log.Debugf("Track type: %s", idType)
+
+	switch idType {
+	case TRACK, ALBUM, PLAYLIST, SHOW, EPISODE:
+	default:
+		return fmt.Errorf("unsupported type: %s", idType)
+	}
+
+	log.Infof("Downloading %d track(s)", len(tracks))
 
 	for _, track := range tracks {
 		switch idType {
