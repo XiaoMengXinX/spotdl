@@ -40,7 +40,27 @@ type accessTokenData struct {
 	IsAnonymous bool   `json:"isAnonymous"`
 }
 
+func initTotpFromEnv() {
+	if envTotpVersion := os.Getenv("TOTP_VERSION"); envTotpVersion != "" {
+		totpVersion = envTotpVersion
+		log.Debugf("TOTP_VERSION loaded from environment variable: %s", envTotpVersion)
+	}
+	if envTotpSecret := os.Getenv("TOTP_SECRET"); envTotpSecret != "" {
+		totpSecret = envTotpSecret
+		log.Debugf("TOTP_SECRET loaded from environment variable: %s", envTotpSecret)
+	}
+	if envTotpSecretRaw := os.Getenv("TOTP_SECRET_RAW"); envTotpSecretRaw != "" {
+		totpSecretRaw = envTotpSecretRaw
+		totpSecret = EncodeTotpStr(totpSecretRaw)
+		log.Debugf("TOTP_SECRET_RAW loaded from environment variable: %s", envTotpSecretRaw)
+	}
+}
+
 func NewTokenManager() *Manager {
+	if !totpEnvInit {
+		initTotpFromEnv()
+		totpEnvInit = true
+	}
 	log.Debugln("New Token Manager Created")
 	return &Manager{
 		TokenURL:      "https://open.spotify.com/api/token",
