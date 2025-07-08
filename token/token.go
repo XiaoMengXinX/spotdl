@@ -15,7 +15,7 @@ import (
 
 const (
 	UserAgent  = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
-	TotpSecret = "GQ2DSNBUGM3DIOJQHA2DQOBWGMZDQOBZGM2TGNBVG4YTANBRGMYTK"
+	TotpSecret = "GEYDEMZZGM2TMOJYGI3DQNBUGY4TCMRQGEZDCNBXGEZDEMZUHE2DQMRZGQYTANZXGMZTMNRYG4YA"
 )
 
 type Manager struct {
@@ -79,7 +79,7 @@ func (tm *Manager) requestAccessToken(spDc string) (string, int64, error) {
 		"productType": {"web-player"},
 		"totp":        {totpStr},
 		"totpServer":  {totpStr},
-		"totpVer":     {"5"},
+		"totpVer":     {"11"},
 		"sTime":       {timeStr},
 		"cTime":       {timeStr + "420"},
 	}.Encode()
