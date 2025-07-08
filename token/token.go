@@ -149,9 +149,14 @@ func (tm *Manager) requestAccessToken(spDc string) (string, int64, error) {
 	log.Debugf("Token response: %+v", tokenResp)
 
 	if tokenResp.IsAnonymous {
-		log.Fatal("Invalid sp_dc cookie, forcing config reset")
-		tm.ConfigManager.Set(config.Data{})
-		os.Exit(1)
+		tm.ConfigManager.Set(config.Data{
+			DefaultQuality:    tm.ConfigManager.Get().DefaultQuality,
+			SpDc:              "",
+			AccessToken:       "",
+			AccessTokenExpire: 0,
+			AcceptLanguage:    tm.ConfigManager.Get().AcceptLanguage,
+		})
+		log.Fatal("Invalid sp_dc cookie")
 	}
 
 	conf, _ := tm.ConfigManager.ReadAndGet()
