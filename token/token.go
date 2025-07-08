@@ -103,7 +103,8 @@ func (tm *Manager) requestAccessToken(spDc string) (string, int64, error) {
 	req.Header.Set("sec-ch-ua-platform", "macOS")
 	req.Header.Set("origin", "https://open.spotify.com/")
 	req.Header.Set("Cookie", fmt.Sprintf("sp_dc=%s", spDc))
-	log.Debugf("Sending request to %s with sp_dc: %s", tm.TokenURL, spDc)
+	log.Debugf("Requesting new access token with sp_dc: %s", spDc)
+	log.Debugf("[GET] %s", reqUrl)
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -112,7 +113,7 @@ func (tm *Manager) requestAccessToken(spDc string) (string, int64, error) {
 	}
 	defer resp.Body.Close()
 
-	log.Debugln("Received response with status code: %d", resp.StatusCode)
+	log.Debugf("Received response with status code: %d", resp.StatusCode)
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
