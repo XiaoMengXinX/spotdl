@@ -9,20 +9,11 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"os"
 	"time"
 )
 
 const (
 	UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
-)
-
-var (
-	totpEnvInit   = false
-	totpVersion   = "12"
-	totpSecretRaw = "kQ19C]WQEC(]02.[^q)lMk\""
-	// totpSecret = HE4DSMJVHA2TGNZYHAZTQOBWGU4DIOBRGU4TOMZTG4ZTMNJXGY3TOMJRGA3TKMBRGEZDQMBRGE3TMMI
-	totpSecret = EncodeTotpStr(totpSecretRaw)
 )
 
 type Manager struct {
@@ -40,27 +31,7 @@ type accessTokenData struct {
 	IsAnonymous bool   `json:"isAnonymous"`
 }
 
-func initTotpFromEnv() {
-	if envTotpVersion := os.Getenv("TOTP_VERSION"); envTotpVersion != "" {
-		totpVersion = envTotpVersion
-		log.Debugf("TOTP_VERSION loaded from environment variable: %s", envTotpVersion)
-	}
-	if envTotpSecret := os.Getenv("TOTP_SECRET"); envTotpSecret != "" {
-		totpSecret = envTotpSecret
-		log.Debugf("TOTP_SECRET loaded from environment variable: %s", envTotpSecret)
-	}
-	if envTotpSecretRaw := os.Getenv("TOTP_SECRET_RAW"); envTotpSecretRaw != "" {
-		totpSecretRaw = envTotpSecretRaw
-		totpSecret = EncodeTotpStr(totpSecretRaw)
-		log.Debugf("TOTP_SECRET_RAW loaded from environment variable: %s", envTotpSecretRaw)
-	}
-}
-
 func NewTokenManager() *Manager {
-	if !totpEnvInit {
-		initTotpFromEnv()
-		totpEnvInit = true
-	}
 	log.Debugln("New Token Manager Created")
 	return &Manager{
 		TokenURL:      "https://open.spotify.com/api/token",
@@ -106,7 +77,7 @@ func (tm *Manager) requestAccessToken(spDc string) (string, int64, error) {
 		"productType": {"web-player"},
 		"totp":        {totpStr},
 		"totpServer":  {totpStr},
-		"totpVer":     {totpVersion},
+		"totpVer":     {fmt.Sprintf("%d", tm.ConfigManager.Get().TOTP.Version)},
 		"sTime":       {timeStr},
 		"cTime":       {timeStr + "420"},
 	}.Encode()
@@ -194,7 +165,7 @@ func (tm *Manager) GetAccessToken() (string, int64) {
 
 func (tm *Manager) getTotp() (string, time.Time, error) {
 	timeNow := time.Now()
-	totpStr, err := totp.GenerateCode(totpSecret, timeNow)
+	totpStr, err := totp.GenerateCode(tm.ConfigManager.Get().TOTP.Secret, timeNow)
 	if err != nil {
 		return "", time.Time{}, err
 	}

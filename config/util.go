@@ -1,4 +1,4 @@
-package token
+package config
 
 import (
 	"encoding/base32"
