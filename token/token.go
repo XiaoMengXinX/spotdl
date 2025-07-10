@@ -19,9 +19,9 @@ const (
 
 var (
 	totpEnvInit   = false
-	totpVersion   = "11"
-	totpSecretRaw = "o-(I_J#Uik<n7HEFrS?X["
-	// totpSecret = GEYDEMZZGM2TMOJYGI3DQNBUGY4TCMRQGEZDCNBXGEZDEMZUHE2DQMRZGQYTANZXGMZTMNRYG4YA
+	totpVersion   = "12"
+	totpSecretRaw = "kQ19C]WQEC(]02.[^q)lMk\""
+	// totpSecret = HE4DSMJVHA2TGNZYHAZTQOBWGU4DIOBRGU4TOMZTG4ZTMNJXGY3TOMJRGA3TKMBRGEZDQMBRGE3TMMI
 	totpSecret = EncodeTotpStr(totpSecretRaw)
 )
 
