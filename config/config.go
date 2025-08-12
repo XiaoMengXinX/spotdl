@@ -4,22 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	log "github.com/XiaoMengXinX/spotdl/logger"
 	"os"
 	"reflect"
-	"strconv"
-)
 
-const (
-	totpVersion   = 12
-	totpSecretRaw = "kQ19C]WQEC(]02.[^q)lMk\""
-)
-
-var (
-	totpEnvInit      = false
-	envTotpVersion   = -1
-	envTotpSecret    = ""
-	envTotpSecretRaw = ""
+	log "github.com/XiaoMengXinX/spotdl/logger"
 )
 
 type Data struct {
@@ -50,10 +38,7 @@ func NewConfigManager() *Manager {
 		AccessTokenExpire: -1,
 		AcceptLanguage:    []string{},
 		DefaultQuality:    "MP4_128_DUAL",
-		TOTP: TOTP{
-			Secret:  EncodeTotpStr(totpSecretRaw),
-			Version: totpVersion,
-		},
+		TOTP:              TOTP{},
 	}
 	return &Manager{
 		configPath: "config.json",
@@ -62,28 +47,11 @@ func NewConfigManager() *Manager {
 	}
 }
 
-func initTotpFromEnv() {
-	if env := os.Getenv("TOTP_VERSION"); env != "" {
-		envTotpVersion, _ = strconv.Atoi(env)
-		log.Debugf("TOTP_VERSION loaded from environment variable: %s", envTotpVersion)
-	}
-	if envTotpSecret = os.Getenv("TOTP_SECRET"); envTotpSecret != "" {
-		log.Debugf("TOTP_SECRET loaded from environment variable: %s", envTotpSecret)
-	}
-	if envTotpSecretRaw = os.Getenv("TOTP_SECRET_RAW"); envTotpSecretRaw != "" {
-		log.Debugf("TOTP_SECRET_RAW loaded from environment variable: %s", envTotpSecretRaw)
-	}
-}
-
 func (cm *Manager) Initialize() *Manager {
 	log.Debugf("Initializing Config Manager, config path: %s", cm.configPath)
 	if _, err := os.Stat(cm.configPath); errors.Is(err, os.ErrNotExist) {
 		log.Debugf("Config file not found, trying to create one")
 		cm.writeConfig()
-	}
-	if !totpEnvInit {
-		initTotpFromEnv()
-		totpEnvInit = true
 	}
 	return cm
 }
@@ -110,23 +78,6 @@ func (cm *Manager) ReadConfig() error {
 	cm.mergeConfigs(&cm.config, fileConfig)
 	log.Debugln("Config merged with defaults, saving...")
 	cm.writeConfig()
-
-	if cm.defaults.TOTP.Version > cm.config.TOTP.Version {
-		log.Debugln("TOTP secret in config is outdated, updating...")
-		cm.config.TOTP.Version = cm.defaults.TOTP.Version
-		cm.config.TOTP.Secret = cm.defaults.TOTP.Secret
-		cm.writeConfig()
-	}
-
-	if envTotpVersion > cm.config.TOTP.Version {
-		log.Debugln("TOTP secret in config is outdated, updating...")
-		cm.config.TOTP.Version = envTotpVersion
-		cm.config.TOTP.Secret = envTotpSecret
-		if envTotpSecretRaw != "" {
-			cm.config.TOTP.Secret = EncodeTotpStr(envTotpSecretRaw)
-		}
-		cm.writeConfig()
-	}
 
 	return nil
 }

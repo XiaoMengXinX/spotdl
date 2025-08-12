@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// EncodeTotpStr Encode TOTP string to base32
 func EncodeTotpStr(input string) string {
 	var obfuscated []byte
 	for index, char := range input {
@@ -18,6 +19,7 @@ func EncodeTotpStr(input string) string {
 	return strings.TrimRight(encoder.EncodeToString(obfuscated), "=")
 }
 
+// DecodeTotpStr Decode TOTP string from base32
 func DecodeTotpStr(encoded string) string {
 	if encoded == "" {
 		return ""

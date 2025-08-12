@@ -3,13 +3,15 @@ package token
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/XiaoMengXinX/spotdl/config"
-	log "github.com/XiaoMengXinX/spotdl/logger"
-	"github.com/pquerna/otp/totp"
 	"io"
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/XiaoMengXinX/spotdl/config"
+	"github.com/XiaoMengXinX/spotdl/injector"
+	log "github.com/XiaoMengXinX/spotdl/logger"
+	"github.com/pquerna/otp/totp"
 )
 
 const (
@@ -150,13 +152,38 @@ func (tm *Manager) GetAccessToken() (string, int64) {
 
 	if currentTime >= conf.AccessTokenExpire {
 		log.Warnln("Access token expired, requesting new token")
-		token, expire, err := tm.requestAccessToken(tm.SpDc)
-		if err != nil {
-			log.Errorf("Error while requesting new access token: %v", err)
-			return "", 0
+
+		var token string
+		var expire int64
+		var err error
+		maxRetries := 3
+		for i := 0; i < maxRetries; i++ {
+			token, expire, err = tm.requestAccessToken(tm.SpDc)
+			if err == nil {
+				log.Debugln("New access token obtained")
+				return token, expire
+			}
+			if i < maxRetries-1 {
+				log.Warnf("Failed to request new access token, trying to refresh TOTP secret (attempt %d/%d)", i+1, maxRetries)
+				newTotp, err := injector.QuickIntercept()
+				if err != nil {
+					log.Errorf("Error while refreshing TOTP secret: %v", err)
+				}
+				for _, s := range newTotp {
+					if s.Version > tm.ConfigManager.Get().TOTP.Version {
+						c := tm.ConfigManager.Get()
+						c.TOTP.Version = s.Version
+						c.TOTP.Secret = s.Secret
+						tm.ConfigManager.Set(c)
+					}
+				}
+				log.Infof("TOTP secret refreshed to version %d", tm.ConfigManager.Get().TOTP.Version)
+				log.Debugf("TOTP secret: %s", tm.ConfigManager.Get().TOTP.Secret)
+			} else {
+				log.Errorf("Error while requesting new access token after %d attempts: %v", maxRetries, err)
+			}
 		}
-		log.Debugln("New access token obtained")
-		return token, expire
+		return "", 0
 	}
 
 	log.Debugln("Using cached access token")
