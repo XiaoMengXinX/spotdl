@@ -168,17 +168,18 @@ func (tm *Manager) GetAccessToken() (string, int64) {
 				newTotp, err := injector.QuickIntercept()
 				if err != nil {
 					log.Errorf("Error while refreshing TOTP secret: %v", err)
-				}
-				for _, s := range newTotp {
-					if s.Version > tm.ConfigManager.Get().TOTP.Version {
-						c := tm.ConfigManager.Get()
-						c.TOTP.Version = s.Version
-						c.TOTP.Secret = s.Secret
-						tm.ConfigManager.Set(c)
+				} else {
+					for _, s := range newTotp {
+						if s.Version > tm.ConfigManager.Get().TOTP.Version {
+							c := tm.ConfigManager.Get()
+							c.TOTP.Version = s.Version
+							c.TOTP.Secret = s.Secret
+							tm.ConfigManager.Set(c)
+						}
 					}
+					log.Infof("TOTP secret refreshed to version %d", tm.ConfigManager.Get().TOTP.Version)
+					log.Debugf("TOTP secret: %s", tm.ConfigManager.Get().TOTP.Secret)
 				}
-				log.Infof("TOTP secret refreshed to version %d", tm.ConfigManager.Get().TOTP.Version)
-				log.Debugf("TOTP secret: %s", tm.ConfigManager.Get().TOTP.Secret)
 			} else {
 				log.Errorf("Error while requesting new access token after %d attempts: %v", maxRetries, err)
 			}
