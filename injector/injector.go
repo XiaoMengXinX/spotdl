@@ -40,7 +40,7 @@ type interceptStatus struct {
 func DefaultOptions() *InterceptOptions {
 	return &InterceptOptions{
 		Headless:     true,
-		Timeout:      20 * time.Second,
+		Timeout:      50 * time.Second,
 		PollInterval: 500 * time.Millisecond,
 		EncodeBase32: true,
 	}

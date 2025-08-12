@@ -157,13 +157,13 @@ func (tm *Manager) GetAccessToken() (string, int64) {
 		var expire int64
 		var err error
 		maxRetries := 3
-		for i := 0; i < maxRetries; i++ {
+		for i := 0; i <= maxRetries; i++ {
 			token, expire, err = tm.requestAccessToken(tm.SpDc)
 			if err == nil {
 				log.Debugln("New access token obtained")
 				return token, expire
 			}
-			if i < maxRetries-1 {
+			if i < maxRetries {
 				log.Warnf("Failed to request new access token, trying to refresh TOTP secret (attempt %d/%d)", i+1, maxRetries)
 				newTotp, err := injector.QuickIntercept()
 				if err != nil {
