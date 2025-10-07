@@ -49,8 +49,14 @@ type accessTokenData struct {
 }
 
 type clientTokenData struct {
+	ResponseType string `json:"response_type"`
 	GrantedToken struct {
-		Token string `json:"token"`
+		Token               string `json:"token"`
+		ExpiresAfterSeconds int    `json:"expires_after_seconds"`
+		RefreshAfterSeconds int    `json:"refresh_after_seconds"`
+		Domains             []struct {
+			Domain string `json:"domain"`
+		} `json:"domains"`
 	} `json:"granted_token"`
 }
 
@@ -209,6 +215,8 @@ func (tm *Manager) requestClientToken(clientId string) (string, error) {
 		log.Debugf("Failed to request client token (status %d): %s", resp.StatusCode, string(body))
 		return "", fmt.Errorf("failed to make request: HTTP status code %d", resp.StatusCode)
 	}
+	body, _ := io.ReadAll(resp.Body)
+	fmt.Println(string(body))
 
 	var tokenResp clientTokenData
 	if err := json.NewDecoder(resp.Body).Decode(&tokenResp); err != nil {
