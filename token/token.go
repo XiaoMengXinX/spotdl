@@ -1,6 +1,7 @@
 package token
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -15,13 +16,27 @@ import (
 )
 
 const (
-	UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+	UserAgent     = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+	ClientVersion = "1.2.70.61.g856ccd63"
 )
 
+var defaultHeaders = http.Header{
+	"User-Agent":          []string{UserAgent},
+	"Accept":              []string{"application/json"},
+	"Content-Type":        []string{"application/json"},
+	"origin":              []string{"https://open.spotify.com/"},
+	"app-platform":        []string{"WebPlayer"},
+	"sec-ch-ua-platform":  []string{"macOS"},
+	"spotify-app-version": []string{ClientVersion},
+}
+
 type Manager struct {
-	TokenURL          string
+	SessionTokenURL   string
+	ClientTokenURL    string
 	SpDc              string
 	AccessToken       string
+	ClientToken       string
+	ClientId          string
 	AccessTokenExpire int64
 	ConfigManager     *config.Manager
 }
@@ -33,12 +48,43 @@ type accessTokenData struct {
 	IsAnonymous bool   `json:"isAnonymous"`
 }
 
+type clientTokenData struct {
+	GrantedToken struct {
+		Token string `json:"token"`
+	} `json:"granted_token"`
+}
+
+type clientTokenRequest struct {
+	ClientData struct {
+		ClientVersion string      `json:"client_version"`
+		ClientId      string      `json:"client_id"`
+		JsSdkData     interface{} `json:"js_sdk_data"`
+	} `json:"client_data"`
+}
+
 func NewTokenManager() *Manager {
 	log.Debugln("New Token Manager Created")
 	return &Manager{
-		TokenURL:      "https://open.spotify.com/api/token",
-		ConfigManager: config.NewConfigManager(),
+		SessionTokenURL: "https://open.spotify.com/api/token",
+		ClientTokenURL:  "https://clienttoken.spotify.com/v1/clienttoken",
+		ConfigManager:   config.NewConfigManager(),
 	}
+}
+
+func (tm *Manager) NewRequest(method, url string, body io.Reader) (*http.Request, error) {
+	req, err := http.NewRequest(method, url, body)
+	if err != nil {
+		return nil, err
+	}
+	req.Header = defaultHeaders.Clone()
+	currentTime := time.Now().UnixNano() / 1e6
+	if tm.ClientToken != "" && currentTime < tm.AccessTokenExpire {
+		req.Header.Set("client-token", tm.ClientToken)
+	}
+	if tm.SpDc != "" {
+		req.Header.Set("Cookie", fmt.Sprintf("sp_dc=%s", tm.SpDc))
+	}
+	return req, nil
 }
 
 func (tm *Manager) QuerySpDc() {
@@ -64,7 +110,7 @@ func (tm *Manager) QuerySpDc() {
 	tm.AccessToken, tm.AccessTokenExpire = tm.GetAccessToken()
 }
 
-func (tm *Manager) requestAccessToken(spDc string) (string, int64, error) {
+func (tm *Manager) requestAccessToken() (string, int64, error) {
 	log.Debugln("Requesting access token from Spotify")
 	client := &http.Client{}
 
@@ -74,7 +120,7 @@ func (tm *Manager) requestAccessToken(spDc string) (string, int64, error) {
 	}
 	timeStr := fmt.Sprint(totpTime.Unix())
 
-	reqUrl := tm.TokenURL + "?" + url.Values{
+	reqUrl := tm.SessionTokenURL + "?" + url.Values{
 		"reason":      {"transport"},
 		"productType": {"web-player"},
 		"totp":        {totpStr},
@@ -84,18 +130,12 @@ func (tm *Manager) requestAccessToken(spDc string) (string, int64, error) {
 		"cTime":       {timeStr + "420"},
 	}.Encode()
 
-	req, err := http.NewRequest("GET", reqUrl, nil)
+	req, err := tm.NewRequest("GET", reqUrl, nil)
 	if err != nil {
 		return "", -1, fmt.Errorf("failed to create request: %w", err)
 	}
 
-	req.Header.Set("User-Agent", UserAgent)
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("app-platform", "WebPlayer")
-	req.Header.Set("sec-ch-ua-platform", "macOS")
-	req.Header.Set("origin", "https://open.spotify.com/")
-	req.Header.Set("Cookie", fmt.Sprintf("sp_dc=%s", spDc))
-	log.Debugf("Requesting new access token with sp_dc: %s", spDc)
+	log.Debugf("Requesting new access token with sp_dc: %s", tm.SpDc)
 	log.Debugf("[GET] %s", reqUrl)
 
 	resp, err := client.Do(req)
@@ -130,6 +170,7 @@ func (tm *Manager) requestAccessToken(spDc string) (string, int64, error) {
 		log.Fatal("Invalid sp_dc cookie")
 	}
 
+	tm.ClientId = tokenResp.ClientId
 	conf, _ := tm.ConfigManager.ReadAndGet()
 	conf.AccessToken = tokenResp.AccessToken
 	conf.AccessTokenExpire = tokenResp.ExpireTime
@@ -137,6 +178,49 @@ func (tm *Manager) requestAccessToken(spDc string) (string, int64, error) {
 
 	log.Debugln("Access token successfully retrieved and saved to config")
 	return tokenResp.AccessToken, tokenResp.ExpireTime, nil
+}
+
+func (tm *Manager) requestClientToken(clientId string) (string, error) {
+	log.Debugln("Requesting client token from Spotify")
+	client := &http.Client{}
+
+	reqBody := clientTokenRequest{}
+	reqBody.ClientData.ClientVersion = ClientVersion
+	reqBody.ClientData.ClientId = clientId
+	reqBody.ClientData.JsSdkData = make(map[string]interface{})
+	jsonData, _ := json.Marshal(reqBody)
+	log.Debugf("Client token request body: %s", string(jsonData))
+	req, err := tm.NewRequest("POST", tm.ClientTokenURL, bytes.NewBuffer(jsonData))
+	if err != nil {
+		return "", fmt.Errorf("failed to create request: %w", err)
+	}
+
+	log.Debugf("[POST] %s", tm.ClientTokenURL)
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("failed to send request: %w", err)
+	}
+	defer resp.Body.Close()
+	log.Debugf("Received response with status code: %d", resp.StatusCode)
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		log.Debugf("Failed to request client token (status %d): %s", resp.StatusCode, string(body))
+		return "", fmt.Errorf("failed to make request: HTTP status code %d", resp.StatusCode)
+	}
+
+	var tokenResp clientTokenData
+	if err := json.NewDecoder(resp.Body).Decode(&tokenResp); err != nil {
+		return "", fmt.Errorf("failed to parse client token response: %v", err)
+	}
+	log.Debugf("Client token response: %+v", tokenResp)
+	if tokenResp.GrantedToken.Token == "" {
+		return "", fmt.Errorf("failed to retrieve granted token")
+	}
+
+	log.Debugln("Client token successfully retrieved")
+	return tokenResp.GrantedToken.Token, nil
 }
 
 func (tm *Manager) GetAccessToken() (string, int64) {
@@ -153,15 +237,19 @@ func (tm *Manager) GetAccessToken() (string, int64) {
 	if currentTime >= conf.AccessTokenExpire {
 		log.Warnln("Access token expired, requesting new token")
 
-		var token string
-		var expire int64
 		var err error
 		maxRetries := 3
 		for i := 0; i <= maxRetries; i++ {
-			token, expire, err = tm.requestAccessToken(tm.SpDc)
+			tm.AccessToken, tm.AccessTokenExpire, err = tm.requestAccessToken()
 			if err == nil {
 				log.Debugln("New access token obtained")
-				return token, expire
+				tm.ClientToken, err = tm.requestClientToken(tm.ClientId)
+				if err != nil {
+					log.Errorf("Failed to request client token: %v", err)
+					return "", 0
+				}
+				log.Debugln("New client token obtained")
+				return tm.AccessToken, tm.AccessTokenExpire
 			}
 			if i < maxRetries {
 				log.Warnf("Failed to request new access token, trying to refresh TOTP secret (attempt %d/%d)", i+1, maxRetries)

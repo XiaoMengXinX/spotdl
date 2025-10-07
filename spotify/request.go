@@ -3,12 +3,13 @@ package spotify
 import (
 	"bytes"
 	"fmt"
-	log "github.com/XiaoMengXinX/spotdl/logger"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
 	"time"
+
+	log "github.com/XiaoMengXinX/spotdl/logger"
 )
 
 func (d *Downloader) makeRequest(method, url string, body []byte) ([]byte, error) {
@@ -22,17 +23,11 @@ func (d *Downloader) makeRequest(method, url string, body []byte) ([]byte, error
 		requestBody = bytes.NewBuffer(body)
 	}
 
-	req, err := http.NewRequest(method, url, requestBody)
+	req, err := d.TokenManager.NewRequest(method, url, requestBody)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
 	req.Header.Set("Authorization", "Bearer "+accessToken)
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36")
-	req.Header.Set("Accept", "application/json")
-	req.Header.Set("app-platform", "WebPlayer")
-	req.Header.Set("sec-ch-ua-platform", "macOS")
-	req.Header.Set("origin", "https://open.spotify.com/")
-
 	if acceptLanguage := d.TokenManager.ConfigManager.Get().AcceptLanguage; len(acceptLanguage) > 0 {
 		req.Header.Set("Accept-Language", generateAcceptLanguageHeader(acceptLanguage))
 	}
