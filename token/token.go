@@ -193,6 +193,7 @@ func (tm *Manager) requestAccessToken() (string, int64, error) {
 		log.Fatal("Invalid sp_dc cookie")
 	}
 
+	conf, _ := tm.GetConfig()
 	tm.ClientId = tokenResp.ClientId
 	tm.ClientToken, err = tm.requestClientToken(tokenResp.ClientId)
 	if err != nil {
@@ -201,7 +202,6 @@ func (tm *Manager) requestAccessToken() (string, int64, error) {
 	}
 	log.Debugln("New client token obtained")
 
-	conf, _ := tm.GetConfig()
 	conf.AccessToken = tokenResp.AccessToken
 	conf.AccessTokenExpire = tokenResp.ExpireTime
 	conf.ClientID = tokenResp.ClientId
