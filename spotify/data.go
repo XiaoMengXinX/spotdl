@@ -141,6 +141,24 @@ type episodeMetadata struct {
 	} `json:"data"`
 }
 
+type mediaManifest struct {
+	Media map[string]struct {
+		Item struct {
+			Metadata struct {
+				Uri           string `json:"uri"`
+				LinkedFromUri string `json:"linked_from_uri"`
+			} `json:"metadata"`
+			Manifest struct {
+				FileIdsMp4 []struct {
+					Bitrate int     `json:"bitrate"`
+					FileID  string  `json:"file_id"`
+					FileURL *string `json:"file_url"`
+				} `json:"file_ids_mp4"`
+			} `json:"manifest"`
+		} `json:"item"`
+	} `json:"media"`
+}
+
 type artistData struct {
 	ExternalUrls struct {
 		Spotify string `json:"spotify"`

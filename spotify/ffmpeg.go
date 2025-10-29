@@ -108,11 +108,11 @@ func (d *Downloader) convertMp3(inputFile string, outputFile string) (err error)
 	switch d.quality {
 	case Quality96Vorbis:
 		bitrate = "96"
-	case Quality128MP4, Quality128MP4Dual:
+	case Quality128MP4:
 		bitrate = "128"
 	case Quality160Vorbis:
 		bitrate = "160"
-	case Quality256MP4, Quality256MP4Dual:
+	case Quality256MP4:
 		bitrate = "256"
 	case Quality320Vorbis:
 		bitrate = "320"

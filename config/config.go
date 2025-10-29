@@ -14,6 +14,8 @@ type Data struct {
 	DefaultQuality    string   `json:"quality"`
 	SpDc              string   `json:"sp_dc"`
 	AccessToken       string   `json:"accessToken"`
+	ClientID          string   `json:"clientId"`
+	ClientToken       string   `json:"clientToken"`
 	AccessTokenExpire int64    `json:"accessTokenExpire"`
 	AcceptLanguage    []string `json:"accept-language"`
 	TOTP              TOTP     `json:"totp"`
@@ -35,6 +37,8 @@ func NewConfigManager() *Manager {
 	defaults := Data{
 		SpDc:              "",
 		AccessToken:       "",
+		ClientID:          "",
+		ClientToken:       "",
 		AccessTokenExpire: -1,
 		AcceptLanguage:    []string{},
 		DefaultQuality:    "MP4_128_DUAL",

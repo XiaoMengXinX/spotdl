@@ -15,6 +15,10 @@ import (
 )
 
 var spBase62Charset = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+var bitrateToFormat = map[int]string{
+	128000: Quality128MP4,
+	256000: Quality256MP4,
+}
 
 func buildQueryParams(params map[string]interface{}) string {
 	values := url.Values{}
@@ -80,6 +84,33 @@ func getAllFiles(metadata trackMetadata) []fileEntry {
 		return metadata.AltFile[0].File
 	}
 	return nil
+}
+
+func extractFilesFromManifest(manifest *mediaManifest, mediaType, mediaID string) []fileEntry {
+	var entries []fileEntry
+
+	for _, mediaData := range manifest.Media {
+		if len(mediaData.Item.Manifest.FileIdsMp4) != 0 {
+			for _, fileInfo := range mediaData.Item.Manifest.FileIdsMp4 {
+				format, ok := bitrateToFormat[fileInfo.Bitrate]
+				if !ok {
+					log.Debugf("Unknown bitrate %d, skipping", fileInfo.Bitrate)
+					continue
+				}
+				entries = append(entries, fileEntry{
+					Format: format,
+					FileID: fileInfo.FileID,
+				})
+			}
+
+			if len(entries) > 0 {
+				log.Debugf("Extracted %d file entries from manifest", len(entries))
+				return entries
+			}
+		}
+	}
+	log.Debugf("No file entries found in manifest")
+	return entries
 }
 
 func checkDirExist(dirPath string) error {

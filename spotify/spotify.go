@@ -10,21 +10,21 @@ import (
 )
 
 const (
-	Quality128MP4     = "MP4_128"
-	Quality128MP4Dual = "MP4_128_DUAL"
-	Quality256MP4     = "MP4_256"
-	Quality256MP4Dual = "MP4_256_DUAL"
-	Quality96Vorbis   = "OGG_VORBIS_96"
-	Quality160Vorbis  = "OGG_VORBIS_160"
-	Quality320Vorbis  = "OGG_VORBIS_320"
+	mediaTypeTrack = "track"
+)
+
+const (
+	Quality128MP4    = "MP4_128"
+	Quality256MP4    = "MP4_256"
+	Quality96Vorbis  = "OGG_VORBIS_96"
+	Quality160Vorbis = "OGG_VORBIS_160"
+	Quality320Vorbis = "OGG_VORBIS_320"
 )
 
 var (
 	mp4FormatSet = map[string]bool{
-		Quality128MP4:     true,
-		Quality128MP4Dual: true,
-		Quality256MP4:     true,
-		Quality256MP4Dual: true,
+		Quality128MP4: true,
+		Quality256MP4: true,
 	}
 
 	oggFormatSet = map[string]bool{
@@ -49,7 +49,7 @@ type Downloader struct {
 func NewDownloader() *Downloader {
 	return &Downloader{
 		TokenManager: token.NewTokenManager(),
-		quality:      Quality128MP4Dual,
+		quality:      Quality128MP4,
 		outputFolder: filepath.Clean("./output"),
 	}
 }
@@ -188,9 +188,14 @@ func (d *Downloader) getTrackMetadata(trackID string) (name string, artist strin
 		artist = metadata.Artists[0].Name
 	}
 
-	log.Debugf("Available formats: %+v", getAllFiles(metadata))
+	manifest, err := d.getMediaManifest(mediaTypeTrack, trackID)
+	if err != nil {
+		return "", "", "", metadata, fmt.Errorf("failed to get media manifest: %w", err)
+	}
+	files := extractFilesFromManifest(manifest, mediaTypeTrack, trackID)
+	log.Debugf("Available formats: %+v", files)
 
-	fileID, err = d.selectFromQuality(getAllFiles(metadata))
+	fileID, err = d.selectFromQuality(files)
 	if err != nil {
 		return "", "", "", metadata, err
 	}
@@ -237,6 +242,28 @@ func (d *Downloader) getEpisodeMetadata(episodeID string) (name string, creator 
 	}
 
 	return episode.Name, episode.Creator, fileID, metadata, err
+}
+
+func (d *Downloader) getMediaManifest(mediaType, mediaID string) (*mediaManifest, error) {
+	url := fmt.Sprintf("%s/track-playback/v1/media/spotify:%s:%s", d.randomClientBase(), mediaType, mediaID)
+	params := map[string]interface{}{
+		"manifestFileFormat": "file_ids_mp4",
+	}
+
+	fullURL := url + "?" + buildQueryParams(params)
+	respBody, err := d.makeRequest(http.MethodGet, fullURL, nil)
+	if err != nil {
+		log.Debugf("Fetch media manifest failed: %v", err)
+		return nil, err
+	}
+
+	var manifestResp mediaManifest
+	if err := json.Unmarshal(respBody, &manifestResp); err != nil {
+		return nil, fmt.Errorf("failed to decode media manifest: %w", err)
+	}
+	log.Debugf("Media manifest response: %+v", manifestResp)
+
+	return &manifestResp, nil
 }
 
 func (d *Downloader) requestCDNURL(fileID string) (string, error) {

@@ -33,6 +33,7 @@ var defaultHeaders = http.Header{
 type Manager struct {
 	SessionTokenURL   string
 	ClientTokenURL    string
+	ServerTimeURL     string
 	SpDc              string
 	AccessToken       string
 	ClientToken       string
@@ -72,9 +73,23 @@ func NewTokenManager() *Manager {
 	log.Debugln("New Token Manager Created")
 	return &Manager{
 		SessionTokenURL: "https://open.spotify.com/api/token",
+		ServerTimeURL:   "https://open.spotify.com/api/server-time",
 		ClientTokenURL:  "https://clienttoken.spotify.com/v1/clienttoken",
 		ConfigManager:   config.NewConfigManager(),
 	}
+}
+
+func (tm *Manager) GetConfig() (conf config.Data, err error) {
+	conf, err = tm.ConfigManager.ReadAndGet()
+	if err != nil {
+		return
+	}
+	tm.ClientToken = conf.ClientToken
+	tm.ClientId = conf.ClientID
+	tm.SpDc = conf.SpDc
+	tm.AccessToken = conf.AccessToken
+	tm.AccessTokenExpire = conf.AccessTokenExpire
+	return
 }
 
 func (tm *Manager) NewRequest(method, url string, body io.Reader) (*http.Request, error) {
@@ -95,7 +110,7 @@ func (tm *Manager) NewRequest(method, url string, body io.Reader) (*http.Request
 
 func (tm *Manager) QuerySpDc() {
 	log.Debugln("Querying sp_dc cookie")
-	conf, err := tm.ConfigManager.ReadAndGet()
+	conf, err := tm.GetConfig()
 	if err != nil {
 		log.Errorf("Failed to read config: %v", err)
 	}
@@ -120,20 +135,22 @@ func (tm *Manager) requestAccessToken() (string, int64, error) {
 	log.Debugln("Requesting access token from Spotify")
 	client := &http.Client{}
 
-	totpStr, totpTime, err := tm.getTotp()
+	serverTime, err := tm.getServerTime()
+	if err != nil {
+		serverTime = time.Now()
+	}
+	totpServer, err := tm.getTotp(serverTime)
+	totpStr, err := tm.getTotp(time.Now())
 	if err != nil {
 		return "", -1, fmt.Errorf("failed to get totp: %w", err)
 	}
-	timeStr := fmt.Sprint(totpTime.Unix())
 
 	reqUrl := tm.SessionTokenURL + "?" + url.Values{
 		"reason":      {"transport"},
 		"productType": {"web-player"},
 		"totp":        {totpStr},
-		"totpServer":  {totpStr},
+		"totpServer":  {totpServer},
 		"totpVer":     {fmt.Sprintf("%d", tm.ConfigManager.Get().TOTP.Version)},
-		"sTime":       {timeStr},
-		"cTime":       {timeStr + "420"},
 	}.Encode()
 
 	req, err := tm.NewRequest("GET", reqUrl, nil)
@@ -177,9 +194,18 @@ func (tm *Manager) requestAccessToken() (string, int64, error) {
 	}
 
 	tm.ClientId = tokenResp.ClientId
-	conf, _ := tm.ConfigManager.ReadAndGet()
+	tm.ClientToken, err = tm.requestClientToken(tokenResp.ClientId)
+	if err != nil {
+		log.Errorf("Failed to request client token: %v", err)
+		return "", -1, fmt.Errorf("failed to get client token: %v", err)
+	}
+	log.Debugln("New client token obtained")
+
+	conf, _ := tm.GetConfig()
 	conf.AccessToken = tokenResp.AccessToken
 	conf.AccessTokenExpire = tokenResp.ExpireTime
+	conf.ClientID = tokenResp.ClientId
+	conf.ClientToken = tm.ClientToken
 	tm.ConfigManager.Set(conf)
 
 	log.Debugln("Access token successfully retrieved and saved to config")
@@ -215,8 +241,6 @@ func (tm *Manager) requestClientToken(clientId string) (string, error) {
 		log.Debugf("Failed to request client token (status %d): %s", resp.StatusCode, string(body))
 		return "", fmt.Errorf("failed to make request: HTTP status code %d", resp.StatusCode)
 	}
-	body, _ := io.ReadAll(resp.Body)
-	fmt.Println(string(body))
 
 	var tokenResp clientTokenData
 	if err := json.NewDecoder(resp.Body).Decode(&tokenResp); err != nil {
@@ -234,7 +258,7 @@ func (tm *Manager) requestClientToken(clientId string) (string, error) {
 func (tm *Manager) GetAccessToken() (string, int64) {
 	log.Debugln("Checking access token")
 
-	conf, err := tm.ConfigManager.ReadAndGet()
+	conf, err := tm.GetConfig()
 	if err != nil {
 		log.Fatalf("Failed to read config: %v", err)
 	}
@@ -251,12 +275,6 @@ func (tm *Manager) GetAccessToken() (string, int64) {
 			tm.AccessToken, tm.AccessTokenExpire, err = tm.requestAccessToken()
 			if err == nil {
 				log.Debugln("New access token obtained")
-				tm.ClientToken, err = tm.requestClientToken(tm.ClientId)
-				if err != nil {
-					log.Errorf("Failed to request client token: %v", err)
-					return "", 0
-				}
-				log.Debugln("New client token obtained")
 				return tm.AccessToken, tm.AccessTokenExpire
 			}
 			if i < maxRetries {
@@ -287,11 +305,39 @@ func (tm *Manager) GetAccessToken() (string, int64) {
 	return conf.AccessToken, conf.AccessTokenExpire
 }
 
-func (tm *Manager) getTotp() (string, time.Time, error) {
-	timeNow := time.Now()
-	totpStr, err := totp.GenerateCode(tm.ConfigManager.Get().TOTP.Secret, timeNow)
-	if err != nil {
-		return "", time.Time{}, err
+func (tm *Manager) getServerTime() (time.Time, error) {
+	client := &http.Client{}
+
+	req, _ := http.NewRequest("GET", tm.ServerTimeURL, nil)
+	req.Header = http.Header{
+		"referer":             {"https://open.spotify.com/"},
+		"origin":              {"https://open.spotify.com/"},
+		"accept":              {"application/json"},
+		"app-platform":        {"WebPlayer"},
+		"spotify-app-version": {"1.2.61.20.g3b4cd5b2"},
+		"user-agent":          {UserAgent},
 	}
-	return totpStr, timeNow, nil
+	resp, err := client.Do(req)
+	if err != nil {
+		return time.Time{}, err
+	}
+	defer resp.Body.Close()
+
+	type responseType struct {
+		ServerTime int64 `json:"serverTime"`
+	}
+
+	var response responseType
+	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+		return time.Time{}, err
+	}
+	return time.Unix(response.ServerTime, 0), nil
+}
+
+func (tm *Manager) getTotp(t time.Time) (string, error) {
+	totpStr, err := totp.GenerateCode(tm.ConfigManager.Get().TOTP.Secret, t)
+	if err != nil {
+		return "", err
+	}
+	return totpStr, nil
 }
