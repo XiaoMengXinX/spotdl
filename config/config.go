@@ -41,7 +41,7 @@ func NewConfigManager() *Manager {
 		ClientToken:       "",
 		AccessTokenExpire: -1,
 		AcceptLanguage:    []string{},
-		DefaultQuality:    "MP4_128_DUAL",
+		DefaultQuality:    "MP4_128",
 		TOTP:              TOTP{},
 	}
 	return &Manager{

@@ -31,7 +31,7 @@ Usage of spotdl:
       --no-metadata       Skip adding metadata to downloaded files
   -o, --output string     Output directory for downloaded files (default "./output")
   -q, --quality string    Audio quality level. (default "MP4_128")
-                          Options:	MP4_128, MP4_128_DUAL, MP4_256, MP4_256_DUAL
+                          Options:	MP4_128, MP4_256
 ```
 
 # Notice
