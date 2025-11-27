@@ -13,6 +13,7 @@ func (d *Downloader) WebAPIGetTrackInfo(trackID string) (WebAPITrackInfo, error)
 		return WebAPITrackInfo{}, fmt.Errorf("failed to fetch track data: %v", err)
 	}
 	var trackInfo WebAPITrackInfo
+	trackInfo.ID = track.ID
 	trackInfo.Name = track.Name
 	trackInfo.DurationMS = track.DurationMS
 	trackInfo.URL = track.ExternalUrls.Spotify
@@ -24,7 +25,7 @@ func (d *Downloader) WebAPIGetTrackInfo(trackID string) (WebAPITrackInfo, error)
 			URL:  artist.ExternalUrls.Spotify,
 		}
 	}
-	trackInfo.WebAPIAlbumInfo = WebAPIAlbumInfo{
+	trackInfo.Album = WebAPIAlbumInfo{
 		ID:      track.Album.ID,
 		Name:    track.Album.Name,
 		Artists: make([]WebAPIArtist, len(track.Album.Artists)),
@@ -32,14 +33,14 @@ func (d *Downloader) WebAPIGetTrackInfo(trackID string) (WebAPITrackInfo, error)
 		URL:     track.Album.ExternalUrls.Spotify,
 	}
 	for i, artist := range track.Album.Artists {
-		trackInfo.WebAPIAlbumInfo.Artists[i] = WebAPIArtist{
+		trackInfo.Album.Artists[i] = WebAPIArtist{
 			Name: artist.Name,
 			ID:   artist.ID,
 			URL:  artist.ExternalUrls.Spotify,
 		}
 	}
 	for i, img := range track.Album.Images {
-		trackInfo.WebAPIAlbumInfo.Images[i] = WebAPICoverImage{
+		trackInfo.Album.Images[i] = WebAPICoverImage{
 			URL:    img.URL,
 			Width:  img.Width,
 			Height: img.Height,

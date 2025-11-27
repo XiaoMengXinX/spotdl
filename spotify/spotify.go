@@ -1,11 +1,9 @@
 package spotify
 
 import (
-	"encoding/json"
 	"fmt"
 	log "github.com/XiaoMengXinX/spotdl/logger"
 	"github.com/XiaoMengXinX/spotdl/token"
-	"net/http"
 	"path/filepath"
 )
 
@@ -155,134 +153,4 @@ func (d *Downloader) fetchShowEpisodes(showID string, offset int, episodes []str
 		return d.fetchShowEpisodes(showID, offset+50, episodes)
 	}
 	return episodes, nil
-}
-
-func (d *Downloader) getTrackCredits(trackID string) (credits trackCredits, err error) {
-	url := fmt.Sprintf("https://spclient.wg.spotify.com/track-credits-view/v0/experimental/%s/credits", trackID)
-	resp, err := d.makeRequest(http.MethodGet, url, nil)
-	if err != nil {
-		log.Debugf("Fetch track credits failed: %v", err)
-		return
-	}
-
-	if err := json.Unmarshal(resp, &credits); err != nil {
-		return credits, fmt.Errorf("failed to decode track credits: %w", err)
-	}
-
-	return
-}
-
-func (d *Downloader) getTrackMetadata(trackID string) (name string, artist string, fileID string, metadata trackMetadata, err error) {
-	url := fmt.Sprintf("https://spclient.wg.spotify.com/metadata/4/track/%s", SpIDToHex(trackID))
-	resp, err := d.makeRequest(http.MethodGet, url, nil)
-	if err != nil {
-		log.Debugf("Fetch track metadata failed: %v", err)
-		return "", "", "", metadata, err
-	}
-
-	if err := json.Unmarshal(resp, &metadata); err != nil {
-		return "", "", "", metadata, fmt.Errorf("failed to decode track metadata: %w", err)
-	}
-
-	if len(metadata.Artists) != 0 {
-		artist = metadata.Artists[0].Name
-	}
-
-	manifest, err := d.getMediaManifest(mediaTypeTrack, trackID)
-	if err != nil {
-		return "", "", "", metadata, fmt.Errorf("failed to get media manifest: %w", err)
-	}
-	files := extractFilesFromManifest(manifest, mediaTypeTrack, trackID)
-	log.Debugf("Available formats: %+v", files)
-
-	fileID, err = d.selectFromQuality(files)
-	if err != nil {
-		return "", "", "", metadata, err
-	}
-
-	return metadata.Name, artist, fileID, metadata, nil
-}
-
-func (d *Downloader) getEpisodeMetadata(episodeID string) (name string, creator string, fileID string, metadata episodeMetadata, err error) {
-	url := "https://api-partner.spotify.com/pathfinder/v1/query"
-	var paramsVar []byte
-	paramsVar, _ = json.Marshal(map[string]string{
-		"uri": fmt.Sprintf("spotify:episode:%s", episodeID),
-	})
-	var paramsExtensions []byte
-	paramsExtensions, _ = json.Marshal(map[string]interface{}{
-		"persistedQuery": map[string]interface{}{
-			"version":    1,
-			"sha256Hash": "9697538fe993af785c10725a40bb9265a20b998ccd2383bd6f586e01303824e9",
-		},
-	})
-	params := map[string]interface{}{
-		"operationName": "getEpisodeOrChapter",
-		"variables":     string(paramsVar),
-		"extensions":    string(paramsExtensions),
-	}
-	resp, err := d.makeRequest(http.MethodGet, url+"?"+buildQueryParams(params), nil)
-	if err != nil {
-		log.Debugf("Fetch episode metadata failed: %v", err)
-		return "", "", "", metadata, err
-	}
-
-	if err := json.Unmarshal(resp, &metadata); err != nil {
-		return "", "", "", metadata, fmt.Errorf("failed to decode episode metadata: %w", err)
-	}
-
-	episode := metadata.Data.Episode
-	fileID, err = d.selectFromQuality(episode.Audio.Items)
-	if err != nil {
-		return "", "", "", metadata, err
-	}
-
-	if episode.Creator == "" {
-		episode.Creator = episode.Podcast.Data.Name
-	}
-
-	return episode.Name, episode.Creator, fileID, metadata, err
-}
-
-func (d *Downloader) getMediaManifest(mediaType, mediaID string) (*mediaManifest, error) {
-	url := fmt.Sprintf("%s/track-playback/v1/media/spotify:%s:%s", d.randomClientBase(), mediaType, mediaID)
-	params := map[string]interface{}{
-		"manifestFileFormat": "file_ids_mp4",
-	}
-
-	fullURL := url + "?" + buildQueryParams(params)
-	respBody, err := d.makeRequest(http.MethodGet, fullURL, nil)
-	if err != nil {
-		log.Debugf("Fetch media manifest failed: %v", err)
-		return nil, err
-	}
-
-	var manifestResp mediaManifest
-	if err := json.Unmarshal(respBody, &manifestResp); err != nil {
-		return nil, fmt.Errorf("failed to decode media manifest: %w", err)
-	}
-	log.Debugf("Media manifest response: %+v", manifestResp)
-
-	return &manifestResp, nil
-}
-
-func (d *Downloader) requestCDNURL(fileID string) (string, error) {
-	url := fmt.Sprintf("%s/storage-resolve/files/audio/interactive/%s", d.randomClientBase(), fileID)
-	params := buildQueryParams(map[string]interface{}{"alt": "json"})
-
-	respBody, err := d.makeRequest(http.MethodGet, url+"?"+params, nil)
-	if err != nil {
-		log.Debugf("Fetch CDN URL Failed: %v", err)
-		return "", err
-	}
-
-	var cdnResponse cdnURL
-	_ = json.Unmarshal(respBody, &cdnResponse)
-
-	if len(cdnResponse.CdnURL) == 0 {
-		return "", fmt.Errorf("no CDN URL found in response")
-	}
-	log.Debugf("Get CDN URL successfully: %v", cdnResponse.CdnURL)
-
-	return cdnResponse.CdnURL[0], nil
 }

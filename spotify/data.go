@@ -1,11 +1,12 @@
 package spotify
 
 type WebAPITrackInfo struct {
-	WebAPIAlbumInfo
-	Artists    []WebAPIArtist
-	DurationMS int
+	ID         string
 	Name       string
 	URL        string
+	DurationMS int
+	Album      WebAPIAlbumInfo
+	Artists    []WebAPIArtist
 }
 
 type WebAPIAlbumInfo struct {
@@ -83,6 +84,7 @@ type albumData struct {
 }
 
 type trackData struct {
+	ID           string `json:"id"`
 	ExternalUrls struct {
 		Spotify string `json:"spotify"`
 	} `json:"external_urls"`
@@ -187,4 +189,43 @@ type fileEntry struct {
 	Format string `json:"format"`
 	FileID string `json:"file_id,omitempty"`
 	FileId string `json:"fileId,omitempty"`
+}
+
+type searchV2Data struct {
+	Data struct {
+		SearchV2 struct {
+			TracksV2 struct {
+				Items []struct {
+					Item struct {
+						Data searchTracksItem `json:"data"`
+					} `json:"item"`
+				} `json:"items"`
+			} `json:"tracksV2"`
+		} `json:"searchV2"`
+	} `json:"data"`
+}
+
+type searchTracksItem struct {
+	ID           string `json:"id"`
+	Name         string `json:"name"`
+	AlbumOfTrack struct {
+		CoverArt struct {
+			Sources []albumImageData `json:"sources"`
+		} `json:"coverArt"`
+		ID   string `json:"id"`
+		Name string `json:"name"`
+		URI  string `json:"uri"`
+	} `json:"albumOfTrack"`
+	Artists struct {
+		Items []struct {
+			Profile struct {
+				Name string `json:"name"`
+			} `json:"profile"`
+			URI string `json:"uri"`
+		} `json:"items"`
+	} `json:"artists"`
+	Duration struct {
+		TotalMilliseconds int `json:"totalMilliseconds"`
+	} `json:"duration"`
+	URI string `json:"uri"`
 }
