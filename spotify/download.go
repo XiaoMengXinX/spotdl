@@ -2,12 +2,13 @@ package spotify
 
 import (
 	"fmt"
-	"github.com/XiaoMengXinX/SimpleDownloader"
+	"os"
+	"path/filepath"
+
+	downloader "github.com/XiaoMengXinX/SimpleDownloader"
 	log "github.com/XiaoMengXinX/spotdl/logger"
 	"github.com/XiaoMengXinX/spotdl/playplay"
 	widevine "github.com/iyear/gowidevine"
-	"os"
-	"path/filepath"
 )
 
 func (d *Downloader) downloadContent(ID string, content IDType) (outFilePath string, err error) {
@@ -16,7 +17,7 @@ func (d *Downloader) downloadContent(ID string, content IDType) (outFilePath str
 
 	switch content {
 	case TRACK:
-		name, artist, fileID, metadata, err = d.getTrackMetadata(ID)
+		metadata, err = d.getTrackMetadata(ID)
 		if err != nil {
 			defer func(ID string, err *error) {
 				if *err != nil {
@@ -25,8 +26,21 @@ func (d *Downloader) downloadContent(ID string, content IDType) (outFilePath str
 			}(ID, &err)
 			return outFilePath, fmt.Errorf("failed to get metadata of trackID [%s]: %v", ID, err)
 		}
+		name = metadata.Name
+		if len(metadata.Artists) != 0 {
+			artist = formatArtistsStr(metadata.Artists)
+		}
+		manifest, err := d.getMediaManifest(mediaTypeTrack, ID)
+		if err != nil {
+			return outFilePath, fmt.Errorf("failed to get media manifest: %w", err)
+		}
+		files := extractFilesFromManifest(manifest, mediaTypeTrack, ID)
+		fileID, err = d.selectFromQuality(files)
+		if err != nil {
+			return outFilePath, err
+		}
 	case EPISODE:
-		name, artist, fileID, _, err = d.getEpisodeMetadata(ID)
+		epMetadata, err := d.getGQLEpisodeMetadata(ID)
 		if err != nil {
 			defer func(ID string, err *error) {
 				if *err != nil {
@@ -34,6 +48,16 @@ func (d *Downloader) downloadContent(ID string, content IDType) (outFilePath str
 				}
 			}(ID, &err)
 			return outFilePath, fmt.Errorf("failed to get metadata of episodeID [%s]: %v", ID, err)
+		}
+		episode := epMetadata.Data.Episode
+		name = episode.Name
+		artist = episode.Creator
+		if artist == "" {
+			artist = episode.Podcast.Data.Name
+		}
+		fileID, err = d.selectFromQuality(episode.Audio.Items)
+		if err != nil {
+			return outFilePath, err
 		}
 	default:
 		return outFilePath, fmt.Errorf("invalid content type")
@@ -176,7 +200,7 @@ func (d *Downloader) DownloadEpisode(ID string) (downloadFilePath string, err er
 }
 
 func (d *Downloader) Download(url string) (err error) {
-	tracks, err := d.GetTracks(url)
+	tracks, err := d.GetTrackIDs(url)
 	if err != nil {
 		return fmt.Errorf("failed to get tracks: %v", err)
 	}

@@ -2,9 +2,10 @@ package spotify
 
 import (
 	"fmt"
+	"path/filepath"
+
 	log "github.com/XiaoMengXinX/spotdl/logger"
 	"github.com/XiaoMengXinX/spotdl/token"
-	"path/filepath"
 )
 
 const (
@@ -87,7 +88,7 @@ func (d *Downloader) SkipAddingMetadata(b bool) *Downloader {
 	return d
 }
 
-func (d *Downloader) GetTracks(url string) ([]string, error) {
+func (d *Downloader) GetTrackIDs(url string) ([]string, error) {
 	url, idType, err := GetIDType(url)
 	if err != nil {
 		log.Debugf("Get IDType failed: %v", err)

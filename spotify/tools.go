@@ -3,7 +3,6 @@ package spotify
 import (
 	"encoding/hex"
 	"fmt"
-	log "github.com/XiaoMengXinX/spotdl/logger"
 	"math/big"
 	"math/rand"
 	"net/url"
@@ -12,6 +11,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	log "github.com/XiaoMengXinX/spotdl/logger"
 )
 
 var spBase62Charset = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"

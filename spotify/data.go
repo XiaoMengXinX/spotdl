@@ -1,5 +1,7 @@
 package spotify
 
+import "fmt"
+
 type WebAPITrackInfo struct {
 	ID         string
 	Name       string
@@ -113,17 +115,53 @@ type trackMetadata struct {
 	GID   string `json:"gid"`
 	Name  string `json:"name"`
 	Album struct {
-		Name       string `json:"name"`
+		GID    string       `json:"gid"`
+		Name   string       `json:"name"`
+		Artist []artistData `json:"artist"`
+		Label  string       `json:"label"`
+		Date   struct {
+			Year  int `json:"year"`
+			Month int `json:"month"`
+			Day   int `json:"day"`
+		} `json:"date"`
 		CoverGroup struct {
 			Image []albumImageData `json:"image"`
 		} `json:"cover_group"`
 	} `json:"album"`
-	Artists []artistData `json:"artist"`
-	File    []fileEntry  `json:"file"`
+	Artists    []artistData `json:"artist"`
+	Number     int          `json:"number"`
+	Duration   int          `json:"duration"`
+	ExternalID []struct {
+		Type string `json:"type"`
+		ID   string `json:"id"`
+	} `json:"external_id"`
+	File    []fileEntry `json:"file"`
 	AltFile []struct {
 		File []fileEntry `json:"file"`
 	} `json:"alternative,omitempty"`
-	CanonicalURI string `json:"canonical_uri"`
+}
+
+func (m trackMetadata) GetExternalID(idType string) string {
+	for _, id := range m.ExternalID {
+		if id.Type == idType {
+			return id.ID
+		}
+	}
+	return ""
+}
+
+func (m trackMetadata) GetReleaseDate() string {
+	date := m.Album.Date
+	if date.Year == 0 {
+		return ""
+	}
+	if date.Month == 0 {
+		return fmt.Sprintf("%d", date.Year)
+	}
+	if date.Day == 0 {
+		return fmt.Sprintf("%d-%02d", date.Year, date.Month)
+	}
+	return fmt.Sprintf("%d-%02d-%02d", date.Year, date.Month, date.Day)
 }
 
 type episodeMetadata struct {
@@ -161,6 +199,50 @@ type mediaManifest struct {
 	} `json:"media"`
 }
 
+type getTrackData struct {
+	Data struct {
+		TrackUnion struct {
+			Typename string `json:"__typename"`
+			Duration struct {
+				TotalMilliseconds int `json:"totalMilliseconds"`
+			} `json:"duration"`
+			ID          string `json:"id"`
+			Name        string `json:"name"`
+			TrackNumber int    `json:"trackNumber"`
+			URI         string `json:"uri"`
+			Artists     struct {
+				Items []struct {
+					Profile struct {
+						Name string `json:"name"`
+					} `json:"profile"`
+					URI string `json:"uri"`
+				} `json:"items"`
+			} `json:"artists"`
+			AlbumOfTrack struct {
+				Copyright struct {
+					Items []struct {
+						Text string `json:"text"`
+						Type string `json:"type"`
+					} `json:"items"`
+				} `json:"copyright"`
+				Date struct {
+					IsoString string `json:"isoString"`
+					Precision string `json:"precision"`
+					Year      int    `json:"year"`
+				} `json:"date"`
+				Name   string `json:"name"`
+				URI    string `json:"uri"`
+				Tracks struct {
+					TotalCount int `json:"totalCount"`
+				} `json:"tracks"`
+				CoverArt struct {
+					Sources []albumImageData `json:"sources"`
+				} `json:"coverArt"`
+			} `json:"albumOfTrack"`
+		} `json:"trackUnion"`
+	} `json:"data"`
+}
+
 type artistData struct {
 	ExternalUrls struct {
 		Spotify string `json:"spotify"`
@@ -168,6 +250,7 @@ type artistData struct {
 	SubRoles []string `json:"subroles"`
 	Name     string   `json:"name"`
 	ID       string   `json:"id"`
+	GID      string   `json:"gid"`
 }
 
 type albumImageData struct {

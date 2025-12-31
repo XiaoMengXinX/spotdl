@@ -2,81 +2,88 @@ package spotify
 
 import (
 	"fmt"
-	log "github.com/XiaoMengXinX/spotdl/logger"
-	"github.com/bogem/id3v2"
 	"net/http"
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
+
+	"strings"
+
+	log "github.com/XiaoMengXinX/spotdl/logger"
+	"github.com/bogem/id3v2"
 )
 
 func (d *Downloader) addMetadata(trackMD trackMetadata, filePath string) (err error) {
 	trackID := SpHexToID(trackMD.GID)
 	log.Debugf("trackID: %s", trackMD.GID)
-	log.Debugf("ID: %s", SpHexToID(trackMD.GID))
-
-	track, err := d.queryTrackAPI(trackID)
-	if err != nil {
-		return fmt.Errorf("failed to fetch track data: %w", err)
-	}
-
-	album, err := d.queryAlbumAPI(track.Album.ID)
-	if err != nil {
-		return fmt.Errorf("failed to fetch album data: %w", err)
-	}
+	log.Debugf("ID: %s", trackID)
 
 	credits, err := d.getTrackCredits(trackID)
 	if err != nil {
-		return fmt.Errorf("failed to fetch track credits: %w", err)
+		log.Warnf("failed to fetch track credits: %w", err)
+	}
+
+	copyright := ""
+	totalTracks := 0
+	gqlMetadata, err := d.getGQLTrackMetadata(trackID)
+	if err == nil {
+		for _, item := range gqlMetadata.Data.TrackUnion.AlbumOfTrack.Copyright.Items {
+			if item.Type == "P" {
+				cr := strings.Replace(item.Text, "(P)", "℗", 1)
+				if !strings.HasPrefix(cr, "℗") {
+					copyright = fmt.Sprintf("℗ %s", cr)
+				} else {
+					copyright = cr
+				}
+				break
+			}
+		}
+		if trackMD.Album.Date.Year == 0 {
+			trackMD.Album.Date.Year = gqlMetadata.Data.TrackUnion.AlbumOfTrack.Date.Year
+		}
+		totalTracks = gqlMetadata.Data.TrackUnion.AlbumOfTrack.Tracks.TotalCount
+	} else {
+		log.Warnf("failed to fetch track metadata for tagging: %v", err)
 	}
 
 	metadata := make(map[string]string)
 	metadata["title"] = trackMD.Name
 	metadata["artist"] = formatArtistsStr(trackMD.Artists)
 	metadata["album"] = trackMD.Album.Name
-	metadata["date"] = album.ReleaseDate
-	metadata["album_artist"] = formatArtistsStr(album.Artists)
-	metadata["composer"] = formatComposersStr(credits)
-	for _, copyright := range album.Copyrights {
-		if copyright.Type == "P" {
-			cr := strings.Replace(copyright.Text, "(P)", "℗", 1)
-			if !strings.HasPrefix(cr, "℗") {
-				metadata["copyright"] = fmt.Sprintf("℗ %s", cr)
-			} else {
-				metadata["copyright"] = cr
-			}
-			break
-		}
+	metadata["date"] = trackMD.GetReleaseDate()
+	metadata["album_artist"] = formatArtistsStr(trackMD.Album.Artist)
+	metadata["label"] = trackMD.Album.Label
+	if c := formatComposersStr(credits); c != "" {
+		metadata["composer"] = c
 	}
-	metadata["label"] = album.Label
-	metadata["UPC"] = track.ExternalIDs.UPC
-	if album.ExternalIds.UPC != "" {
-		metadata["UPC"] = album.ExternalIds.UPC
+	if copyright != "" {
+		metadata["copyright"] = copyright
 	}
-	metadata["ISRC"] = track.ExternalIDs.ISRC
-	if album.ExternalIds.ISRC != "" {
-		metadata["ISRC"] = album.ExternalIds.ISRC
+	if isrc := trackMD.GetExternalID("isrc"); isrc != "" {
+		metadata["ISRC"] = isrc
 	}
-	metadata["EAN"] = track.ExternalIDs.EAN
-	if album.ExternalIds.EAN != "" {
-		metadata["EAN"] = album.ExternalIds.EAN
+	if upc := trackMD.GetExternalID("upc"); upc != "" {
+		metadata["UPC"] = upc
 	}
-	metadata["track"] = fmt.Sprintf("%d/%d", track.TrackNumber, track.Album.TotalTracks)
-	if len(album.Genres) > 0 {
-		metadata["genre"] = album.Genres[0]
+	if ean := trackMD.GetExternalID("ean"); ean != "" {
+		metadata["EAN"] = ean
 	}
-	metadata["creation_time"] = time.Now().UTC().Format(time.RFC3339)
+	if totalTracks > 0 {
+		metadata["track"] = fmt.Sprintf("%d/%d", trackMD.Number, totalTracks)
+	} else {
+		metadata["track"] = fmt.Sprintf("%d", trackMD.Number)
+	}
 
 	log.Debugf("Serialized metadata: %+v", metadata)
 
 	coverFileName, err := d.downloadCoverImage(trackMD)
-	coverFilePath := filepath.Join(d.outputFolder, coverFileName)
-	defer os.Remove(coverFilePath)
-
 	if err != nil {
 		log.Warnf("Failed to download cover image: %v, skip adding front cover", err)
 	}
+	coverFilePath := filepath.Join(d.outputFolder, coverFileName)
+	defer os.Remove(coverFilePath)
+
+	metadata["creation_time"] = time.Now().UTC().Format(time.RFC3339)
 
 	if d.isConvertToMP3 {
 		return addMp3Id3v2(filePath, coverFilePath, metadata)
