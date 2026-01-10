@@ -210,14 +210,25 @@ type getTrackData struct {
 			Name        string `json:"name"`
 			TrackNumber int    `json:"trackNumber"`
 			URI         string `json:"uri"`
-			Artists     struct {
+			FirstArtist struct {
 				Items []struct {
+					ID      string `json:"id"`
+					URI     string `json:"uri"`
 					Profile struct {
 						Name string `json:"name"`
 					} `json:"profile"`
-					URI string `json:"uri"`
 				} `json:"items"`
-			} `json:"artists"`
+				TotalCount int `json:"totalCount"`
+			} `json:"firstArtist"`
+			OtherArtists struct {
+				Items []struct {
+					ID      string `json:"id"`
+					URI     string `json:"uri"`
+					Profile struct {
+						Name string `json:"name"`
+					} `json:"profile"`
+				} `json:"items"`
+			} `json:"otherArtists"`
 			AlbumOfTrack struct {
 				Copyright struct {
 					Items []struct {

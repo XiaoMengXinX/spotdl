@@ -17,8 +17,13 @@ func (d *Downloader) GetTrackInfo(trackID string) (WebAPITrackInfo, error) {
 
 	track := gqlData.Data.TrackUnion
 	var artists []WebAPIArtist
-	for _, item := range track.Artists.Items {
-		artistID := strings.Split(item.URI, ":")[2]
+
+	for _, item := range append(track.FirstArtist.Items, track.OtherArtists.Items...) {
+		parts := strings.Split(item.URI, ":")
+		if len(parts) < 3 {
+			continue
+		}
+		artistID := parts[2]
 		artists = append(artists, WebAPIArtist{
 			Name: item.Profile.Name,
 			ID:   artistID,
