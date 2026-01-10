@@ -174,8 +174,8 @@ func cleanFilename(filename string) string {
 		return "null"
 	}
 
-	if len(cleaned) > 250 {
-		cleaned = cleaned[:250]
+	if len(cleaned) > 220 {
+		cleaned = cleaned[:220]
 	}
 
 	return cleaned
